@@ -1,4 +1,4 @@
-import type { StaticImageData } from "next/image";
+import type { StaticImageData } from 'next/image';
 
 export type Skill = {
   id: string;
@@ -16,6 +16,18 @@ export type User = {
   skillsOffered: Skill[];
   skillsNeeded: Skill[];
 };
+
+export type UserProfile = {
+    uid: string;
+    name: string;
+    email: string;
+    phone?: string | null;
+    avatarUrl?: string;
+    bio?: string;
+    location?: string;
+    skillsOffered?: Skill[];
+    skillsNeeded?: Skill[];
+}
 
 export type Message = {
   id: string;
