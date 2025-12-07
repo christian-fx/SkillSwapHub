@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -6,17 +7,26 @@ import { Textarea } from "@/components/ui/textarea";
 
 export default function ContactUsPage() {
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="p-4 border-b">
+    <div className="flex flex-col min-h-dvh">
+      <header className="px-4 lg:px-6 h-16 flex items-center border-b">
         <Logo />
+        <nav className="ml-auto">
+            <Button asChild>
+                <Link href="/login">Back to App</Link>
+            </Button>
+        </nav>
       </header>
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold font-headline mb-4">Contact Us</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Have a question or feedback? We'd love to hear from you.
-          </p>
-          <form className="space-y-6">
+      <main className="flex-1">
+        <div className="container px-4 md:px-6 py-12 md:py-20 lg:py-28">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
+              Contact Us
+            </h1>
+            <p className="mt-4 text-muted-foreground md:text-xl">
+              Have a question or feedback? We'd love to hear from you.
+            </p>
+          </div>
+          <form className="max-w-xl mx-auto mt-12 space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
                  <div className="space-y-2">
                     <Label htmlFor="name">Name</Label>

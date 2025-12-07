@@ -2,6 +2,7 @@ import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { MapPin, Calendar } from "lucide-react";
+import Link from "next/link";
 
 export default function EventsPage() {
     const upcomingEvents = [
@@ -19,17 +20,26 @@ export default function EventsPage() {
         }
     ];
   return (
-    <div className="flex flex-col min-h-screen">
-      <header className="p-4 border-b">
+    <div className="flex flex-col min-h-dvh">
+       <header className="px-4 lg:px-6 h-16 flex items-center border-b">
         <Logo />
+        <nav className="ml-auto">
+            <Button asChild>
+                <Link href="/login">Back to App</Link>
+            </Button>
+        </nav>
       </header>
-      <main className="flex-1 container mx-auto px-4 py-8">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-bold font-headline mb-4">Events</h1>
-          <p className="text-lg text-muted-foreground mb-8">
-            Join our workshops, meetups, and community events.
-          </p>
-           <div className="space-y-8">
+      <main className="flex-1">
+        <div className="container px-4 md:px-6 py-12 md:py-20 lg:py-28">
+          <div className="max-w-3xl mx-auto text-center">
+            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none font-headline">
+                Community Events
+            </h1>
+            <p className="mt-4 text-muted-foreground md:text-xl">
+                Join our workshops, meetups, and community events.
+            </p>
+          </div>
+           <div className="max-w-3xl mx-auto mt-12 space-y-8">
             {upcomingEvents.map((event, index) => (
               <Card key={index}>
                 <CardHeader>
