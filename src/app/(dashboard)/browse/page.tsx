@@ -106,7 +106,7 @@ export default function BrowsePage() {
 
   return (
     <>
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight font-headline">
             Discover Skills
