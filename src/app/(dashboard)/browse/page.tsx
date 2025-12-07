@@ -41,7 +41,6 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-import { SkillFilter } from '@/components/skill-filter';
 
 const USERS_PER_PAGE = 8;
 
@@ -49,17 +48,6 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
-  const [selectedSkillsOffered, setSelectedSkillsOffered] = useState<Set<string>>(new Set());
-  const [selectedSkillsNeeded, setSelectedSkillsNeeded] = useState<Set<string>>(new Set());
-
-  const allSkills = useMemo(() => {
-    const skills = new Map<string, { id: string; name: string }>();
-    allUsers.forEach(user => {
-      user.skillsOffered.forEach(skill => skills.set(skill.name, skill));
-      user.skillsNeeded.forEach(skill => skills.set(skill.name, skill));
-    });
-    return Array.from(skills.values()).sort((a, b) => a.name.localeCompare(b.name));
-  }, []);
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -83,24 +71,8 @@ export default function BrowsePage() {
       );
     }
     
-    if (selectedSkillsOffered.size > 0) {
-      users = users.filter(user =>
-        Array.from(selectedSkillsOffered).every(selectedSkill =>
-          user.skillsOffered.some(skill => skill.name === selectedSkill)
-        )
-      );
-    }
-    
-    if (selectedSkillsNeeded.size > 0) {
-      users = users.filter(user =>
-        Array.from(selectedSkillsNeeded).every(selectedSkill =>
-          user.skillsNeeded.some(skill => skill.name === selectedSkill)
-        )
-      );
-    }
-
     return users;
-  }, [searchQuery, sortOrder, shuffledUsers, selectedSkillsOffered, selectedSkillsNeeded]);
+  }, [searchQuery, sortOrder, shuffledUsers]);
 
 
   const totalPages = Math.ceil(sortedAndFilteredUsers.length / USERS_PER_PAGE);
@@ -118,12 +90,10 @@ export default function BrowsePage() {
   const clearFilters = () => {
     setSearchQuery("");
     setSortOrder("random");
-    setSelectedSkillsOffered(new Set());
-    setSelectedSkillsNeeded(new Set());
     setCurrentPage(1);
   };
   
-  const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random' || selectedSkillsOffered.size > 0 || selectedSkillsNeeded.size > 0;
+  const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random';
 
   return (
     <>
@@ -165,26 +135,6 @@ export default function BrowsePage() {
                     />
                   </div>
                   
-                  <Separator />
-                  
-                  <div>
-                    <Label className="text-sm font-medium mb-2 block">Filter by Skills</Label>
-                    <div className="flex flex-col gap-2">
-                        <SkillFilter
-                            title="Offers"
-                            allSkills={allSkills}
-                            selectedSkills={selectedSkillsOffered}
-                            onSelectionChange={setSelectedSkillsOffered}
-                        />
-                        <SkillFilter
-                            title="Needs"
-                            allSkills={allSkills}
-                            selectedSkills={selectedSkillsNeeded}
-                            onSelectionChange={setSelectedSkillsNeeded}
-                        />
-                    </div>
-                  </div>
-
                   <Separator />
 
                   <div>
@@ -228,8 +178,6 @@ export default function BrowsePage() {
           <div className="flex flex-wrap gap-1">
             {searchQuery && <Badge variant="secondary">Search: {searchQuery}</Badge>}
             {sortOrder !== 'random' && <Badge variant="secondary">Sort: {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}</Badge>}
-            {Array.from(selectedSkillsOffered).map(skill => <Badge key={`so-${skill}`} variant="secondary">Offers: {skill}</Badge>)}
-            {Array.from(selectedSkillsNeeded).map(skill => <Badge key={`sn-${skill}`} variant="secondary">Needs: {skill}</Badge>)}
             <Button variant="ghost" size="icon" className="h-5 w-5" onClick={clearFilters}><X className="h-4 w-4" /></Button>
           </div>
         </div>
