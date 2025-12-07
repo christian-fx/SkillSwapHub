@@ -11,6 +11,7 @@ import {
   Mail,
   Phone,
   TriangleAlert,
+  Loader2,
 } from 'lucide-react';
 import {
   createUserWithEmailAndPassword,
@@ -100,7 +101,6 @@ export default function SignupPage() {
     if (!firestore) return;
     const userRef = doc(firestore, 'users', user.uid);
     
-    // Check if the document already exists
     const docSnap = await getDoc(userRef);
     if (!docSnap.exists()) {
       await setDoc(userRef, {
@@ -138,6 +138,7 @@ export default function SignupPage() {
       );
       await updateProfile(userCredential.user, { displayName: name });
       await createUserProfile(userCredential.user, name, email, null);
+      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
       router.push('/browse');
     } catch (error: any) {
       setError(error.message);
@@ -162,6 +163,7 @@ export default function SignupPage() {
         userCredential.user.email,
         userCredential.user.phoneNumber
       );
+      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
       router.push('/browse');
     } catch (error: any) {
       setError(error.message);
@@ -207,6 +209,7 @@ export default function SignupPage() {
       const user = result.user;
       await updateProfile(user, { displayName: name });
       await createUserProfile(user, name, null, phone);
+      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
       router.push('/browse');
     } catch (error: any) {
       setError(error.message);
@@ -351,6 +354,7 @@ export default function SignupPage() {
                     className="w-full"
                     disabled={loading || !agreedToTerms}
                   >
+                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                     {loading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
@@ -384,7 +388,7 @@ export default function SignupPage() {
                         <Input
                           id="phone"
                           type="tel"
-                          placeholder="15555555555"
+                          placeholder="2348012345678"
                           className="pl-8"
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
@@ -392,7 +396,7 @@ export default function SignupPage() {
                         />
                       </div>
                       <p className="text-xs text-muted-foreground">
-                        Enter number with country code, e.g., 1 for US.
+                        Enter number with country code, e.g., 234 for Nigeria.
                       </p>
                     </div>
                     <Button
@@ -400,6 +404,7 @@ export default function SignupPage() {
                       className="w-full"
                       disabled={loading}
                     >
+                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       {loading ? 'Sending OTP...' : 'Send OTP'}
                     </Button>
                   </form>
@@ -427,6 +432,7 @@ export default function SignupPage() {
                       className="w-full"
                       disabled={loading || !agreedToTerms}
                     >
+                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       {loading ? 'Verifying...' : 'Verify OTP & Sign Up'}
                     </Button>
                   </form>
@@ -478,9 +484,10 @@ export default function SignupPage() {
                 variant="outline"
                 className="w-full mt-4"
                 onClick={handleGoogleSignup}
-                disabled={loading}
+                disabled={loading || !agreedToTerms}
               >
-                {loading ? '...' : 'Sign up with Google'}
+                {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 21.2 177 60.4L373 136.9c-24.6-23.8-59.2-38.4-95-38.4-83.8 0-152 68.2-152 152s68.2 152 152 152c93.2 0 135-67.6 140-101.3H248v-75.3h236.2c2.3 12.7 3.8 26.6 3.8 41.5z"></path></svg>}
+                Sign up with Google
               </Button>
             </Tabs>
           </CardContent>

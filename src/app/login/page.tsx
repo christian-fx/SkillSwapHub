@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { Eye, EyeOff, Lock, Mail, Phone, TriangleAlert } from "lucide-react";
+import { Eye, EyeOff, Lock, Mail, Phone, TriangleAlert, Loader2 } from "lucide-react";
 import {
     getAuth,
     signInWithEmailAndPassword,
@@ -67,6 +67,7 @@ export default function LoginPage() {
         setError(null);
         try {
             await signInWithEmailAndPassword(auth, email, password);
+            toast({ title: "Welcome back!", description: "You have been successfully logged in." });
             router.push("/browse");
         } catch (error: any) {
             setError(error.message);
@@ -81,6 +82,7 @@ export default function LoginPage() {
         try {
             const provider = new GoogleAuthProvider();
             await signInWithPopup(auth, provider);
+            toast({ title: "Welcome!", description: "You have been successfully signed in." });
             router.push("/browse");
         } catch (error: any) {
             setError(error.message);
@@ -113,6 +115,7 @@ export default function LoginPage() {
         setError(null);
         try {
             await window.confirmationResult.confirm(otp);
+            toast({ title: "Welcome!", description: "You have been successfully logged in." });
             router.push("/browse");
         } catch (error: any) {
              setError(error.message);
@@ -173,6 +176,7 @@ export default function LoginPage() {
                                     </div>
                                 </div>
                                 <Button type="submit" className="w-full" disabled={loading}>
+                                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                     {loading ? 'Logging in...' : 'Login'}
                                 </Button>
                             </form>
@@ -186,9 +190,10 @@ export default function LoginPage() {
                                         <Phone className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                                         <Input id="phone" type="tel" placeholder="15555555555" className="pl-8" value={phone} onChange={e => setPhone(e.target.value)} required />
                                     </div>
-                                    <p className="text-xs text-muted-foreground">Enter number with country code, e.g., 1 for US.</p>
+                                    <p className="text-xs text-muted-foreground">Enter number with country code, e.g., 234 for Nigeria.</p>
                                 </div>
                                 <Button type="submit" className="w-full" disabled={loading}>
+                                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                     {loading ? 'Sending OTP...' : 'Send OTP'}
                                 </Button>
                             </form>
@@ -199,6 +204,7 @@ export default function LoginPage() {
                                     <Input id="otp" type="text" placeholder="Enter 6-digit code" value={otp} onChange={e => setOtp(e.target.value)} required/>
                                 </div>
                                 <Button type="submit" className="w-full" disabled={loading}>
+                                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                     {loading ? 'Verifying...' : 'Verify OTP & Login'}
                                 </Button>
                              </form>
@@ -217,7 +223,8 @@ export default function LoginPage() {
                         </div>
 
                         <Button variant="outline" className="w-full mt-4" onClick={handleGoogleLogin} disabled={loading}>
-                            {loading ? '...' : 'Login with Google'}
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <svg className="mr-2 h-4 w-4" aria-hidden="true" focusable="false" data-prefix="fab" data-icon="google" role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 488 512"><path fill="currentColor" d="M488 261.8C488 403.3 391.1 504 248 504 110.8 504 0 393.2 0 256S110.8 8 248 8c66.8 0 126 21.2 177 60.4L373 136.9c-24.6-23.8-59.2-38.4-95-38.4-83.8 0-152 68.2-152 152s68.2 152 152 152c93.2 0 135-67.6 140-101.3H248v-75.3h236.2c2.3 12.7 3.8 26.6 3.8 41.5z"></path></svg>}
+                            Login with Google
                         </Button>
                     </Tabs>
                 </CardContent>
