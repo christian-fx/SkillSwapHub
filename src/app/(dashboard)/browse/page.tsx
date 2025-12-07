@@ -1,9 +1,9 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA, Plus } from 'lucide-react';
 
 import { users as allUsers } from '@/lib/data';
 import type { User } from '@/lib/types';
@@ -41,7 +41,9 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { ALL_SKILLS } from '@/lib/skills';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const USERS_PER_PAGE = 8;
 
@@ -49,8 +51,12 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
-  const [drawerSearch, setDrawerSearch] = useState('');
+  
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
+  
+  // Drawer-specific temporary states
+  const [drawerSearch, setDrawerSearch] = useState('');
+  const [drawerSort, setDrawerSort] = useState<'random' | 'asc' | 'desc'>('random');
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -87,19 +93,30 @@ export default function BrowsePage() {
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
   
-  const clearFilters = () => {
+  const clearFilters = useCallback(() => {
     setSearchQuery("");
     setDrawerSearch("");
     setSortOrder("random");
+    setDrawerSort("random");
     setCurrentPage(1);
-  };
+  }, []);
 
   const applyFilters = () => {
     setSearchQuery(drawerSearch);
+    setSortOrder(drawerSort);
     setCurrentPage(1);
+  }
+
+  const handleDrawerOpen = (open: boolean) => {
+    if (open) {
+      setDrawerSearch(searchQuery);
+      setDrawerSort(sortOrder);
+    }
+    setIsDrawerOpen(open);
   }
   
   const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random';
@@ -116,7 +133,7 @@ export default function BrowsePage() {
           </p>
         </div>
         <div className="flex w-full sm:w-auto items-center gap-2">
-           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
+           <Drawer open={isDrawerOpen} onOpenChange={handleDrawerOpen}>
             <DrawerTrigger asChild>
               <Button variant="outline">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -130,21 +147,17 @@ export default function BrowsePage() {
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
-                    <div className="relative">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                            placeholder="Search skills or people..."
-                            value={drawerSearch}
-                            onChange={(e) => setDrawerSearch(e.target.value)}
-                            className="pl-8"
-                        />
-                    </div>
+                    <Input
+                        placeholder="Search skills or people..."
+                        value={drawerSearch}
+                        onChange={(e) => setDrawerSearch(e.target.value)}
+                    />
                   
                   <Separator />
 
                   <div>
                     <Label className="text-sm font-medium">Sort by Name</Label>
-                    <RadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as 'random' | 'asc' | 'desc')}>
+                    <RadioGroup value={drawerSort} onValueChange={(value) => setDrawerSort(value as 'random' | 'asc' | 'desc')}>
                         <div className="flex items-center space-x-2 mt-2">
                             <RadioGroupItem value="asc" id="r-asc" />
                             <Label htmlFor="r-asc" className="flex items-center gap-2"><ArrowDownAZ className="h-4 w-4"/> Ascending</Label>
