@@ -138,38 +138,37 @@ export default function BrowsePage() {
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
-                    <div className="relative w-full">
-                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                      <Input
-                        type="search"
-                        placeholder="Search skills or people..."
-                        className="pl-8"
-                        value={drawerSearch}
-                        onChange={(e) => setDrawerSearch(e.target.value)}
-                      />
-                    </div>
-                    
-                    <div className="max-h-60 overflow-y-auto rounded-md border">
-                        <Command>
+                    <Command>
+                      <div className="relative w-full">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                          type="search"
+                          placeholder="Search skills or people..."
+                          className="pl-8"
+                          value={drawerSearch}
+                          onValueChange={setDrawerSearch}
+                        />
+                      </div>
+                      
+                      <div className="max-h-60 overflow-y-auto rounded-md border">
                           <CommandList>
                             <CommandEmpty>No skills found.</CommandEmpty>
                             <CommandGroup heading="Skills">
                               {suggestedSkills.map(skill => (
                                 <CommandItem
                                   key={skill}
+                                  value={skill}
                                   onSelect={(currentValue) => {
                                     setDrawerSearch(currentValue === drawerSearch ? '' : currentValue);
                                   }}
-                                  value={skill}
-                                  className="cursor-pointer"
                                 >
                                   {skill}
                                 </CommandItem>
                               ))}
                             </CommandGroup>
                           </CommandList>
-                        </Command>
-                    </div>
+                      </div>
+                    </Command>
                   
                   <Separator />
 

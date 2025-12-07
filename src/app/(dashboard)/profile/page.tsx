@@ -88,7 +88,7 @@ const SkillCombobox = ({
                                     key={skill}
                                     value={skill}
                                     onSelect={(currentValue) => {
-                                        const skillToAdd = ALL_SKILLS.find(s => s.toLowerCase() === currentValue)
+                                        const skillToAdd = ALL_SKILLS.find(s => s.toLowerCase() === currentValue);
                                         if (skillToAdd) {
                                             onSelect(skillToAdd);
                                         }
