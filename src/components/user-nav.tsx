@@ -1,4 +1,9 @@
+"use client";
+
 import Link from "next/link"
+import { getAuth, signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
+
 import {
   Avatar,
   AvatarFallback,
@@ -15,11 +20,43 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { ThemeToggle } from "./theme-toggle"
-import placeholderData from "@/lib/placeholder-images.json";
-
-const userAvatar = placeholderData.placeholderImages.find(img => img.id === 'user-1');
+import { useUser } from "@/firebase";
 
 export function UserNav() {
+  const { user, loading } = useUser();
+  const router = useRouter();
+  const auth = getAuth();
+
+  const handleLogout = async () => {
+    await signOut(auth);
+    router.push("/");
+  };
+
+  if (loading) {
+    return (
+        <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <div className="h-9 w-9 rounded-full bg-muted animate-pulse" />
+        </div>
+    )
+  }
+
+  if (!user) {
+    return (
+        <div className="flex items-center gap-2">
+            <ThemeToggle />
+            <Button asChild variant="ghost">
+                <Link href="/login">Login</Link>
+            </Button>
+             <Button asChild>
+                <Link href="/signup">Sign Up</Link>
+            </Button>
+        </div>
+    )
+  }
+
+  const userInitial = user.displayName?.split(' ').map(n => n[0]).join('') || user.email?.charAt(0).toUpperCase();
+
   return (
     <div className="flex items-center gap-2">
         <ThemeToggle />
@@ -27,17 +64,17 @@ export function UserNav() {
         <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="relative h-8 w-8 rounded-full">
             <Avatar className="h-9 w-9">
-                <AvatarImage src={userAvatar?.imageUrl} alt="Alice Johnson" data-ai-hint={userAvatar?.imageHint}/>
-                <AvatarFallback>AJ</AvatarFallback>
+                <AvatarImage src={user.photoURL || undefined} alt={user.displayName || ""} />
+                <AvatarFallback>{userInitial}</AvatarFallback>
             </Avatar>
             </Button>
         </DropdownMenuTrigger>
         <DropdownMenuContent className="w-56" align="end" forceMount>
             <DropdownMenuLabel className="font-normal">
             <div className="flex flex-col space-y-1">
-                <p className="text-sm font-medium leading-none">Alice Johnson</p>
+                <p className="text-sm font-medium leading-none">{user.displayName}</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                alice@example.com
+                {user.email}
                 </p>
             </div>
             </DropdownMenuLabel>
@@ -51,8 +88,8 @@ export function UserNav() {
             </DropdownMenuItem>
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem asChild>
-                <Link href="/">Log out</Link>
+            <DropdownMenuItem onClick={handleLogout}>
+                Log out
             </DropdownMenuItem>
         </DropdownMenuContent>
         </DropdownMenu>
