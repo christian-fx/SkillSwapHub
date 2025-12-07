@@ -41,6 +41,9 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
+import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from '@/components/ui/popover';
+import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command';
+
 
 const USERS_PER_PAGE = 8;
 
@@ -48,6 +51,23 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
+  const allSkills = useMemo(() => {
+    const skills = new Set<string>();
+    allUsers.forEach(user => {
+      user.skillsOffered.forEach(skill => skills.add(skill.name));
+      user.skillsNeeded.forEach(skill => skills.add(skill.name));
+    });
+    return Array.from(skills).sort();
+  }, []);
+
+  const suggestedSkills = useMemo(() => {
+    if (!searchQuery) return [];
+    return allSkills.filter(skill =>
+      skill.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [searchQuery, allSkills]);
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -121,19 +141,53 @@ export default function BrowsePage() {
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
-                  <div className="relative w-full">
-                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                    <Input
-                      type="search"
-                      placeholder="Search skills or people..."
-                      className="pl-8"
-                      value={searchQuery}
-                      onChange={(e) => {
-                        setSearchQuery(e.target.value);
-                        setCurrentPage(1); // Reset to first page on new search
-                      }}
-                    />
-                  </div>
+                    <Popover open={showSuggestions} onOpenChange={setShowSuggestions}>
+                      <PopoverAnchor asChild>
+                        <div className="relative w-full">
+                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                          <Input
+                            type="search"
+                            placeholder="Search skills or people..."
+                            className="pl-8"
+                            value={searchQuery}
+                            onChange={(e) => {
+                              setSearchQuery(e.target.value);
+                              setCurrentPage(1);
+                              if (e.target.value.length > 0) {
+                                setShowSuggestions(true);
+                              } else {
+                                setShowSuggestions(false);
+                              }
+                            }}
+                            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                            onFocus={() => {
+                              if(searchQuery.length > 0) setShowSuggestions(true);
+                            }}
+                          />
+                        </div>
+                      </PopoverAnchor>
+                      <PopoverContent className="w-[calc(var(--radix-popover-trigger-width)-2rem)] p-0" align="start">
+                        <Command>
+                          <CommandList>
+                            <CommandEmpty>No skills found.</CommandEmpty>
+                            <CommandGroup heading="Suggestions">
+                              {suggestedSkills.map(skill => (
+                                <CommandItem
+                                  key={skill}
+                                  onSelect={() => {
+                                    setSearchQuery(skill);
+                                    setShowSuggestions(false);
+                                  }}
+                                  className="cursor-pointer"
+                                >
+                                  {skill}
+                                </CommandItem>
+                              ))}
+                            </CommandGroup>
+                          </CommandList>
+                        </Command>
+                      </PopoverContent>
+                    </Popover>
                   
                   <Separator />
 
@@ -296,3 +350,5 @@ export default function BrowsePage() {
     </>
   );
 }
+
+    
