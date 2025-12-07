@@ -21,9 +21,6 @@ const findImage = (id: string) => {
 };
 
 const heroImage = findImage('hero');
-const feature1Image = findImage('feature-1');
-const feature2Image = findImage('feature-2');
-const feature3Image = findImage('feature-3');
 const user1Image = findImage('user-1');
 const user2Image = findImage('user-2');
 const user3Image = findImage('user-3');
@@ -35,28 +32,16 @@ export default function Home() {
       icon: <HeartHandshake className="h-10 w-10 text-primary" />,
       title: "Create Your Profile",
       description: "Showcase the skills you're proud to offer and list the new talents you're excited to learn.",
-      image: {
-        src: feature1Image.imageUrl,
-        hint: feature1Image.imageHint
-      }
     },
     {
       icon: <BookOpen className="h-10 w-10 text-primary" />,
       title: "Discover & Connect",
       description: "Browse a vibrant community of skilled individuals. Find the perfect match for your learning and teaching goals.",
-      image: {
-        src: feature2Image.imageUrl,
-        hint: feature2Image.imageHint
-      }
     },
     {
       icon: <BrainCircuit className="h-10 w-10 text-primary" />,
       title: "Swap & Grow",
       description: "Propose a skill exchange, chat with potential partners, and start your journey of mutual growth and collaboration.",
-      image: {
-        src: feature3Image.imageUrl,
-        hint: feature3Image.imageHint
-      }
     },
   ];
 
@@ -162,14 +147,13 @@ export default function Home() {
             </div>
             <div className="mx-auto grid max-w-5xl items-start gap-12 sm:grid-cols-1 md:gap-16 lg:max-w-none lg:grid-cols-3 mt-12">
               {features.map((feature, index) => (
-                <div key={index} className="grid gap-6">
+                <div key={index} className="grid gap-4 text-center">
                   <div className="flex justify-center">
-                    <Image src={feature.image.src} alt={feature.title} width={550} height={310} data-ai-hint={feature.image.hint} className="rounded-xl object-cover" />
-                  </div>
-                  <div className="flex flex-col items-center text-center gap-2">
-                    <div className="bg-primary/10 p-3 rounded-full">
+                     <div className="bg-primary/10 p-3 rounded-full">
                       {feature.icon}
                     </div>
+                  </div>
+                  <div className="space-y-2">
                     <h3 className="text-xl font-bold">{feature.title}</h3>
                     <p className="text-muted-foreground">{feature.description}</p>
                   </div>

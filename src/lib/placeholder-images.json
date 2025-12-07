@@ -41,24 +41,6 @@
       "description": "A group of people learning together in a bright, collaborative space.",
       "imageUrl": "https://images.unsplash.com/photo-1764173039318-75d362d60af8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw1fHxjb21tdW5pdHklMjBsZWFybmluZ3xlbnwwfHx8fDE3NjUxMTA2NzB8MA&ixlib=rb-4.1.0&q=80&w=1080",
       "imageHint": "community learning"
-    },
-    {
-      "id": "feature-1",
-      "description": "A person writing in a notebook, focused on creating their profile.",
-      "imageUrl": "https://images.unsplash.com/photo-1456324504439-367cee3b3c32?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxwZXJzb24lMjB3cml0aW5nfGVufDB8fHx8MTc2NTExMDY2OXww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "person writing"
-    },
-    {
-      "id": "feature-2",
-      "description": "Two people having a friendly conversation over coffee.",
-      "imageUrl": "https://images.unsplash.com/photo-1631885627891-19651751251f?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHwzfHxwZW9wbGUlMjB0YWxraW5nfGVufDB8fHx8MTc2NTAyNzQ3OHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "people talking"
-    },
-    {
-      "id": "feature-3",
-      "description": "Close-up of two pairs of hands planting a small seedling.",
-      "imageUrl": "https://images.unsplash.com/photo-1652040003918-0bf6d84bbfc6?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w3NDE5ODJ8MHwxfHNlYXJjaHw3fHxoYW5kcyUyMHBsYW50aW5nfGVufDB8fHx8MTc2NTExMDY3MHww&ixlib=rb-4.1.0&q=80&w=1080",
-      "imageHint": "hands planting"
     }
   ]
 }
