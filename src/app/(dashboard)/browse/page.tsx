@@ -157,9 +157,10 @@ export default function BrowsePage() {
                               {suggestedSkills.map(skill => (
                                 <CommandItem
                                   key={skill}
-                                  onSelect={() => {
-                                    setDrawerSearch(skill);
+                                  onSelect={(currentValue) => {
+                                    setDrawerSearch(currentValue === drawerSearch ? '' : currentValue);
                                   }}
+                                  value={skill}
                                   className="cursor-pointer"
                                 >
                                   {skill}
