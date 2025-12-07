@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
+import { useState, useEffect } from 'react';
 import { useUser, useFirestore, useAuth } from '@/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
@@ -17,14 +17,12 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
-import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Check, ChevronsUpDown } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
-import { cn } from '@/lib/utils';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Badge } from '@/components/ui/badge';
 
 
 // This is a placeholder, in a real app you might fetch these dynamically
@@ -53,64 +51,64 @@ type UserProfile = {
   skillsNeeded: string[];
 };
 
-const SkillCombobox = ({
-    selectedSkills,
-    onSelect,
-    availableSkills
+const SkillManager = ({
+  title,
+  description,
+  userSkills,
+  onAdd,
+  onRemove,
 }: {
-    selectedSkills: string[],
-    onSelect: (skill: string) => void,
-    availableSkills: string[]
+  title: string;
+  description: string;
+  userSkills: string[];
+  onAdd: (skill: string) => void;
+  onRemove: (skill: string) => void;
 }) => {
-    const [open, setOpen] = useState(false);
-    
-    return (
-        <Popover open={open} onOpenChange={setOpen}>
-            <PopoverTrigger asChild>
-                <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-full justify-between"
-                >
-                    Add a skill...
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
-                <Command>
-                    <CommandInput placeholder="Search for a skill..." />
-                    <CommandList>
-                        <CommandEmpty>No skill found.</CommandEmpty>
-                        <CommandGroup>
-                            {availableSkills.map((skill) => (
-                                <CommandItem
-                                    key={skill}
-                                    value={skill}
-                                    onSelect={(currentValue) => {
-                                        const skillToAdd = ALL_SKILLS.find(s => s.toLowerCase() === currentValue);
-                                        if (skillToAdd) {
-                                            onSelect(skillToAdd);
-                                        }
-                                        setOpen(false);
-                                    }}
-                                >
-                                    <Check
-                                        className={cn(
-                                            "mr-2 h-4 w-4",
-                                            selectedSkills.includes(skill) ? "opacity-100" : "opacity-0"
-                                        )}
-                                    />
-                                    {skill}
-                                </CommandItem>
-                            ))}
-                        </CommandGroup>
-                    </CommandList>
-                </Command>
-            </PopoverContent>
-        </Popover>
-    )
-}
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>{title}</CardTitle>
+        <CardDescription>{description}</CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="space-y-2 min-h-[6rem] rounded-md border p-2">
+            {userSkills.length > 0 ? (
+                 <div className="flex flex-wrap gap-2">
+                    {userSkills.map((skill) => (
+                        <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                            {skill}
+                            <button onClick={() => onRemove(skill)} className="rounded-full hover:bg-background/50">
+                                <X className="h-3 w-3" />
+                            </button>
+                        </Badge>
+                    ))}
+                </div>
+            ) : (
+                <p className="text-sm text-muted-foreground p-2">No skills added yet.</p>
+            )}
+        </div>
+         <p className="text-sm font-medium">Available Skills</p>
+        <ScrollArea className="h-64 rounded-md border">
+          <div className="p-4 space-y-2">
+            {ALL_SKILLS.map((skill) => {
+              const isAdded = userSkills.includes(skill);
+              if (isAdded) return null;
+              return (
+                <div key={skill} className="flex items-center justify-between">
+                  <span className="text-sm">{skill}</span>
+                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => onAdd(skill)}>
+                    <Plus className="h-4 w-4" />
+                  </Button>
+                </div>
+              );
+            })}
+          </div>
+        </ScrollArea>
+      </CardContent>
+    </Card>
+  );
+};
+
 
 export default function ProfilePage() {
   const { user, loading: userLoading } = useUser();
@@ -237,15 +235,6 @@ export default function ProfilePage() {
     setIsEditing(false);
   }
   
-  const availableSkillsOffered = useMemo(() => {
-    if (!profile) return ALL_SKILLS;
-    return ALL_SKILLS.filter(skill => !(profile.skillsOffered || []).includes(skill));
-  }, [profile]);
-  
-  const availableSkillsNeeded = useMemo(() => {
-    if (!profile) return ALL_SKILLS;
-    return ALL_SKILLS.filter(skill => !(profile.skillsNeeded || []).includes(skill));
-  }, [profile]);
 
   if (loading || userLoading) {
     return <div>Loading profile...</div>;
@@ -336,58 +325,20 @@ export default function ProfilePage() {
         </TabsContent>
         <TabsContent value="skills">
           <div className="grid md:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Skills I Offer</CardTitle>
-                <CardDescription>What are you good at?</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2 min-h-[6rem]">
-                  {(profile.skillsOffered || []).map((skill) => (
-                    <div
-                      key={skill}
-                      className="flex items-center justify-between p-2 rounded-md bg-secondary"
-                    >
-                      <span>{skill}</span>
-                      <Button size="icon" variant="ghost" onClick={() => removeSkill('skillsOffered', skill)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-                <SkillCombobox 
-                    selectedSkills={profile.skillsOffered || []}
-                    onSelect={(skill) => addSkill('skillsOffered', skill)}
-                    availableSkills={availableSkillsOffered}
-                />
-              </CardContent>
-            </Card>
-            <Card>
-              <CardHeader>
-                <CardTitle>Skills I Need</CardTitle>
-                <CardDescription>What do you want to learn?</CardDescription>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-2 min-h-[6rem]">
-                  {(profile.skillsNeeded || []).map((skill) => (
-                     <div
-                      key={skill}
-                      className="flex items-center justify-between p-2 rounded-md bg-secondary"
-                    >
-                      <span>{skill}</span>
-                      <Button size="icon" variant="ghost" onClick={() => removeSkill('skillsNeeded', skill)}>
-                        <Trash2 className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  ))}
-                </div>
-                 <SkillCombobox 
-                    selectedSkills={profile.skillsNeeded || []}
-                    onSelect={(skill) => addSkill('skillsNeeded', skill)}
-                    availableSkills={availableSkillsNeeded}
-                />
-              </CardContent>
-            </Card>
+            <SkillManager
+              title="Skills I Offer"
+              description="What are you good at?"
+              userSkills={profile.skillsOffered || []}
+              onAdd={(skill) => addSkill('skillsOffered', skill)}
+              onRemove={(skill) => removeSkill('skillsOffered', skill)}
+            />
+            <SkillManager
+              title="Skills I Need"
+              description="What do you want to learn?"
+              userSkills={profile.skillsNeeded || []}
+              onAdd={(skill) => addSkill('skillsNeeded', skill)}
+              onRemove={(skill) => removeSkill('skillsNeeded', skill)}
+            />
           </div>
         </TabsContent>
         <TabsContent value="suggestions">
