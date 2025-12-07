@@ -41,7 +41,7 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command';
+import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandInput } from '@/components/ui/command';
 import { ALL_SKILLS } from '@/lib/skills';
 
 
@@ -52,6 +52,7 @@ export default function BrowsePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
   const [drawerSearch, setDrawerSearch] = useState('');
+  const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const suggestedSkills = useMemo(() => {
     if (!drawerSearch) return ALL_SKILLS;
@@ -124,7 +125,7 @@ export default function BrowsePage() {
           </p>
         </div>
         <div className="flex w-full sm:w-auto items-center gap-2">
-           <Drawer>
+           <Drawer open={isDrawerOpen} onOpenChange={setIsDrawerOpen}>
             <DrawerTrigger asChild>
               <Button variant="outline">
                 <SlidersHorizontal className="mr-2 h-4 w-4" />
@@ -139,18 +140,12 @@ export default function BrowsePage() {
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
                     <Command>
-                      <div className="relative w-full">
-                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                        <Input
-                          type="search"
-                          placeholder="Search skills or people..."
-                          className="pl-8"
-                          value={drawerSearch}
-                          onValueChange={setDrawerSearch}
-                        />
-                      </div>
-                      
-                      <div className="max-h-60 overflow-y-auto rounded-md border">
+                      <CommandInput
+                        placeholder="Search skills or people..."
+                        value={drawerSearch}
+                        onValueChange={setDrawerSearch}
+                      />
+                      <div className="max-h-60 overflow-y-auto">
                           <CommandList>
                             <CommandEmpty>No skills found.</CommandEmpty>
                             <CommandGroup heading="Skills">
@@ -191,16 +186,11 @@ export default function BrowsePage() {
                   </div>
                 </div>
                 <DrawerFooter>
-                    <DrawerClose asChild>
-                      <Button onClick={applyFilters}>Apply</Button>
-                    </DrawerClose>
+                    <Button onClick={() => { applyFilters(); setIsDrawerOpen(false); }}>Apply</Button>
                     {hasActiveFilters && (
-                       <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
+                       <Button variant="ghost" onClick={() => { clearFilters(); setIsDrawerOpen(false); }}>Clear Filters</Button>
                     )}
                 </DrawerFooter>
-                <DrawerClose asChild className="absolute right-4 top-4">
-                  <Button variant="ghost" size="icon"><X className="h-4 w-4" /></Button>
-                </DrawerClose>
                 </div>
             </DrawerContent>
           </Drawer>
