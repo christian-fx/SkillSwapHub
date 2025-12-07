@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useUser, useFirestore, useAuth } from '@/firebase';
 import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
@@ -24,21 +24,7 @@ import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-
-
-// This is a placeholder, in a real app you might fetch these dynamically
-const initialSuggestions = [
-    {
-        suggestedSkill: 'Public Speaking',
-        offeredBy: 'Fiona G.',
-        matchReason: 'A great match for your goal to learn presentation skills.',
-    },
-    {
-        suggestedSkill: 'React',
-        offeredBy: 'Bob W.',
-        matchReason: 'You both want to improve your web development abilities.',
-    }
-];
+import { suggestSkillSwaps, type SkillSwapOutput } from '@/ai/flows/skill-match-suggestions';
 
 
 type UserProfile = {
@@ -153,6 +139,10 @@ export default function ProfilePage() {
   const [isEditingNeeded, setIsEditingNeeded] = useState(false);
   const [formData, setFormData] = useState({ name: '', location: '', bio: '' });
 
+  const [aiSuggestions, setAiSuggestions] = useState<SkillSwapOutput>([]);
+  const [suggestionsLoading, setSuggestionsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('profile');
+
   useEffect(() => {
     if (user) {
       const fetchProfile = async () => {
@@ -179,6 +169,37 @@ export default function ProfilePage() {
         setLoading(false);
     }
   }, [user, firestore, userLoading]);
+
+  const getSuggestions = useCallback(async () => {
+    if (!profile || (profile.skillsOffered.length === 0 && profile.skillsNeeded.length === 0)) {
+        setAiSuggestions([]);
+        return;
+    }
+    setSuggestionsLoading(true);
+    try {
+        const suggestions = await suggestSkillSwaps({
+            skillsOffered: profile.skillsOffered,
+            skillsNeeded: profile.skillsNeeded,
+        });
+        setAiSuggestions(suggestions);
+    } catch (error) {
+        console.error("Error fetching AI suggestions:", error);
+        toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not fetch AI suggestions."
+        });
+    } finally {
+        setSuggestionsLoading(false);
+    }
+  }, [profile, toast]);
+
+  useEffect(() => {
+    if (activeTab === 'suggestions') {
+        getSuggestions();
+    }
+  }, [activeTab, getSuggestions, profile?.skillsOffered, profile?.skillsNeeded]);
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { id, value } = e.target;
@@ -293,7 +314,7 @@ export default function ProfilePage() {
           <p className="text-muted-foreground">{profile.location}</p>
         </div>
       </div>
-      <Tabs defaultValue="profile">
+      <Tabs defaultValue="profile" onValueChange={setActiveTab}>
         <TabsList>
           <TabsTrigger value="profile">My Profile</TabsTrigger>
           <TabsTrigger value="skills">Manage Skills</TabsTrigger>
@@ -385,12 +406,16 @@ export default function ProfilePage() {
                 <CardTitle>AI-Powered Suggestions</CardTitle>
               </div>
               <CardDescription>
-                Here are some potential skill swaps we found for you.
+                Here are some potential skill swaps we found for you based on your profile.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              {initialSuggestions.length > 0 ? (
-                initialSuggestions.map((suggestion, index) => (
+              {suggestionsLoading ? (
+                 <div className="flex items-center justify-center p-8">
+                    <p>Finding the best matches for you...</p>
+                 </div>
+              ) : aiSuggestions.length > 0 ? (
+                aiSuggestions.map((suggestion, index) => (
                   <Card key={index} className="p-4">
                     <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
                       <div className="flex-1">
@@ -412,10 +437,14 @@ export default function ProfilePage() {
                   </Card>
                 ))
               ) : (
-                <p>
-                  No suggestions available right now. Try adding more skills
-                  you need!
-                </p>
+                <div className="text-center p-8">
+                    <p>
+                    No suggestions available right now.
+                    </p>
+                    <p className="text-muted-foreground text-sm">
+                    Try adding skills you offer and need to get personalized matches!
+                    </p>
+                </div>
               )}
             </CardContent>
           </Card>
