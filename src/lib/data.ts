@@ -361,3 +361,5 @@ export const conversations: Conversation[] = [
     get lastMessage() { return this.messages[this.messages.length - 1] },
   },
 ];
+
+    

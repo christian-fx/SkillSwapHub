@@ -38,8 +38,10 @@ import {
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
-} from "@/components/ui/drawer"
+} from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Separator } from '@/components/ui/separator';
+import { SkillFilter } from '@/components/skill-filter';
 
 const USERS_PER_PAGE = 8;
 
@@ -47,6 +49,17 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
+  const [selectedSkillsOffered, setSelectedSkillsOffered] = useState<Set<string>>(new Set());
+  const [selectedSkillsNeeded, setSelectedSkillsNeeded] = useState<Set<string>>(new Set());
+
+  const allSkills = useMemo(() => {
+    const skills = new Map<string, { id: string; name: string }>();
+    allUsers.forEach(user => {
+      user.skillsOffered.forEach(skill => skills.set(skill.name, skill));
+      user.skillsNeeded.forEach(skill => skills.set(skill.name, skill));
+    });
+    return Array.from(skills.values()).sort((a, b) => a.name.localeCompare(b.name));
+  }, []);
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -69,9 +82,25 @@ export default function BrowsePage() {
         user.skillsNeeded.some(skill => skill.name.toLowerCase().includes(lowercasedQuery))
       );
     }
+    
+    if (selectedSkillsOffered.size > 0) {
+      users = users.filter(user =>
+        Array.from(selectedSkillsOffered).every(selectedSkill =>
+          user.skillsOffered.some(skill => skill.name === selectedSkill)
+        )
+      );
+    }
+    
+    if (selectedSkillsNeeded.size > 0) {
+      users = users.filter(user =>
+        Array.from(selectedSkillsNeeded).every(selectedSkill =>
+          user.skillsNeeded.some(skill => skill.name === selectedSkill)
+        )
+      );
+    }
 
     return users;
-  }, [searchQuery, sortOrder, shuffledUsers]);
+  }, [searchQuery, sortOrder, shuffledUsers, selectedSkillsOffered, selectedSkillsNeeded]);
 
 
   const totalPages = Math.ceil(sortedAndFilteredUsers.length / USERS_PER_PAGE);
@@ -85,6 +114,16 @@ export default function BrowsePage() {
       setCurrentPage(page);
     }
   };
+  
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSortOrder("random");
+    setSelectedSkillsOffered(new Set());
+    setSelectedSkillsNeeded(new Set());
+    setCurrentPage(1);
+  };
+  
+  const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random' || selectedSkillsOffered.size > 0 || selectedSkillsNeeded.size > 0;
 
   return (
     <>
@@ -98,20 +137,7 @@ export default function BrowsePage() {
           </p>
         </div>
         <div className="flex w-full sm:w-auto items-center gap-2">
-          <div className="relative w-full sm:w-64">
-            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input
-              type="search"
-              placeholder="Search skills or people..."
-              className="pl-8"
-              value={searchQuery}
-              onChange={(e) => {
-                setSearchQuery(e.target.value);
-                setCurrentPage(1); // Reset to first page on new search
-              }}
-            />
-          </div>
-          <Drawer>
+           <Drawer>
             <DrawerTrigger asChild>
               <Button variant="outline" size="icon">
                 <SlidersHorizontal className="h-4 w-4" />
@@ -124,37 +150,89 @@ export default function BrowsePage() {
                     <DrawerTitle>Sort & Filter</DrawerTitle>
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
-                <div className="p-4">
-                  <Label className="text-sm font-medium">Sort by Name</Label>
-                   <RadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as 'random' | 'asc' | 'desc')}>
-                      <div className="flex items-center space-x-2 mt-2">
-                          <RadioGroupItem value="asc" id="r-asc" />
-                          <Label htmlFor="r-asc" className="flex items-center gap-2"><ArrowDownAZ className="h-4 w-4"/> Ascending</Label>
-                      </div>
-                      <div className="flex items-center space-x-2 mt-2">
-                          <RadioGroupItem value="desc" id="r-desc" />
-                          <Label htmlFor="r-desc" className="flex items-center gap-2"><ArrowUpZA className="h-4 w-4"/> Descending</Label>
-                      </div>
-                      <div className="flex items-center space-x-2 mt-2">
-                          <RadioGroupItem value="random" id="r-random" />
-                          <Label htmlFor="r-random">Default</Label>
-                      </div>
-                  </RadioGroup>
+                <div className="p-4 space-y-4">
+                  <div className="relative w-full">
+                    <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                    <Input
+                      type="search"
+                      placeholder="Search skills or people..."
+                      className="pl-8"
+                      value={searchQuery}
+                      onChange={(e) => {
+                        setSearchQuery(e.target.value);
+                        setCurrentPage(1); // Reset to first page on new search
+                      }}
+                    />
+                  </div>
+                  
+                  <Separator />
+                  
+                  <div>
+                    <Label className="text-sm font-medium mb-2 block">Filter by Skills</Label>
+                    <div className="flex flex-col sm:flex-row gap-2">
+                        <SkillFilter
+                            title="Offers"
+                            allSkills={allSkills}
+                            selectedSkills={selectedSkillsOffered}
+                            onSelectionChange={setSelectedSkillsOffered}
+                        />
+                        <SkillFilter
+                            title="Needs"
+                            allSkills={allSkills}
+                            selectedSkills={selectedSkillsNeeded}
+                            onSelectionChange={setSelectedSkillsNeeded}
+                        />
+                    </div>
+                  </div>
+
+                  <Separator />
+
+                  <div>
+                    <Label className="text-sm font-medium">Sort by Name</Label>
+                    <RadioGroup value={sortOrder} onValueChange={(value) => setSortOrder(value as 'random' | 'asc' | 'desc')}>
+                        <div className="flex items-center space-x-2 mt-2">
+                            <RadioGroupItem value="asc" id="r-asc" />
+                            <Label htmlFor="r-asc" className="flex items-center gap-2"><ArrowDownAZ className="h-4 w-4"/> Ascending</Label>
+                        </div>
+                        <div className="flex items-center space-x-2 mt-2">
+                            <RadioGroupItem value="desc" id="r-desc" />
+                            <Label htmlFor="r-desc" className="flex items-center gap-2"><ArrowUpZA className="h-4 w-4"/> Descending</Label>
+                        </div>
+                        <div className="flex items-center space-x-2 mt-2">
+                            <RadioGroupItem value="random" id="r-random" />
+                            <Label htmlFor="r-random">Default</Label>
+                        </div>
+                    </RadioGroup>
+                  </div>
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>
-                    <Button>Apply</Button>
+                      <Button>Apply</Button>
                     </DrawerClose>
-                    <DrawerClose asChild>
-                    <Button variant="outline">Cancel</Button>
-                    </DrawerClose>
+                    {hasActiveFilters && (
+                       <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
+                    )}
                 </DrawerFooter>
                 </div>
             </DrawerContent>
           </Drawer>
         </div>
       </div>
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+      
+       {hasActiveFilters && (
+        <div className="flex items-center gap-2 text-sm mt-4">
+          <h3 className="font-semibold">Active Filters:</h3>
+          <div className="flex flex-wrap gap-1">
+            {searchQuery && <Badge variant="secondary">Search: {searchQuery}</Badge>}
+            {sortOrder !== 'random' && <Badge variant="secondary">Sort: {sortOrder === 'asc' ? 'A-Z' : 'Z-A'}</Badge>}
+            {Array.from(selectedSkillsOffered).map(skill => <Badge key={`so-${skill}`} variant="secondary">Offers: {skill}</Badge>)}
+            {Array.from(selectedSkillsNeeded).map(skill => <Badge key={`sn-${skill}`} variant="secondary">Needs: {skill}</Badge>)}
+            <Button variant="ghost" size="icon" className="h-5 w-5" onClick={clearFilters}><X className="h-4 w-4" /></Button>
+          </div>
+        </div>
+      )}
+      
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4">
         {paginatedUsers.map((user) => (
           <Card key={user.id} className="flex flex-col">
             <CardHeader className="flex flex-row items-center gap-4">
@@ -252,6 +330,20 @@ export default function BrowsePage() {
             </div>
         </div>
       )}
+
+      {paginatedUsers.length === 0 && (
+        <div className="text-center py-16">
+            <p className="text-lg font-semibold">No users found</p>
+            <p className="text-muted-foreground">Try adjusting your search or filter criteria.</p>
+             {hasActiveFilters && (
+                <Button variant="link" onClick={clearFilters} className="mt-4">
+                    Clear all filters
+                </Button>
+            )}
+        </div>
+      )}
     </>
   );
 }
+
+    
