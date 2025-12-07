@@ -142,31 +142,31 @@ export default function BrowsePage() {
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
                     <Popover open={showSuggestions} onOpenChange={setShowSuggestions}>
-                      <PopoverAnchor asChild>
-                        <div className="relative w-full">
-                          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                          <Input
-                            type="search"
-                            placeholder="Search skills or people..."
-                            className="pl-8"
-                            value={searchQuery}
-                            onChange={(e) => {
-                              setSearchQuery(e.target.value);
-                              setCurrentPage(1);
-                              if (e.target.value.length > 0) {
-                                setShowSuggestions(true);
-                              } else {
-                                setShowSuggestions(false);
-                              }
-                            }}
-                            onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                            onFocus={() => {
-                              if(searchQuery.length > 0) setShowSuggestions(true);
-                            }}
-                          />
-                        </div>
-                      </PopoverAnchor>
-                      <PopoverContent className="w-[calc(var(--radix-popover-trigger-width)-2rem)] p-0" align="start">
+                      <PopoverTrigger asChild className="w-full">
+                          <div className="relative w-full">
+                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                            <Input
+                              type="search"
+                              placeholder="Search skills or people..."
+                              className="pl-8"
+                              value={searchQuery}
+                              onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                                if (e.target.value.length > 0) {
+                                  setShowSuggestions(true);
+                                } else {
+                                  setShowSuggestions(false);
+                                }
+                              }}
+                              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
+                              onFocus={() => {
+                                if(searchQuery.length > 0) setShowSuggestions(true);
+                              }}
+                            />
+                          </div>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-[calc(var(--radix-popover-trigger-width))] p-0" align="start">
                         <Command>
                           <CommandList>
                             <CommandEmpty>No skills found.</CommandEmpty>
@@ -350,5 +350,3 @@ export default function BrowsePage() {
     </>
   );
 }
-
-    

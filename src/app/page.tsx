@@ -112,7 +112,7 @@ export default function Home() {
         </nav>
       </header>
       <main className="flex-1">
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-20 lg:py-28">
           <div className="container px-4 md:px-6">
             <div className="grid gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="flex flex-col justify-center space-y-4">
@@ -149,7 +149,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="features" className="w-full py-12 md:py-24 lg:py-32 bg-card">
+        <section id="features" className="w-full py-12 md:py-20 lg:py-28 bg-card">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -160,21 +160,26 @@ export default function Home() {
                 </p>
               </div>
             </div>
-            <div className="mx-auto grid max-w-5xl items-start gap-8 sm:grid-cols-1 md:gap-12 lg:max-w-none lg:grid-cols-3 mt-12">
+            <div className="mx-auto grid max-w-5xl items-start gap-12 sm:grid-cols-1 md:gap-16 lg:max-w-none lg:grid-cols-3 mt-12">
               {features.map((feature, index) => (
-                 <div key={index} className="flex flex-col items-center text-center gap-4">
-                  <div className="bg-primary/10 p-4 rounded-full">
-                    {feature.icon}
+                <div key={index} className="grid gap-6">
+                  <div className="flex justify-center">
+                    <Image src={feature.image.src} alt={feature.title} width={550} height={310} data-ai-hint={feature.image.hint} className="rounded-xl object-cover" />
                   </div>
-                  <h3 className="text-xl font-bold">{feature.title}</h3>
-                  <p className="text-muted-foreground">{feature.description}</p>
+                  <div className="flex flex-col items-center text-center gap-2">
+                    <div className="bg-primary/10 p-3 rounded-full">
+                      {feature.icon}
+                    </div>
+                    <h3 className="text-xl font-bold">{feature.title}</h3>
+                    <p className="text-muted-foreground">{feature.description}</p>
+                  </div>
                 </div>
               ))}
             </div>
           </div>
         </section>
 
-        <section id="featured-skills" className="w-full py-12 md:py-24 lg:py-32">
+        <section id="featured-skills" className="w-full py-12 md:py-20 lg:py-28">
           <div className="container px-4 md:px-6">
             <div className="flex flex-col items-center justify-center space-y-4 text-center">
               <div className="space-y-2">
@@ -199,7 +204,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section id="testimonials" className="w-full py-12 md:py-24 lg:py-32 bg-card">
+        <section id="testimonials" className="w-full py-12 md:py-20 lg:py-28 bg-card">
           <div className="container grid items-center justify-center gap-4 px-4 text-center md:px-6">
             <div className="space-y-3">
               <h2 className="text-3xl font-bold tracking-tighter md:text-4xl/tight font-headline">What Our Community Is Saying</h2>
@@ -234,7 +239,7 @@ export default function Home() {
           </div>
         </section>
 
-        <section className="w-full py-12 md:py-24 lg:py-32">
+        <section className="w-full py-12 md:py-20 lg:py-28">
           <div className="container px-4 md:px-6">
             <div className="grid items-center gap-6 lg:grid-cols-2 lg:gap-12">
               <div className="space-y-4">
@@ -278,32 +283,32 @@ export default function Home() {
                 <div>
                 <p className="font-medium text-foreground">Company</p>
                 <ul className="mt-4 space-y-2 text-sm">
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">About</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Careers</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Blog</Link></li>
+                    <li><Link href="/about" className="text-muted-foreground hover:text-primary">About</Link></li>
+                    <li><Link href="/careers" className="text-muted-foreground hover:text-primary">Careers</Link></li>
+                    <li><Link href="/blog" className="text-muted-foreground hover:text-primary">Blog</Link></li>
                 </ul>
                 </div>
                 <div>
                 <p className="font-medium text-foreground">Community</p>
                 <ul className="mt-4 space-y-2 text-sm">
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Guidelines</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Events</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Forum</Link></li>
+                    <li><Link href="/guidelines" className="text-muted-foreground hover:text-primary">Guidelines</Link></li>
+                    <li><Link href="/events" className="text-muted-foreground hover:text-primary">Events</Link></li>
+                    <li><Link href="/forum" className="text-muted-foreground hover:text-primary">Forum</Link></li>
                 </ul>
                 </div>
                 <div>
                 <p className="font-medium text-foreground">Support</p>
                 <ul className="mt-4 space-y-2 text-sm">
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Help Center</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Contact Us</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Privacy Policy</Link></li>
+                    <li><Link href="/help-center" className="text-muted-foreground hover:text-primary">Help Center</Link></li>
+                    <li><Link href="/contact-us" className="text-muted-foreground hover:text-primary">Contact Us</Link></li>
+                    <li><Link href="/privacy-policy" className="text-muted-foreground hover:text-primary">Privacy Policy</Link></li>
                 </ul>
                 </div>
                  <div>
                 <p className="font-medium text-foreground">Legal</p>
                 <ul className="mt-4 space-y-2 text-sm">
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Terms of Service</Link></li>
-                    <li><Link href="#" className="text-muted-foreground hover:text-primary">Cookie Policy</Link></li>
+                    <li><Link href="/terms-of-service" className="text-muted-foreground hover:text-primary">Terms of Service</Link></li>
+                    <li><Link href="/cookie-policy" className="text-muted-foreground hover:text-primary">Cookie Policy</Link></li>
                 </ul>
                 </div>
             </div>
