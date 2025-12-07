@@ -41,8 +41,9 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-import { Popover, PopoverContent, PopoverTrigger, PopoverAnchor } from '@/components/ui/popover';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command';
+import { ALL_SKILLS } from '@/lib/skills';
 
 
 const USERS_PER_PAGE = 8;
@@ -51,23 +52,14 @@ export default function BrowsePage() {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
-  const [showSuggestions, setShowSuggestions] = useState(false);
-
-  const allSkills = useMemo(() => {
-    const skills = new Set<string>();
-    allUsers.forEach(user => {
-      user.skillsOffered.forEach(skill => skills.add(skill));
-      user.skillsNeeded.forEach(skill => skills.add(skill));
-    });
-    return Array.from(skills).sort();
-  }, []);
+  const [drawerSearch, setDrawerSearch] = useState('');
 
   const suggestedSkills = useMemo(() => {
-    if (!searchQuery) return [];
-    return allSkills.filter(skill =>
-      skill.toLowerCase().includes(searchQuery.toLowerCase())
+    if (!drawerSearch) return ALL_SKILLS;
+    return ALL_SKILLS.filter(skill =>
+      skill.toLowerCase().includes(drawerSearch.toLowerCase())
     );
-  }, [searchQuery, allSkills]);
+  }, [drawerSearch]);
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -109,9 +101,15 @@ export default function BrowsePage() {
   
   const clearFilters = () => {
     setSearchQuery("");
+    setDrawerSearch("");
     setSortOrder("random");
     setCurrentPage(1);
   };
+
+  const applyFilters = () => {
+    setSearchQuery(drawerSearch);
+    setCurrentPage(1);
+  }
   
   const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random';
 
@@ -129,9 +127,9 @@ export default function BrowsePage() {
         <div className="flex w-full sm:w-auto items-center gap-2">
            <Drawer>
             <DrawerTrigger asChild>
-              <Button variant="outline" size="icon">
-                <SlidersHorizontal className="h-4 w-4" />
-                <span className="sr-only">Filter</span>
+              <Button variant="outline">
+                <SlidersHorizontal className="mr-2 h-4 w-4" />
+                Filter & Sort
               </Button>
             </DrawerTrigger>
             <DrawerContent>
@@ -141,42 +139,27 @@ export default function BrowsePage() {
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
-                    <Popover open={showSuggestions} onOpenChange={setShowSuggestions}>
-                      <PopoverTrigger asChild className="w-full">
-                          <div className="relative w-full">
-                            <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-                            <Input
-                              type="search"
-                              placeholder="Search skills or people..."
-                              className="pl-8"
-                              value={searchQuery}
-                              onChange={(e) => {
-                                setSearchQuery(e.target.value);
-                                setCurrentPage(1);
-                                if (e.target.value.length > 0) {
-                                  setShowSuggestions(true);
-                                } else {
-                                  setShowSuggestions(false);
-                                }
-                              }}
-                              onBlur={() => setTimeout(() => setShowSuggestions(false), 150)}
-                              onFocus={() => {
-                                if(searchQuery.length > 0) setShowSuggestions(true);
-                              }}
-                            />
-                          </div>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-[calc(var(--radix-popover-trigger-width))] p-0" align="start">
+                    <div className="relative w-full">
+                      <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                      <Input
+                        type="search"
+                        placeholder="Search skills or people..."
+                        className="pl-8"
+                        value={drawerSearch}
+                        onChange={(e) => setDrawerSearch(e.target.value)}
+                      />
+                    </div>
+                    
+                    <div className="max-h-60 overflow-y-auto rounded-md border">
                         <Command>
                           <CommandList>
                             <CommandEmpty>No skills found.</CommandEmpty>
-                            <CommandGroup heading="Suggestions">
+                            <CommandGroup heading="Skills">
                               {suggestedSkills.map(skill => (
                                 <CommandItem
                                   key={skill}
                                   onSelect={() => {
-                                    setSearchQuery(skill);
-                                    setShowSuggestions(false);
+                                    setDrawerSearch(skill);
                                   }}
                                   className="cursor-pointer"
                                 >
@@ -186,8 +169,7 @@ export default function BrowsePage() {
                             </CommandGroup>
                           </CommandList>
                         </Command>
-                      </PopoverContent>
-                    </Popover>
+                    </div>
                   
                   <Separator />
 
@@ -211,7 +193,7 @@ export default function BrowsePage() {
                 </div>
                 <DrawerFooter>
                     <DrawerClose asChild>
-                      <Button>Apply</Button>
+                      <Button onClick={applyFilters}>Apply</Button>
                     </DrawerClose>
                     {hasActiveFilters && (
                        <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
