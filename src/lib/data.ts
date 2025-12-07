@@ -337,6 +337,336 @@ export const users: User[] = [
     location: "Hyrule",
     skillsOffered: [{ id: "skill-54", name: "Ocarina" }],
     skillsNeeded: [{ id: "skill-55", name: "Electronics Repair" }],
+  },
+  {
+    id: "user-27",
+    name: "Albus Dumbledore",
+    email: "albus@hogwarts.edu",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "wise wizard",
+    bio: "Headmaster. Can offer lessons in transfiguration and defense against the dark arts. Seeking to understand 'the internet'.",
+    location: "Hogwarts, Scotland",
+    skillsOffered: [{ "id": "skill-56", "name": "Transfiguration" }, { "id": "skill-57", "name": "Ancient Runes" }],
+    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+  },
+  {
+    id: "user-28",
+    name: "Beatrix Kiddo",
+    email: "beatrix@example.com",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "female warrior",
+    bio: "Can teach sword fighting and the five-point-palm exploding heart technique. I'm interested in learning how to knit.",
+    location: "El Paso, TX",
+    skillsOffered: [{ "id": "skill-58", "name": "Swordsmanship" }],
+    skillsNeeded: [{ "id": "skill-32", "name": "Knitting" }]
+  },
+  {
+    id: "user-29",
+    name: "Cosmo Kramer",
+    email: "kramer@example.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "quirky man",
+    bio: "I'm full of ideas! I can teach you about physical comedy and making a grand entrance. I need someone to help me with my taxes.",
+    location: "New York, NY",
+    skillsOffered: [{ "id": "skill-59", "name": "Physical Comedy" }],
+    skillsNeeded: [{ "id": "skill-14", "name": "Personal Finance" }]
+  },
+  {
+    id: "user-30",
+    name: "Dana Scully",
+    email: "scully@fbi.gov",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "female detective",
+    bio: "Medical doctor and FBI agent. I can teach you about forensic science and skepticism. I'm looking to learn photography.",
+    location: "Washington D.C.",
+    skillsOffered: [{ "id": "skill-60", "name": "Forensic Science" }],
+    skillsNeeded: [{ "id": "skill-27", "name": "Photography" }]
+  },
+  {
+    id: "user-31",
+    name: "Elaine Benes",
+    email: "elaine@example.com",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "woman city",
+    bio: "I work in publishing. I can edit your manuscript and teach you how to dance... sort of. I want to learn how to do my own plumbing.",
+    location: "New York, NY",
+    skillsOffered: [{ "id": "skill-7", "name": "Editing" }],
+    skillsNeeded: [{ "id": "skill-61", "name": "Plumbing" }]
+  },
+  {
+    id: "user-32",
+    name: "Fox Mulder",
+    email: "mulder@fbi.gov",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "male detective",
+    bio: "I want to believe. Can teach you about unsolved mysteries and the paranormal. Looking for someone to teach me advanced basketball techniques.",
+    location: "Washington D.C.",
+    skillsOffered: [{ "id": "skill-62", "name": "Cryptozoology" }],
+    skillsNeeded: [{ "id": "skill-63", "name": "Basketball" }]
+  },
+  {
+    id: "user-33",
+    name: "Gordon Ramsay",
+    email: "gordon@example.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "chef angry",
+    bio: "I can teach you how to cook like a real chef. Don't be an idiot sandwich. I'd like to learn how to be more patient.",
+    location: "London, UK",
+    skillsOffered: [{ "id": "skill-12", "name": "Cooking" }],
+    skillsNeeded: [{ "id": "skill-64", "name": "Meditation" }]
+  },
+  {
+    id: "user-34",
+    name: "Hermione Granger",
+    email: "hermione@hogwarts.edu",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "student wizard",
+    bio: "I can help you with pretty much any subject. I'm particularly good at Arithmancy. I want to learn how to use a computer.",
+    location: "Hogwarts, Scotland",
+    skillsOffered: [{ "id": "skill-65", "name": "Arithmancy" }],
+    skillsNeeded: [{ "id": "skill-41", "name": "Smartphone Basics" }]
+  },
+  {
+    id: "user-35",
+    name: "Indiana Jones",
+    email: "indy@example.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "adventurer fedora",
+    bio: "Archaeology professor and adventurer. I can teach you about ancient history and how to use a whip. I need to learn how to fly a plane.",
+    location: "Connecticut, USA",
+    skillsOffered: [{ "id": "skill-66", "name": "Archaeology" }],
+    skillsNeeded: [{ "id": "skill-67", "name": "Piloting" }]
+  },
+  {
+    id: "user-36",
+    name: "Jack Sparrow",
+    email: "captainjack@sea.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "pirate captain",
+    bio: "Captain. I can teach you how to sail and find treasure. Savvy? I need someone to fix my compass.",
+    location: "The Caribbean",
+    skillsOffered: [{ "id": "skill-68", "name": "Sailing" }],
+    skillsNeeded: [{ "id": "skill-55", "name": "Electronics Repair" }]
+  },
+  {
+    id: "user-37",
+    name: "Katniss Everdeen",
+    email: "katniss@district12.panem",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "archer woods",
+    bio: "I can teach you archery and survival skills. I'd like to learn how to bake.",
+    location: "District 12",
+    skillsOffered: [{ "id": "skill-69", "name": "Archery" }],
+    skillsNeeded: [{ "id": "skill-28", "name": "Baking" }]
+  },
+  {
+    id: "user-38",
+    name: "Liz Lemon",
+    email: "liz@nbc.com",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "woman office",
+    bio: "Head writer for a sketch comedy show. I can teach you how to write jokes. I need help with my night cheese addiction.",
+    location: "New York, NY",
+    skillsOffered: [{ "id": "skill-70", "name": "Comedy Writing" }],
+    skillsNeeded: [{ "id": "skill-15", "name": "Nutrition Planning" }]
+  },
+  {
+    id: "user-39",
+    name: "Marty McFly",
+    email: "marty@hillvalley.ca",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "teenager 80s",
+    bio: "I can play the guitar pretty well. I need someone to help me fix my DeLorean.",
+    location: "Hill Valley, CA",
+    skillsOffered: [{ "id": "skill-13", "name": "Guitar" }],
+    skillsNeeded: [{ "id": "skill-37", "name": "Car Maintenance" }]
+  },
+  {
+    id: "user-40",
+    name: "Optimus Prime",
+    email: "optimus@autobots.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "robot leader",
+    bio: "Leader of the Autobots. I can teach you about leadership and intergalactic diplomacy. I wish to learn about human art.",
+    location: "Cybertron",
+    skillsOffered: [{ "id": "skill-43", "name": "Leadership" }],
+    skillsNeeded: [{ "id": "skill-44", "name": "Art History" }]
+  },
+  {
+    id: "user-41",
+    name: "Peter Parker",
+    email: "pete@dailybugle.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "young man",
+    bio: "I'm a freelance photographer. I can teach you how to take great pictures. I'm trying to learn more about chemistry.",
+    location: "Queens, NY",
+    skillsOffered: [{ "id": "skill-27", "name": "Photography" }],
+    skillsNeeded: [{ "id": "skill-26", "name": "Chemistry" }]
+  },
+  {
+    id: "user-42",
+    name: "Ron Swanson",
+    email: "ron@pawnee.in.gov",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "man mustache",
+    bio: "I enjoy woodworking and breakfast food. I can teach you how to build a canoe. I have no needs.",
+    location: "Pawnee, IN",
+    skillsOffered: [{ "id": "skill-18", "name": "Woodworking" }],
+    skillsNeeded: [{ "id": "skill-71", "name": "Philosophy" }]
+  },
+  {
+    id: "user-43",
+    name: "Sarah Connor",
+    email: "sarah@resistance.net",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "woman tough",
+    bio: "I can teach you how to survive judgment day. I need to learn how to weld.",
+    location: "Los Angeles, CA",
+    skillsOffered: [{ "id": "skill-72", "name": "Survival" }],
+    skillsNeeded: [{ "id": "skill-73", "name": "Welding" }]
+  },
+  {
+    id: "user-44",
+    name: "Sherlock Holmes",
+    email: "sherlock@221b.baker.st",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "detective classic",
+    bio: "Consulting detective. I can teach you the science of deduction. I'm looking for someone to teach me the violin.",
+    location: "London, UK",
+    skillsOffered: [{ "id": "skill-74", "name": "Deduction" }],
+    skillsNeeded: [{ "id": "skill-75", "name": "Violin" }]
+  },
+  {
+    id: "user-45",
+    name: "Willy Wonka",
+    email: "wonka@factory.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "eccentric man",
+    bio: "Chocolatier. I can teach you how to make candy. I need help with my factory's accounting.",
+    location: "Unknown",
+    skillsOffered: [{ "id": "skill-76", "name": "Candy Making" }],
+    skillsNeeded: [{ "id": "skill-14", "name": "Personal Finance" }]
+  },
+  {
+    id: "user-46",
+    name: "Anakin Skywalker",
+    email: "ani@jedicouncil.org",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "young jedi",
+    bio: "Jedi Knight. Expert pilot and lightsaber duelist. I can teach you pod-racing. Looking to learn sand-castle building.",
+    location: "Coruscant",
+    skillsOffered: [{ "id": "skill-67", "name": "Piloting" }, { "id": "skill-58", "name": "Swordsmanship" }],
+    skillsNeeded: [{ "id": "skill-77", "name": "Sand Sculpting" }]
+  },
+  {
+    id: "user-47",
+    name: "Bilbo Baggins",
+    email: "bilbo@bagend.shire",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "hobbit home",
+    bio: "I've been on an adventure. I can teach you map-making and riddles. Seeking lessons in dragon-slaying, just in case.",
+    location: "The Shire",
+    skillsOffered: [{ "id": "skill-78", "name": "Riddles" }],
+    skillsNeeded: [{ "id": "skill-58", "name": "Swordsmanship" }]
+  },
+  {
+    id: "user-48",
+    name: "Carmen Sandiego",
+    email: "carmen@vile.org",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "woman red",
+    bio: "International art thief. I can teach you geography and history. Looking for someone to teach me how to code.",
+    location: "Everywhere",
+    skillsOffered: [{ "id": "skill-79", "name": "Geography" }],
+    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+  },
+  {
+    id: "user-49",
+    name: "Doctor Who",
+    email: "the.doctor@tardis.time",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "time traveler",
+    bio: "Time Lord. I can teach you about all of time and space. I need help fixing my chameleon circuit.",
+    location: "Everywhen",
+    skillsOffered: [{ "id": "skill-80", "name": "Time Travel" }],
+    skillsNeeded: [{ "id": "skill-55", "name": "Electronics Repair" }]
+  },
+  {
+    id: "user-50",
+    name: "Forrest Gump",
+    email: "forrest@bubbagump.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "man simple",
+    bio: "I'm not a smart man, but I know what love is. I can teach you how to run, play ping-pong, and shrimp. I want to learn about computers.",
+    location: "Greenbow, AL",
+    skillsOffered: [{ "id": "skill-81", "name": "Ping Pong" }],
+    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+  },
+  {
+    id: "user-51",
+    name: "Gollum",
+    email: "myprecious@middle-earth.net",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "creature dark",
+    bio: "We knows riddles, yes we do. We can teach you how to catch fish with our hands. We needs our precious.",
+    location: "Misty Mountains",
+    skillsOffered: [{ "id": "skill-78", "name": "Riddles" }],
+    skillsNeeded: [{ "id": "skill-82", "name": "Jewelry Making" }]
+  },
+  {
+    id: "user-52",
+    name: "James Bond",
+    email: "007@mi6.gov.uk",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "spy tuxedo",
+    bio: "Shaken, not stirred. I can teach you espionage and card games. I'm looking for someone to teach me how to make a proper martini at home.",
+    location: "London, UK",
+    skillsOffered: [{ "id": "skill-83", "name": "Espionage" }],
+    skillsNeeded: [{ "id": "skill-84", "name": "Mixology" }]
+  },
+  {
+    id: "user-53",
+    name: "Legolas",
+    email: "legolas@mirkwood.elf",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "elf archer",
+    bio: "Elf of the woodland realm. My eyes are keen. I can teach you archery and how to walk on snow. I wish to learn the ways of the Dwarves.",
+    location: "Mirkwood",
+    skillsOffered: [{ "id": "skill-69", "name": "Archery" }],
+    skillsNeeded: [{ "id": "skill-85", "name": "Stonemasonry" }]
+  },
+  {
+    id: "user-54",
+    name: "Mary Poppins",
+    email: "mary@cherrytreelane.uk",
+    avatarUrl: findImage("user-1").imageUrl,
+    avatarHint: "nanny vintage",
+    bio: "Practically perfect in every way. I can teach you how to have a tidy nursery and how to fly a kite. I'm looking to learn how to skateboard.",
+    location: "London, UK",
+    skillsOffered: [{ "id": "skill-86", "name": "Child Care" }],
+    skillsNeeded: [{ "id": "skill-87", "name": "Skateboarding" }]
+  },
+  {
+    id: "user-55",
+    name: "Neo",
+    email: "thomas.anderson@metacortex.com",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "man trenchcoat",
+    bio: "I know kung fu. I can teach you how to free your mind. I need someone to explain what 'tastee wheat' is.",
+    location: "The Matrix",
+    skillsOffered: [{ "id": "skill-88", "name": "Kung Fu" }],
+    skillsNeeded: [{ "id": "skill-12", "name": "Cooking" }]
+  },
+  {
+    id: "user-56",
+    name: "Rocky Balboa",
+    email: "rocky@philly.net",
+    avatarUrl: findImage("user-2").imageUrl,
+    avatarHint: "boxer determined",
+    bio: "It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward. I can teach you boxing. I want to learn how to read better.",
+    location: "Philadelphia, PA",
+    skillsOffered: [{ "id": "skill-89", "name": "Boxing" }],
+    skillsNeeded: [{ "id": "skill-90", "name": "Literacy Tutoring" }]
   }
 ];
 
@@ -361,5 +691,3 @@ export const conversations: Conversation[] = [
     get lastMessage() { return this.messages[this.messages.length - 1] },
   },
 ];
-
-    
