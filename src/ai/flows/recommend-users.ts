@@ -64,7 +64,7 @@ Here is the list of all available users:
 
 Based on the recommendation type "{{recommendationType}}", return a list of the most relevant user IDs.
 
-- If "bestMatches", find users who offer skills the current user needs AND need skills the current user offers. This is the highest quality match.
+- If "bestMatches", find users with any skill overlap. This includes users who offer skills the current user needs, need skills the current user offers, or both. Prioritize users with a two-way match, but include any users with at least one overlapping skill.
 - If "needsMySkills", find users who need skills that the current user offers.
 - If "offersMyNeeds", find users who offer skills that the current user needs.
 
