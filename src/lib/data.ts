@@ -1,4 +1,4 @@
-import type { User, Conversation } from "@/lib/types";
+import type { User, Conversation, Notification } from "@/lib/types";
 import placeholderData from "@/lib/placeholder-images.json";
 import { ALL_SKILLS } from "@/lib/skills";
 
@@ -654,4 +654,54 @@ export const conversations: Conversation[] = [
     ],
     get lastMessage() { return this.messages[this.messages.length - 1] },
   },
+];
+
+export const notifications: Notification[] = [
+    {
+        id: "notif-1",
+        type: 'message',
+        title: "New Message from Bolanle Adebayo",
+        description: "Hey! I saw you're looking for pottery lessons...",
+        timestamp: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+        read: false,
+        user: {
+            name: "Bolanle Adebayo",
+            avatarUrl: findImage("user-2").imageUrl,
+            avatarHint: findImage("user-2").imageHint,
+        }
+    },
+    {
+        id: "notif-2",
+        type: 'swap',
+        title: "Swap Accepted!",
+        description: "Dayo Olumide accepted your proposal to swap Fitness Coaching for Social Media Marketing.",
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 2).toISOString(),
+        read: false,
+        user: {
+            name: "Dayo Olumide",
+            avatarUrl: findImage("user-4").imageUrl,
+            avatarHint: findImage("user-4").imageHint,
+        }
+    },
+    {
+        id: "notif-3",
+        type: 'ai',
+        title: "New AI Matches Found",
+        description: "We found 3 new users who need skills you offer. Check them out!",
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
+        read: false,
+    },
+    {
+        id: "notif-4",
+        type: 'message',
+        title: "New Message from Chinedu Okafor",
+        description: "That's perfect! I'd love to. Let's chat more this week.",
+        timestamp: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2).toISOString(),
+        read: true,
+        user: {
+            name: "Chinedu Okafor",
+            avatarUrl: findImage("user-3").imageUrl,
+            avatarHint: findImage("user-3").imageHint,
+        }
+    },
 ];

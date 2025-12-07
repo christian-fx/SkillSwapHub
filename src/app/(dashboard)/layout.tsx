@@ -27,6 +27,7 @@ import {
 import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
+import { Notifications } from "@/components/notifications";
 
 const menuItems = [
   { href: "/browse", label: "Browse", icon: LayoutGrid },
@@ -90,7 +91,10 @@ export default function DashboardLayout({
             <div className="w-full flex-1">
                 {/* Header content can go here, like a search bar */}
             </div>
-            <UserNav />
+            <div className="flex items-center gap-2">
+                <Notifications />
+                <UserNav />
+            </div>
         </header>
         <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
             {children}

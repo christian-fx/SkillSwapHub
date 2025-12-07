@@ -42,3 +42,17 @@ export type Conversation = {
   messages: Message[];
   lastMessage: Message;
 };
+
+export type Notification = {
+  id: string;
+  type: 'message' | 'swap' | 'ai';
+  title: string;
+  description: string;
+  timestamp: string;
+  read: boolean;
+  user?: {
+    name: string;
+    avatarUrl: string;
+    avatarHint: string;
+  }
+};
