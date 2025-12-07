@@ -145,24 +145,22 @@ export default function BrowsePage() {
                         value={drawerSearch}
                         onValueChange={setDrawerSearch}
                       />
-                      <div className="max-h-60 overflow-y-auto">
-                          <CommandList>
-                            <CommandEmpty>No skills found.</CommandEmpty>
-                            <CommandGroup heading="Skills">
-                              {suggestedSkills.map(skill => (
-                                <CommandItem
-                                  key={skill}
-                                  value={skill}
-                                  onSelect={(currentValue) => {
-                                    setDrawerSearch(currentValue === drawerSearch ? '' : currentValue);
-                                  }}
-                                >
-                                  {skill}
-                                </CommandItem>
-                              ))}
-                            </CommandGroup>
-                          </CommandList>
-                      </div>
+                      <CommandList className="max-h-60">
+                        <CommandEmpty>No skills found.</CommandEmpty>
+                        <CommandGroup heading="Skills">
+                          {suggestedSkills.map(skill => (
+                            <CommandItem
+                              key={skill}
+                              value={skill}
+                              onSelect={(currentValue) => {
+                                setDrawerSearch(currentValue === drawerSearch ? '' : currentValue);
+                              }}
+                            >
+                              {skill}
+                            </CommandItem>
+                          ))}
+                        </CommandGroup>
+                      </CommandList>
                     </Command>
                   
                   <Separator />
