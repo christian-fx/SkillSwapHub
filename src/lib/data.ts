@@ -1,5 +1,6 @@
 import type { User, Conversation } from "@/lib/types";
 import placeholderData from "@/lib/placeholder-images.json";
+import { ALL_SKILLS } from "@/lib/skills";
 
 const { placeholderImages } = placeholderData;
 
@@ -22,15 +23,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Passionate graphic designer with a love for typography and branding. Looking to learn pottery to unwind and create with my hands.",
     location: "New York, NY",
-    skillsOffered: [
-      { id: "skill-1", name: "Graphic Design" },
-      { id: "skill-2", name: "Illustration" },
-      { id: "skill-3", name: "Branding" },
-    ],
-    skillsNeeded: [
-      { id: "skill-10", name: "Pottery" },
-      { id: "skill-11", name: "Creative Writing" },
-    ],
+    skillsOffered: ["Graphic Design", "Illustration", "Branding"],
+    skillsNeeded: ["Pottery", "Creative Writing"],
   },
   {
     id: "user-2",
@@ -40,15 +34,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Software developer by day, aspiring chef by night. I can build you a website in exchange for some authentic Italian cooking lessons.",
     location: "San Francisco, CA",
-    skillsOffered: [
-      { id: "skill-4", name: "Web Development" },
-      { id: "skill-5", name: "React" },
-      { id: "skill-6", name: "Node.js" },
-    ],
-    skillsNeeded: [
-      { id: "skill-12", name: "Cooking" },
-      { id: "skill-13", name: "Guitar" },
-    ],
+    skillsOffered: ["Web Development", "React", "Node.js"],
+    skillsNeeded: ["Cooking", "Guitar"],
   },
   {
     id: "user-3",
@@ -58,15 +45,8 @@ export const users: User[] = [
     avatarHint: findImage("user-3").imageHint,
     bio: "I'm a writer and editor looking to get my finances in order. I can help you with your blog or manuscript!",
     location: "London, UK",
-    skillsOffered: [
-      { id: "skill-11", name: "Creative Writing" },
-      { id: "skill-7", name: "Editing" },
-      { id: "skill-8", name: "Content Strategy" },
-    ],
-    skillsNeeded: [
-      { id: "skill-14", name: "Personal Finance" },
-      { id: "skill-1", name: "Graphic Design" },
-    ],
+    skillsOffered: ["Creative Writing", "Editing", "Content Strategy"],
+    skillsNeeded: ["Personal Finance", "Graphic Design"],
   },
   {
     id: "user-4",
@@ -76,14 +56,8 @@ export const users: User[] = [
     avatarHint: findImage("user-4").imageHint,
     bio: "Fitness instructor and nutritionist. I can create a personalized workout and meal plan for you. Seeking help with social media marketing.",
     location: "Miami, FL",
-    skillsOffered: [
-      { id: "skill-9", name: "Fitness Coaching" },
-      { id: "skill-15", name: "Nutrition Planning" },
-    ],
-    skillsNeeded: [
-      { id: "skill-16", name: "Social Media Marketing" },
-      { id: "skill-4", name: "Web Development" },
-    ],
+    skillsOffered: ["Fitness Coaching", "Nutrition Planning"],
+    skillsNeeded: ["Social Media Marketing", "Web Development"],
   },
   {
     id: "user-5",
@@ -93,13 +67,8 @@ export const users: User[] = [
     avatarHint: findImage("user-5").imageHint,
     bio: "Skilled carpenter and woodworker. Can build custom furniture. I'd love to learn how to play the guitar.",
     location: "Austin, TX",
-    skillsOffered: [
-        { id: "skill-17", name: "Carpentry" },
-        { id: "skill-18", name: "Woodworking" },
-    ],
-    skillsNeeded: [
-        { id: "skill-13", name: "Guitar" },
-    ],
+    skillsOffered: ["Carpentry", "Woodworking"],
+    skillsNeeded: ["Guitar"],
   },
    {
     id: "user-6",
@@ -109,14 +78,8 @@ export const users: User[] = [
     avatarHint: findImage("user-6").imageHint,
     bio: "Expert in public speaking and presentation skills. Looking to learn basic coding to build a personal project.",
     location: "Chicago, IL",
-    skillsOffered: [
-        { id: "skill-19", name: "Public Speaking" },
-        { id: "skill-20", name: "Presentation Design" },
-    ],
-    skillsNeeded: [
-        { id: "skill-5", name: "React" },
-        { id: "skill-6", name: "Node.js" },
-    ],
+    skillsOffered: ["Public Speaking", "Presentation Design"],
+    skillsNeeded: ["React", "Node.js"],
   },
   {
     id: "user-7",
@@ -126,8 +89,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Architect looking to trade building design tips for learning about urban gardening.",
     location: "New York, NY",
-    skillsOffered: [{ id: "skill-21", name: "Architecture" }],
-    skillsNeeded: [{ id: "skill-22", name: "Urban Gardening" }],
+    skillsOffered: ["Architecture"],
+    skillsNeeded: ["Urban Gardening"],
   },
   {
     id: "user-8",
@@ -137,8 +100,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Pop star by night, normal teen by day. Can teach singing in exchange for advanced math tutoring.",
     location: "Malibu, CA",
-    skillsOffered: [{ id: "skill-23", name: "Singing" }],
-    skillsNeeded: [{ id: "skill-24", name: "Advanced Math" }],
+    skillsOffered: ["Singing"],
+    skillsNeeded: ["Calculus"],
   },
   {
     id: "user-9",
@@ -148,8 +111,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "I've got a few laws of physics to share. I'm interested in learning about modern-day alchemy, or 'chemistry' as you call it.",
     location: "Woolsthorpe, UK",
-    skillsOffered: [{ id: "skill-25", name: "Physics" }],
-    skillsNeeded: [{ id: "skill-26", name: "Chemistry" }],
+    skillsOffered: ["Physics"],
+    skillsNeeded: ["Chemistry"],
   },
   {
     id: "user-10",
@@ -159,8 +122,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "I'm a photographer who wants to learn how to bake sourdough bread. I can take professional portraits for you!",
     location: "Portland, OR",
-    skillsOffered: [{ id: "skill-27", name: "Photography" }],
-    skillsNeeded: [{ id: "skill-28", name: "Baking" }],
+    skillsOffered: ["Photography"],
+    skillsNeeded: ["Baking"],
   },
   {
     id: "user-11",
@@ -170,8 +133,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Expert in home defense systems. Looking for someone to teach me how to speak French.",
     location: "Chicago, IL",
-    skillsOffered: [{ id: "skill-29", name: "Home Security" }],
-    skillsNeeded: [{ id: "skill-30", name: "French" }],
+    skillsOffered: ["Home Security"],
+    skillsNeeded: ["French"],
   },
   {
     id: "user-12",
@@ -181,8 +144,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Homecoming queen. I can teach you about... secrets. Looking to learn knitting.",
     location: "Twin Peaks, WA",
-    skillsOffered: [{ id: "skill-31", name: "Charisma" }],
-    skillsNeeded: [{ id: "skill-32", name: "Knitting" }],
+    skillsOffered: ["Event Planning"],
+    skillsNeeded: ["Knitting"],
   },
   {
     id: "user-13",
@@ -192,8 +155,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "World's Best Boss. Can teach management and improv comedy. Need help with my video editing for 'Threat Level Midnight'.",
     location: "Scranton, PA",
-    skillsOffered: [{ id: "skill-33", name: "Management" }, { id: "skill-34", name: "Improv" }],
-    skillsNeeded: [{ id: "skill-35", name: "Video Editing" }],
+    skillsOffered: ["Sales", "Improv"],
+    skillsNeeded: ["Video Editing"],
   },
   {
     id: "user-14",
@@ -203,8 +166,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Amateur detective. I can find anything! I'd like to learn car maintenance for my blue roadster.",
     location: "River Heights, USA",
-    skillsOffered: [{ id: "skill-36", name: "Sleuthing" }],
-    skillsNeeded: [{ id: "skill-37", name: "Car Maintenance" }],
+    skillsOffered: ["Problem Solving"],
+    skillsNeeded: ["Car Maintenance"],
   },
   {
     id: "user-15",
@@ -214,8 +177,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "I can teach you the importance of being earnest. In return, I'd like to learn about this 'internet' thing.",
     location: "Dublin, Ireland",
-    skillsOffered: [{ id: "skill-38", name: "Witty Repartee" }],
-    skillsNeeded: [{ id: "skill-4", name: "Web Development" }],
+    skillsOffered: ["Playwriting"],
+    skillsNeeded: ["Web Development"],
   },
   {
     id: "user-16",
@@ -225,8 +188,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Artist and former receptionist. I can teach watercolor painting. I'm looking for lessons in public speaking.",
     location: "Scranton, PA",
-    skillsOffered: [{ id: "skill-39", name: "Watercolor" }],
-    skillsNeeded: [{ id: "skill-19", name: "Public Speaking" }],
+    skillsOffered: ["Watercolor Painting"],
+    skillsNeeded: ["Public Speaking"],
   },
   {
     id: "user-17",
@@ -236,8 +199,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "I make films. I can teach you about dialogue and non-linear storytelling. I need someone to teach me how to use a smartphone properly.",
     location: "Hollywood, CA",
-    skillsOffered: [{ id: "skill-40", name: "Filmmaking" }],
-    skillsNeeded: [{ id: "skill-41", name: "Smartphone Basics" }],
+    skillsOffered: ["Filmmaking"],
+    skillsNeeded: ["Smartphone Basics"],
   },
   {
     id: "user-18",
@@ -247,8 +210,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Fashion enthusiast. I can give you a complete style makeover. I want to learn how to cook something other than a trifle with beef.",
     location: "New York, NY",
-    skillsOffered: [{ id: "skill-42", name: "Fashion Styling" }],
-    skillsNeeded: [{ id: "skill-12", name: "Cooking" }],
+    skillsOffered: ["Fashion Styling"],
+    skillsNeeded: ["Cooking"],
   },
   {
     id: "user-19",
@@ -258,8 +221,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "I can do this all day. Can teach strategic leadership and super soldier combat. I need to learn about modern art.",
     location: "Brooklyn, NY",
-    skillsOffered: [{ id: "skill-43", name: "Leadership" }],
-    skillsNeeded: [{ id: "skill-44", name: "Art History" }],
+    skillsOffered: ["Leadership"],
+    skillsNeeded: ["Art History"],
   },
   {
     id: "user-20",
@@ -269,8 +232,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Genius, billionaire, playboy, philanthropist. Can teach robotics and AI. Looking to learn how to relax and do yoga.",
     location: "Malibu, CA",
-    skillsOffered: [{ id: "skill-45", name: "Robotics" }],
-    skillsNeeded: [{ id: "skill-46", name: "Yoga" }],
+    skillsOffered: ["Robotics"],
+    skillsNeeded: ["Yoga"],
   },
   {
     id: "user-21",
@@ -280,8 +243,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "I write stories about other worlds. Can teach world-building and narrative structure. I want to learn about astronomy.",
     location: "Portland, OR",
-    skillsOffered: [{ id: "skill-47", name: "World-Building" }],
-    skillsNeeded: [{ id: "skill-48", name: "Astronomy" }],
+    skillsOffered: ["Creative Writing"],
+    skillsNeeded: ["Astronomy"],
   },
   {
     id: "user-22",
@@ -291,8 +254,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "A man of science. Can teach anatomy and reanimation. I'm looking for lessons in ethics and moral philosophy.",
     location: "Geneva, Switzerland",
-    skillsOffered: [{ id: "skill-49", name: "Anatomy" }],
-    skillsNeeded: [{ id: "skill-50", name: "Ethics" }],
+    skillsOffered: ["Anatomy"],
+    skillsNeeded: ["Ethics"],
   },
   {
     id: "user-23",
@@ -302,8 +265,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Chemistry teacher. I can teach you a lot about chemistry. I need help with my car wash business.",
     location: "Albuquerque, NM",
-    skillsOffered: [{ id: "skill-26", name: "Chemistry" }],
-    skillsNeeded: [{ id: "skill-51", name: "Business Management" }],
+    skillsOffered: ["Chemistry"],
+    skillsNeeded: ["Business Management"],
   },
   {
     id: "user-24",
@@ -313,8 +276,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Warrior Princess. Can teach you how to use a chakram and fight for the greater good. I'd like to learn pottery.",
     location: "Amphipolis, Greece",
-    skillsOffered: [{ id: "skill-52", name: "Chakram" }],
-    skillsNeeded: [{ id: "skill-10", name: "Pottery" }],
+    skillsOffered: ["Self-Defense"],
+    skillsNeeded: ["Pottery"],
   },
   {
     id: "user-25",
@@ -324,8 +287,8 @@ export const users: User[] = [
     avatarHint: findImage("user-2").imageHint,
     bio: "Teach you, I can. Learn, you will. How to build a modern web app, I wish to learn.",
     location: "Dagobah",
-    skillsOffered: [{ id: "skill-53", name: "The Force" }],
-    skillsNeeded: [{ id: "skill-5", name: "React" }],
+    skillsOffered: ["Meditation"],
+    skillsNeeded: ["React"],
   },
   {
     id: "user-26",
@@ -335,8 +298,8 @@ export const users: User[] = [
     avatarHint: findImage("user-1").imageHint,
     bio: "Princess of Hyrule. I can teach royal etiquette and Ocarina songs. I need help fixing my Sheikah Slate.",
     location: "Hyrule",
-    skillsOffered: [{ id: "skill-54", name: "Ocarina" }],
-    skillsNeeded: [{ id: "skill-55", name: "Electronics Repair" }],
+    skillsOffered: ["Music"],
+    skillsNeeded: ["Electronics Repair"],
   },
   {
     id: "user-27",
@@ -346,8 +309,8 @@ export const users: User[] = [
     avatarHint: "wise wizard",
     bio: "Headmaster. Can offer lessons in transfiguration and defense against the dark arts. Seeking to understand 'the internet'.",
     location: "Hogwarts, Scotland",
-    skillsOffered: [{ "id": "skill-56", "name": "Transfiguration" }, { "id": "skill-57", "name": "Ancient Runes" }],
-    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+    skillsOffered: ["Transfiguration", "Ancient Runes" ],
+    skillsNeeded: ["Web Development"]
   },
   {
     id: "user-28",
@@ -357,8 +320,8 @@ export const users: User[] = [
     avatarHint: "female warrior",
     bio: "Can teach sword fighting and the five-point-palm exploding heart technique. I'm interested in learning how to knit.",
     location: "El Paso, TX",
-    skillsOffered: [{ "id": "skill-58", "name": "Swordsmanship" }],
-    skillsNeeded: [{ "id": "skill-32", "name": "Knitting" }]
+    skillsOffered: ["Swordsmanship"],
+    skillsNeeded: ["Knitting"]
   },
   {
     id: "user-29",
@@ -368,8 +331,8 @@ export const users: User[] = [
     avatarHint: "quirky man",
     bio: "I'm full of ideas! I can teach you about physical comedy and making a grand entrance. I need someone to help me with my taxes.",
     location: "New York, NY",
-    skillsOffered: [{ "id": "skill-59", "name": "Physical Comedy" }],
-    skillsNeeded: [{ "id": "skill-14", "name": "Personal Finance" }]
+    skillsOffered: ["Improv"],
+    skillsNeeded: ["Personal Finance"]
   },
   {
     id: "user-30",
@@ -379,8 +342,8 @@ export const users: User[] = [
     avatarHint: "female detective",
     bio: "Medical doctor and FBI agent. I can teach you about forensic science and skepticism. I'm looking to learn photography.",
     location: "Washington D.C.",
-    skillsOffered: [{ "id": "skill-60", "name": "Forensic Science" }],
-    skillsNeeded: [{ "id": "skill-27", "name": "Photography" }]
+    skillsOffered: ["Forensic Science"],
+    skillsNeeded: ["Photography"]
   },
   {
     id: "user-31",
@@ -390,8 +353,8 @@ export const users: User[] = [
     avatarHint: "woman city",
     bio: "I work in publishing. I can edit your manuscript and teach you how to dance... sort of. I want to learn how to do my own plumbing.",
     location: "New York, NY",
-    skillsOffered: [{ "id": "skill-7", "name": "Editing" }],
-    skillsNeeded: [{ "id": "skill-61", "name": "Plumbing" }]
+    skillsOffered: ["Editing"],
+    skillsNeeded: ["Plumbing"]
   },
   {
     id: "user-32",
@@ -401,8 +364,8 @@ export const users: User[] = [
     avatarHint: "male detective",
     bio: "I want to believe. Can teach you about unsolved mysteries and the paranormal. Looking for someone to teach me advanced basketball techniques.",
     location: "Washington D.C.",
-    skillsOffered: [{ "id": "skill-62", "name": "Cryptozoology" }],
-    skillsNeeded: [{ "id": "skill-63", "name": "Basketball" }]
+    skillsOffered: ["Creative Writing"],
+    skillsNeeded: ["Basketball"]
   },
   {
     id: "user-33",
@@ -412,8 +375,8 @@ export const users: User[] = [
     avatarHint: "chef angry",
     bio: "I can teach you how to cook like a real chef. Don't be an idiot sandwich. I'd like to learn how to be more patient.",
     location: "London, UK",
-    skillsOffered: [{ "id": "skill-12", "name": "Cooking" }],
-    skillsNeeded: [{ "id": "skill-64", "name": "Meditation" }]
+    skillsOffered: ["Cooking"],
+    skillsNeeded: ["Meditation"]
   },
   {
     id: "user-34",
@@ -423,8 +386,8 @@ export const users: User[] = [
     avatarHint: "student wizard",
     bio: "I can help you with pretty much any subject. I'm particularly good at Arithmancy. I want to learn how to use a computer.",
     location: "Hogwarts, Scotland",
-    skillsOffered: [{ "id": "skill-65", "name": "Arithmancy" }],
-    skillsNeeded: [{ "id": "skill-41", "name": "Smartphone Basics" }]
+    skillsOffered: ["Research"],
+    skillsNeeded: ["Computer Basics"]
   },
   {
     id: "user-35",
@@ -434,8 +397,8 @@ export const users: User[] = [
     avatarHint: "adventurer fedora",
     bio: "Archaeology professor and adventurer. I can teach you about ancient history and how to use a whip. I need to learn how to fly a plane.",
     location: "Connecticut, USA",
-    skillsOffered: [{ "id": "skill-66", "name": "Archaeology" }],
-    skillsNeeded: [{ "id": "skill-67", "name": "Piloting" }]
+    skillsOffered: ["Archaeology"],
+    skillsNeeded: ["Piloting"]
   },
   {
     id: "user-36",
@@ -445,8 +408,8 @@ export const users: User[] = [
     avatarHint: "pirate captain",
     bio: "Captain. I can teach you how to sail and find treasure. Savvy? I need someone to fix my compass.",
     location: "The Caribbean",
-    skillsOffered: [{ "id": "skill-68", "name": "Sailing" }],
-    skillsNeeded: [{ "id": "skill-55", "name": "Electronics Repair" }]
+    skillsOffered: ["Sailing"],
+    skillsNeeded: ["Electronics Repair"]
   },
   {
     id: "user-37",
@@ -456,8 +419,8 @@ export const users: User[] = [
     avatarHint: "archer woods",
     bio: "I can teach you archery and survival skills. I'd like to learn how to bake.",
     location: "District 12",
-    skillsOffered: [{ "id": "skill-69", "name": "Archery" }],
-    skillsNeeded: [{ "id": "skill-28", "name": "Baking" }]
+    skillsOffered: ["Archery"],
+    skillsNeeded: ["Baking"]
   },
   {
     id: "user-38",
@@ -467,8 +430,8 @@ export const users: User[] = [
     avatarHint: "woman office",
     bio: "Head writer for a sketch comedy show. I can teach you how to write jokes. I need help with my night cheese addiction.",
     location: "New York, NY",
-    skillsOffered: [{ "id": "skill-70", "name": "Comedy Writing" }],
-    skillsNeeded: [{ "id": "skill-15", "name": "Nutrition Planning" }]
+    skillsOffered: ["Comedy Writing"],
+    skillsNeeded: ["Nutrition Planning"]
   },
   {
     id: "user-39",
@@ -478,8 +441,8 @@ export const users: User[] = [
     avatarHint: "teenager 80s",
     bio: "I can play the guitar pretty well. I need someone to help me fix my DeLorean.",
     location: "Hill Valley, CA",
-    skillsOffered: [{ "id": "skill-13", "name": "Guitar" }],
-    skillsNeeded: [{ "id": "skill-37", "name": "Car Maintenance" }]
+    skillsOffered: ["Guitar"],
+    skillsNeeded: ["Car Maintenance"]
   },
   {
     id: "user-40",
@@ -489,8 +452,8 @@ export const users: User[] = [
     avatarHint: "robot leader",
     bio: "Leader of the Autobots. I can teach you about leadership and intergalactic diplomacy. I wish to learn about human art.",
     location: "Cybertron",
-    skillsOffered: [{ "id": "skill-43", "name": "Leadership" }],
-    skillsNeeded: [{ "id": "skill-44", "name": "Art History" }]
+    skillsOffered: ["Leadership"],
+    skillsNeeded: ["Art History"]
   },
   {
     id: "user-41",
@@ -500,8 +463,8 @@ export const users: User[] = [
     avatarHint: "young man",
     bio: "I'm a freelance photographer. I can teach you how to take great pictures. I'm trying to learn more about chemistry.",
     location: "Queens, NY",
-    skillsOffered: [{ "id": "skill-27", "name": "Photography" }],
-    skillsNeeded: [{ "id": "skill-26", "name": "Chemistry" }]
+    skillsOffered: ["Photography"],
+    skillsNeeded: ["Chemistry"]
   },
   {
     id: "user-42",
@@ -511,8 +474,8 @@ export const users: User[] = [
     avatarHint: "man mustache",
     bio: "I enjoy woodworking and breakfast food. I can teach you how to build a canoe. I have no needs.",
     location: "Pawnee, IN",
-    skillsOffered: [{ "id": "skill-18", "name": "Woodworking" }],
-    skillsNeeded: [{ "id": "skill-71", "name": "Philosophy" }]
+    skillsOffered: ["Woodworking"],
+    skillsNeeded: ["Philosophy"]
   },
   {
     id: "user-43",
@@ -522,8 +485,8 @@ export const users: User[] = [
     avatarHint: "woman tough",
     bio: "I can teach you how to survive judgment day. I need to learn how to weld.",
     location: "Los Angeles, CA",
-    skillsOffered: [{ "id": "skill-72", "name": "Survival" }],
-    skillsNeeded: [{ "id": "skill-73", "name": "Welding" }]
+    skillsOffered: ["Survival Skills"],
+    skillsNeeded: ["Welding"]
   },
   {
     id: "user-44",
@@ -533,8 +496,8 @@ export const users: User[] = [
     avatarHint: "detective classic",
     bio: "Consulting detective. I can teach you the science of deduction. I'm looking for someone to teach me the violin.",
     location: "London, UK",
-    skillsOffered: [{ "id": "skill-74", "name": "Deduction" }],
-    skillsNeeded: [{ "id": "skill-75", "name": "Violin" }]
+    skillsOffered: ["Problem Solving"],
+    skillsNeeded: ["Violin"]
   },
   {
     id: "user-45",
@@ -544,8 +507,8 @@ export const users: User[] = [
     avatarHint: "eccentric man",
     bio: "Chocolatier. I can teach you how to make candy. I need help with my factory's accounting.",
     location: "Unknown",
-    skillsOffered: [{ "id": "skill-76", "name": "Candy Making" }],
-    skillsNeeded: [{ "id": "skill-14", "name": "Personal Finance" }]
+    skillsOffered: ["Baking"],
+    skillsNeeded: ["Personal Finance"]
   },
   {
     id: "user-46",
@@ -555,8 +518,8 @@ export const users: User[] = [
     avatarHint: "young jedi",
     bio: "Jedi Knight. Expert pilot and lightsaber duelist. I can teach you pod-racing. Looking to learn sand-castle building.",
     location: "Coruscant",
-    skillsOffered: [{ "id": "skill-67", "name": "Piloting" }, { "id": "skill-58", "name": "Swordsmanship" }],
-    skillsNeeded: [{ "id": "skill-77", "name": "Sand Sculpting" }]
+    skillsOffered: ["Piloting", "Swordsmanship"],
+    skillsNeeded: ["Sculpting"]
   },
   {
     id: "user-47",
@@ -566,8 +529,8 @@ export const users: User[] = [
     avatarHint: "hobbit home",
     bio: "I've been on an adventure. I can teach you map-making and riddles. Seeking lessons in dragon-slaying, just in case.",
     location: "The Shire",
-    skillsOffered: [{ "id": "skill-78", "name": "Riddles" }],
-    skillsNeeded: [{ "id": "skill-58", "name": "Swordsmanship" }]
+    skillsOffered: ["Storytelling"],
+    skillsNeeded: ["Swordsmanship"]
   },
   {
     id: "user-48",
@@ -577,8 +540,8 @@ export const users: User[] = [
     avatarHint: "woman red",
     bio: "International art thief. I can teach you geography and history. Looking for someone to teach me how to code.",
     location: "Everywhere",
-    skillsOffered: [{ "id": "skill-79", "name": "Geography" }],
-    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+    skillsOffered: ["Geography"],
+    skillsNeeded: ["Web Development"]
   },
   {
     id: "user-49",
@@ -588,8 +551,8 @@ export const users: User[] = [
     avatarHint: "time traveler",
     bio: "Time Lord. I can teach you about all of time and space. I need help fixing my chameleon circuit.",
     location: "Everywhen",
-    skillsOffered: [{ "id": "skill-80", "name": "Time Travel" }],
-    skillsNeeded: [{ "id": "skill-55", "name": "Electronics Repair" }]
+    skillsOffered: ["History"],
+    skillsNeeded: ["Electronics Repair"]
   },
   {
     id: "user-50",
@@ -599,8 +562,8 @@ export const users: User[] = [
     avatarHint: "man simple",
     bio: "I'm not a smart man, but I know what love is. I can teach you how to run, play ping-pong, and shrimp. I want to learn about computers.",
     location: "Greenbow, AL",
-    skillsOffered: [{ "id": "skill-81", "name": "Ping Pong" }],
-    skillsNeeded: [{ "id": "skill-4", "name": "Web Development" }]
+    skillsOffered: ["Running"],
+    skillsNeeded: ["Web Development"]
   },
   {
     id: "user-51",
@@ -610,8 +573,8 @@ export const users: User[] = [
     avatarHint: "creature dark",
     bio: "We knows riddles, yes we do. We can teach you how to catch fish with our hands. We needs our precious.",
     location: "Misty Mountains",
-    skillsOffered: [{ "id": "skill-78", "name": "Riddles" }],
-    skillsNeeded: [{ "id": "skill-82", "name": "Jewelry Making" }]
+    skillsOffered: ["Riddles"],
+    skillsNeeded: ["Jewelry Making"]
   },
   {
     id: "user-52",
@@ -621,8 +584,8 @@ export const users: User[] = [
     avatarHint: "spy tuxedo",
     bio: "Shaken, not stirred. I can teach you espionage and card games. I'm looking for someone to teach me how to make a proper martini at home.",
     location: "London, UK",
-    skillsOffered: [{ "id": "skill-83", "name": "Espionage" }],
-    skillsNeeded: [{ "id": "skill-84", "name": "Mixology" }]
+    skillsOffered: ["Problem Solving"],
+    skillsNeeded: ["Mixology"]
   },
   {
     id: "user-53",
@@ -632,8 +595,8 @@ export const users: User[] = [
     avatarHint: "elf archer",
     bio: "Elf of the woodland realm. My eyes are keen. I can teach you archery and how to walk on snow. I wish to learn the ways of the Dwarves.",
     location: "Mirkwood",
-    skillsOffered: [{ "id": "skill-69", "name": "Archery" }],
-    skillsNeeded: [{ "id": "skill-85", "name": "Stonemasonry" }]
+    skillsOffered: ["Archery"],
+    skillsNeeded: ["Stonemasonry"]
   },
   {
     id: "user-54",
@@ -643,8 +606,8 @@ export const users: User[] = [
     avatarHint: "nanny vintage",
     bio: "Practically perfect in every way. I can teach you how to have a tidy nursery and how to fly a kite. I'm looking to learn how to skateboard.",
     location: "London, UK",
-    skillsOffered: [{ "id": "skill-86", "name": "Child Care" }],
-    skillsNeeded: [{ "id": "skill-87", "name": "Skateboarding" }]
+    skillsOffered: ["Child Care"],
+    skillsNeeded: ["Skateboarding"]
   },
   {
     id: "user-55",
@@ -654,8 +617,8 @@ export const users: User[] = [
     avatarHint: "man trenchcoat",
     bio: "I know kung fu. I can teach you how to free your mind. I need someone to explain what 'tastee wheat' is.",
     location: "The Matrix",
-    skillsOffered: [{ "id": "skill-88", "name": "Kung Fu" }],
-    skillsNeeded: [{ "id": "skill-12", "name": "Cooking" }]
+    skillsOffered: ["Kung Fu"],
+    skillsNeeded: ["Cooking"]
   },
   {
     id: "user-56",
@@ -665,15 +628,16 @@ export const users: User[] = [
     avatarHint: "boxer determined",
     bio: "It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward. I can teach you boxing. I want to learn how to read better.",
     location: "Philadelphia, PA",
-    skillsOffered: [{ "id": "skill-89", "name": "Boxing" }],
-    skillsNeeded: [{ "id": "skill-90", "name": "Literacy Tutoring" }]
+    skillsOffered: ["Boxing"],
+    skillsNeeded: ["Literacy"]
   }
 ];
+
 
 export const conversations: Conversation[] = [
   {
     id: "conv-1",
-    participant: users[1],
+    participant: users.find(u => u.id === 'user-2')!,
     messages: [
       { id: "msg-1", senderId: "user-2", text: "Hey! I saw you're looking for pottery lessons. I'm a beginner but I have a wheel. Maybe we can practice together?", timestamp: "2024-05-20T10:00:00Z" },
       { id: "msg-2", senderId: "user-1", text: "That sounds great, Bob! I'd love that. I can help you with some logo ideas for your new cooking blog in return.", timestamp: "2024-05-20T10:05:00Z" },
@@ -682,7 +646,7 @@ export const conversations: Conversation[] = [
   },
     {
     id: "conv-2",
-    participant: users[2],
+    participant: users.find(u => u.id === 'user-3')!,
     messages: [
       { id: "msg-3", senderId: "user-3", text: "Hi Alice, I need some help with a cover design for my manuscript. Your work is amazing!", timestamp: "2024-05-19T14:30:00Z" },
       { id: "msg-4", senderId: "user-1", text: "Hi Charlie! Thanks so much. I'd be happy to take a look. I'm actually looking for someone to help me brainstorm some story ideas. Maybe we can help each other out?", timestamp: "2024-05-19T14:35:00Z" },

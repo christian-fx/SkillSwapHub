@@ -13,8 +13,8 @@ export type User = {
   avatarHint: string;
   bio: string;
   location: string;
-  skillsOffered: Skill[];
-  skillsNeeded: Skill[];
+  skillsOffered: string[];
+  skillsNeeded: string[];
 };
 
 export type UserProfile = {
@@ -25,8 +25,8 @@ export type UserProfile = {
     avatarUrl?: string;
     bio?: string;
     location?: string;
-    skillsOffered?: Skill[];
-    skillsNeeded?: Skill[];
+    skillsOffered?: string[];
+    skillsNeeded?: string[];
 }
 
 export type Message = {

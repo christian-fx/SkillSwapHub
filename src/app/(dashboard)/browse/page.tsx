@@ -56,8 +56,8 @@ export default function BrowsePage() {
   const allSkills = useMemo(() => {
     const skills = new Set<string>();
     allUsers.forEach(user => {
-      user.skillsOffered.forEach(skill => skills.add(skill.name));
-      user.skillsNeeded.forEach(skill => skills.add(skill.name));
+      user.skillsOffered.forEach(skill => skills.add(skill));
+      user.skillsNeeded.forEach(skill => skills.add(skill));
     });
     return Array.from(skills).sort();
   }, []);
@@ -86,8 +86,8 @@ export default function BrowsePage() {
       const lowercasedQuery = searchQuery.toLowerCase();
       users = users.filter(user =>
         user.name.toLowerCase().includes(lowercasedQuery) ||
-        user.skillsOffered.some(skill => skill.name.toLowerCase().includes(lowercasedQuery)) ||
-        user.skillsNeeded.some(skill => skill.name.toLowerCase().includes(lowercasedQuery))
+        user.skillsOffered.some(skill => skill.toLowerCase().includes(lowercasedQuery)) ||
+        user.skillsNeeded.some(skill => skill.toLowerCase().includes(lowercasedQuery))
       );
     }
     
@@ -255,8 +255,8 @@ export default function BrowsePage() {
                 <h3 className="text-sm font-semibold mb-2">Offers:</h3>
                 <div className="flex flex-wrap gap-1">
                   {user.skillsOffered.map((skill) => (
-                    <Badge key={skill.id} variant="secondary">
-                      {skill.name}
+                    <Badge key={skill} variant="secondary">
+                      {skill}
                     </Badge>
                   ))}
                 </div>
@@ -265,8 +265,8 @@ export default function BrowsePage() {
                 <h3 className="text-sm font-semibold mb-2">Needs:</h3>
                 <div className="flex flex-wrap gap-1">
                   {user.skillsNeeded.map((skill) => (
-                    <Badge key={skill.id} variant="outline">
-                      {skill.name}
+                    <Badge key={skill} variant="outline">
+                      {skill}
                     </Badge>
                   ))}
                 </div>

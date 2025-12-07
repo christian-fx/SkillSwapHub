@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { useUser, useFirestore, useAuth } from '@/firebase';
-import { doc, getDoc, setDoc } from 'firebase/firestore';
+import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { updateProfile } from 'firebase/auth';
 
 import { Button } from '@/components/ui/button';
@@ -19,8 +19,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Check, ChevronsUpDown } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { ALL_SKILLS } from '@/lib/skills';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Command, CommandEmpty, CommandGroup, CommandInput, CommandItem, CommandList } from '@/components/ui/command';
+import { cn } from '@/lib/utils';
+
 
 // This is a placeholder, in a real app you might fetch these dynamically
 const initialSuggestions = [
@@ -44,9 +49,68 @@ type UserProfile = {
   location: string;
   bio: string;
   avatarUrl: string;
-  skillsOffered: { id: string; name: string }[];
-  skillsNeeded: { id: string; name: string }[];
+  skillsOffered: string[];
+  skillsNeeded: string[];
 };
+
+const SkillCombobox = ({
+    selectedSkills,
+    onSelect,
+    availableSkills
+}: {
+    selectedSkills: string[],
+    onSelect: (skill: string) => void,
+    availableSkills: string[]
+}) => {
+    const [open, setOpen] = useState(false);
+    
+    return (
+        <Popover open={open} onOpenChange={setOpen}>
+            <PopoverTrigger asChild>
+                <Button
+                    variant="outline"
+                    role="combobox"
+                    aria-expanded={open}
+                    className="w-full justify-between"
+                >
+                    Add a skill...
+                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-[--radix-popover-trigger-width] p-0">
+                <Command>
+                    <CommandInput placeholder="Search for a skill..." />
+                    <CommandList>
+                        <CommandEmpty>No skill found.</CommandEmpty>
+                        <CommandGroup>
+                            {availableSkills.map((skill) => (
+                                <CommandItem
+                                    key={skill}
+                                    value={skill}
+                                    onSelect={(currentValue) => {
+                                        const skillToAdd = ALL_SKILLS.find(s => s.toLowerCase() === currentValue)
+                                        if (skillToAdd) {
+                                            onSelect(skillToAdd);
+                                        }
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <Check
+                                        className={cn(
+                                            "mr-2 h-4 w-4",
+                                            selectedSkills.includes(skill) ? "opacity-100" : "opacity-0"
+                                        )}
+                                    />
+                                    {skill}
+                                </CommandItem>
+                            ))}
+                        </CommandGroup>
+                    </CommandList>
+                </Command>
+            </PopoverContent>
+        </Popover>
+    )
+}
 
 export default function ProfilePage() {
   const { user, loading: userLoading } = useUser();
@@ -62,11 +126,16 @@ export default function ProfilePage() {
   useEffect(() => {
     if (user) {
       const fetchProfile = async () => {
+        setLoading(true);
         const userDocRef = doc(firestore, 'users', user.uid);
         const userDoc = await getDoc(userDocRef);
         if (userDoc.exists()) {
           const data = userDoc.data() as UserProfile;
-          setProfile(data);
+          setProfile({
+              ...data,
+              skillsOffered: data.skillsOffered || [],
+              skillsNeeded: data.skillsNeeded || [],
+          });
           setFormData({
               name: data.name || '',
               location: data.location || '',
@@ -99,7 +168,7 @@ export default function ProfilePage() {
 
     try {
         await setDoc(userDocRef, updatedProfileData, { merge: true });
-        if (auth.currentUser) {
+        if (auth.currentUser && auth.currentUser.displayName !== formData.name) {
             await updateProfile(auth.currentUser, { displayName: formData.name });
         }
         setProfile(updatedProfileData);
@@ -117,6 +186,45 @@ export default function ProfilePage() {
         });
     }
   }
+  
+  const handleSkillUpdate = async (skillType: 'skillsOffered' | 'skillsNeeded', newSkills: string[]) => {
+      if (!user || !profile) return;
+      
+      const userDocRef = doc(firestore, 'users', user.uid);
+      try {
+          await updateDoc(userDocRef, {
+              [skillType]: newSkills
+          });
+          setProfile(prev => prev ? ({...prev, [skillType]: newSkills}) : null);
+          toast({
+              title: "Skills Updated",
+              description: "Your skills have been saved."
+          });
+      } catch (error) {
+          console.error("Error updating skills:", error);
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: "Could not update your skills. Please try again."
+        });
+      }
+  }
+
+  const addSkill = (skillType: 'skillsOffered' | 'skillsNeeded', skill: string) => {
+      if (!profile) return;
+      const currentSkills = profile[skillType] || [];
+      if (!currentSkills.includes(skill)) {
+          const newSkills = [...currentSkills, skill];
+          handleSkillUpdate(skillType, newSkills);
+      }
+  }
+
+  const removeSkill = (skillType: 'skillsOffered' | 'skillsNeeded', skill: string) => {
+      if (!profile) return;
+      const currentSkills = profile[skillType] || [];
+      const newSkills = currentSkills.filter(s => s !== skill);
+      handleSkillUpdate(skillType, newSkills);
+  }
 
   const handleCancelEdit = () => {
     if (profile) {
@@ -128,6 +236,16 @@ export default function ProfilePage() {
     }
     setIsEditing(false);
   }
+  
+  const availableSkillsOffered = useMemo(() => {
+    if (!profile) return ALL_SKILLS;
+    return ALL_SKILLS.filter(skill => !(profile.skillsOffered || []).includes(skill));
+  }, [profile]);
+  
+  const availableSkillsNeeded = useMemo(() => {
+    if (!profile) return ALL_SKILLS;
+    return ALL_SKILLS.filter(skill => !(profile.skillsNeeded || []).includes(skill));
+  }, [profile]);
 
   if (loading || userLoading) {
     return <div>Loading profile...</div>;
@@ -195,7 +313,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <p className="text-sm p-2 text-muted-foreground">{profile.email} (Cannot be changed)</p>
+                <p className="text-sm p-2 text-muted-foreground">{profile.email}</p>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="location">Location</Label>
@@ -224,25 +342,24 @@ export default function ProfilePage() {
                 <CardDescription>What are you good at?</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-2 min-h-[6rem]">
                   {(profile.skillsOffered || []).map((skill) => (
                     <div
-                      key={skill.id}
+                      key={skill}
                       className="flex items-center justify-between p-2 rounded-md bg-secondary"
                     >
-                      <span>{skill.name}</span>
-                      <Button size="icon" variant="ghost">
+                      <span>{skill}</span>
+                      <Button size="icon" variant="ghost" onClick={() => removeSkill('skillsOffered', skill)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   ))}
                 </div>
-                <div className="flex gap-2">
-                  <Input placeholder="Add a new skill..." />
-                  <Button size="icon">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+                <SkillCombobox 
+                    selectedSkills={profile.skillsOffered || []}
+                    onSelect={(skill) => addSkill('skillsOffered', skill)}
+                    availableSkills={availableSkillsOffered}
+                />
               </CardContent>
             </Card>
             <Card>
@@ -251,25 +368,24 @@ export default function ProfilePage() {
                 <CardDescription>What do you want to learn?</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="space-y-2">
+                <div className="space-y-2 min-h-[6rem]">
                   {(profile.skillsNeeded || []).map((skill) => (
-                    <div
-                      key={skill.id}
+                     <div
+                      key={skill}
                       className="flex items-center justify-between p-2 rounded-md bg-secondary"
                     >
-                      <span>{skill.name}</span>
-                      <Button size="icon" variant="ghost">
+                      <span>{skill}</span>
+                      <Button size="icon" variant="ghost" onClick={() => removeSkill('skillsNeeded', skill)}>
                         <Trash2 className="h-4 w-4" />
                       </Button>
                     </div>
                   ))}
                 </div>
-                <div className="flex gap-2">
-                  <Input placeholder="Add a new skill..." />
-                  <Button size="icon">
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
+                 <SkillCombobox 
+                    selectedSkills={profile.skillsNeeded || []}
+                    onSelect={(skill) => addSkill('skillsNeeded', skill)}
+                    availableSkills={availableSkillsNeeded}
+                />
               </CardContent>
             </Card>
           </div>
