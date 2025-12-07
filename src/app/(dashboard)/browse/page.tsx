@@ -41,8 +41,6 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem, CommandInput } from '@/components/ui/command';
-import { ALL_SKILLS } from '@/lib/skills';
 
 
 const USERS_PER_PAGE = 8;
@@ -53,13 +51,6 @@ export default function BrowsePage() {
   const [sortOrder, setSortOrder] = useState<'random' | 'asc' | 'desc'>('random');
   const [drawerSearch, setDrawerSearch] = useState('');
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
-
-  const suggestedSkills = useMemo(() => {
-    if (!drawerSearch) return ALL_SKILLS;
-    return ALL_SKILLS.filter(skill =>
-      skill.toLowerCase().includes(drawerSearch.toLowerCase())
-    );
-  }, [drawerSearch]);
 
   const shuffledUsers = useMemo(() => {
     return [...allUsers].sort(() => Math.random() - 0.5);
@@ -139,29 +130,15 @@ export default function BrowsePage() {
                     <DrawerDescription>Adjust how you view the profiles.</DrawerDescription>
                 </DrawerHeader>
                 <div className="p-4 space-y-4">
-                    <Command>
-                      <CommandInput
-                        placeholder="Search skills or people..."
-                        value={drawerSearch}
-                        onValueChange={setDrawerSearch}
-                      />
-                      <CommandList className="max-h-60">
-                        <CommandEmpty>No skills found.</CommandEmpty>
-                        <CommandGroup heading="Skills">
-                          {suggestedSkills.map(skill => (
-                            <CommandItem
-                              key={skill}
-                              value={skill}
-                              onSelect={(currentValue) => {
-                                setDrawerSearch(currentValue === drawerSearch ? '' : currentValue);
-                              }}
-                            >
-                              {skill}
-                            </CommandItem>
-                          ))}
-                        </CommandGroup>
-                      </CommandList>
-                    </Command>
+                    <div className="relative">
+                        <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+                        <Input
+                            placeholder="Search skills or people..."
+                            value={drawerSearch}
+                            onChange={(e) => setDrawerSearch(e.target.value)}
+                            className="pl-8"
+                        />
+                    </div>
                   
                   <Separator />
 

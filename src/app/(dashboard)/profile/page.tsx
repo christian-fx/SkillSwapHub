@@ -12,6 +12,7 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
+  CardFooter,
 } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -57,53 +58,82 @@ const SkillManager = ({
   userSkills,
   onAdd,
   onRemove,
+  isEditing,
+  setIsEditing
 }: {
   title: string;
   description: string;
   userSkills: string[];
   onAdd: (skill: string) => void;
   onRemove: (skill: string) => void;
+  isEditing: boolean;
+  setIsEditing: (isEditing: boolean) => void;
 }) => {
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>{title}</CardTitle>
-        <CardDescription>{description}</CardDescription>
+      <CardHeader className="flex-row items-center justify-between">
+        <div>
+            <CardTitle>{title}</CardTitle>
+            <CardDescription>{description}</CardDescription>
+        </div>
+        <Button variant="outline" size="sm" onClick={() => setIsEditing(!isEditing)}>
+            {isEditing ? "Done" : "Edit Skills"}
+        </Button>
       </CardHeader>
       <CardContent className="space-y-4">
-        <div className="space-y-2 min-h-[6rem] rounded-md border p-2">
-            {userSkills.length > 0 ? (
-                 <div className="flex flex-wrap gap-2">
-                    {userSkills.map((skill) => (
-                        <Badge key={skill} variant="secondary" className="flex items-center gap-1">
-                            {skill}
-                            <button onClick={() => onRemove(skill)} className="rounded-full hover:bg-background/50">
-                                <X className="h-3 w-3" />
-                            </button>
-                        </Badge>
-                    ))}
+        {isEditing ? (
+            <>
+                <p className="text-sm font-medium">Your Skills</p>
+                <div className="space-y-2 min-h-[6rem] rounded-md border p-2">
+                    {userSkills.length > 0 ? (
+                        <div className="flex flex-wrap gap-2">
+                            {userSkills.map((skill) => (
+                                <Badge key={skill} variant="secondary" className="flex items-center gap-1">
+                                    {skill}
+                                    <button onClick={() => onRemove(skill)} className="rounded-full hover:bg-background/50">
+                                        <X className="h-3 w-3" />
+                                    </button>
+                                </Badge>
+                            ))}
+                        </div>
+                    ) : (
+                        <p className="text-sm text-muted-foreground p-2">No skills added yet.</p>
+                    )}
                 </div>
-            ) : (
-                <p className="text-sm text-muted-foreground p-2">No skills added yet.</p>
-            )}
-        </div>
-         <p className="text-sm font-medium">Available Skills</p>
-        <ScrollArea className="h-64 rounded-md border">
-          <div className="p-4 space-y-2">
-            {ALL_SKILLS.map((skill) => {
-              const isAdded = userSkills.includes(skill);
-              if (isAdded) return null;
-              return (
-                <div key={skill} className="flex items-center justify-between">
-                  <span className="text-sm">{skill}</span>
-                  <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => onAdd(skill)}>
-                    <Plus className="h-4 w-4" />
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        </ScrollArea>
+                <p className="text-sm font-medium">Available Skills</p>
+                <ScrollArea className="h-64 rounded-md border">
+                    <div className="p-4 space-y-2">
+                        {ALL_SKILLS.map((skill) => {
+                        const isAdded = userSkills.includes(skill);
+                        if (isAdded) return null;
+                        return (
+                            <div key={skill} className="flex items-center justify-between">
+                            <span className="text-sm">{skill}</span>
+                            <Button size="icon" variant="ghost" className="h-7 w-7" onClick={() => onAdd(skill)}>
+                                <Plus className="h-4 w-4" />
+                            </Button>
+                            </div>
+                        );
+                        })}
+                    </div>
+                </ScrollArea>
+            </>
+        ) : (
+            <div className="space-y-2 min-h-[6rem] rounded-md border p-2">
+                {userSkills.length > 0 ? (
+                    <div className="flex flex-wrap gap-2">
+                        {userSkills.map((skill) => (
+                            <Badge key={skill} variant="secondary">
+                                {skill}
+                            </Badge>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-sm text-muted-foreground p-2">No skills added yet. Click 'Edit Skills' to add some.</p>
+                )}
+            </div>
+        )}
+        
       </CardContent>
     </Card>
   );
@@ -118,7 +148,9 @@ export default function ProfilePage() {
 
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditingProfile, setIsEditingProfile] = useState(false);
+  const [isEditingOffered, setIsEditingOffered] = useState(false);
+  const [isEditingNeeded, setIsEditingNeeded] = useState(false);
   const [formData, setFormData] = useState({ name: '', location: '', bio: '' });
 
   useEffect(() => {
@@ -170,7 +202,7 @@ export default function ProfilePage() {
             await updateProfile(auth.currentUser, { displayName: formData.name });
         }
         setProfile(updatedProfileData);
-        setIsEditing(false);
+        setIsEditingProfile(false);
         toast({
             title: "Profile Updated",
             description: "Your changes have been saved successfully."
@@ -232,7 +264,7 @@ export default function ProfilePage() {
             bio: profile.bio || '',
         });
     }
-    setIsEditing(false);
+    setIsEditingProfile(false);
   }
   
 
@@ -273,11 +305,11 @@ export default function ProfilePage() {
               <div>
                 <CardTitle>Profile Details</CardTitle>
                 <CardDescription>
-                  {isEditing ? "Update your personal information." : "View your personal information."}
+                  {isEditingProfile ? "Update your personal information." : "View your personal information."}
                 </CardDescription>
               </div>
-               {!isEditing ? (
-                    <Button variant="outline" size="icon" onClick={() => setIsEditing(true)}>
+               {!isEditingProfile ? (
+                    <Button variant="outline" size="icon" onClick={() => setIsEditingProfile(true)}>
                         <Edit className="h-4 w-4" />
                     </Button>
                 ) : (
@@ -294,7 +326,7 @@ export default function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="name">Name</Label>
-                 {isEditing ? (
+                 {isEditingProfile ? (
                     <Input id="name" value={formData.name} onChange={handleInputChange} />
                 ) : (
                     <p className="text-sm p-2">{profile.name}</p>
@@ -306,7 +338,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="location">Location</Label>
-                {isEditing ? (
+                {isEditingProfile ? (
                     <Input id="location" value={formData.location} onChange={handleInputChange} />
                 ) : (
                     <p className="text-sm p-2">{profile.location}</p>
@@ -314,7 +346,7 @@ export default function ProfilePage() {
               </div>
               <div className="space-y-2">
                 <Label htmlFor="bio">Bio</Label>
-                 {isEditing ? (
+                 {isEditingProfile ? (
                     <Textarea id="bio" value={formData.bio} onChange={handleInputChange} />
                 ) : (
                     <p className="text-sm p-2 whitespace-pre-wrap">{profile.bio}</p>
@@ -331,6 +363,8 @@ export default function ProfilePage() {
               userSkills={profile.skillsOffered || []}
               onAdd={(skill) => addSkill('skillsOffered', skill)}
               onRemove={(skill) => removeSkill('skillsOffered', skill)}
+              isEditing={isEditingOffered}
+              setIsEditing={setIsEditingOffered}
             />
             <SkillManager
               title="Skills I Need"
@@ -338,6 +372,8 @@ export default function ProfilePage() {
               userSkills={profile.skillsNeeded || []}
               onAdd={(skill) => addSkill('skillsNeeded', skill)}
               onRemove={(skill) => removeSkill('skillsNeeded', skill)}
+              isEditing={isEditingNeeded}
+              setIsEditing={setIsEditingNeeded}
             />
           </div>
         </TabsContent>
