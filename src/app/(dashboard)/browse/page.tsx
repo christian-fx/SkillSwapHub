@@ -169,7 +169,7 @@ export default function BrowsePage() {
                   
                   <div>
                     <Label className="text-sm font-medium mb-2 block">Filter by Skills</Label>
-                    <div className="flex flex-col sm:flex-row gap-2">
+                    <div className="flex flex-col gap-2">
                         <SkillFilter
                             title="Offers"
                             allSkills={allSkills}

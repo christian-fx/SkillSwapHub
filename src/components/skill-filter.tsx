@@ -41,7 +41,7 @@ export function SkillFilter({
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" size="sm" className="h-9 border-dashed">
+        <Button variant="outline" size="sm" className="h-9 border-dashed w-full justify-start text-left font-normal">
           <PlusCircle className="mr-2 h-4 w-4" />
           {title}
           {selectedValues.size > 0 && (
@@ -49,15 +49,37 @@ export function SkillFilter({
               <Separator orientation="vertical" className="mx-2 h-4" />
               <Badge
                 variant="secondary"
-                className="rounded-sm px-1 font-normal"
+                className="rounded-sm px-1 font-normal lg:hidden"
               >
                 {selectedValues.size}
               </Badge>
+              <div className="hidden space-x-1 lg:flex">
+                {selectedValues.size > 2 ? (
+                  <Badge
+                    variant="secondary"
+                    className="rounded-sm px-1 font-normal"
+                  >
+                    {selectedValues.size} selected
+                  </Badge>
+                ) : (
+                  allSkills
+                    .filter((option) => selectedValues.has(option.name))
+                    .map((option) => (
+                      <Badge
+                        variant="secondary"
+                        key={option.name}
+                        className="rounded-sm px-1 font-normal"
+                      >
+                        {option.name}
+                      </Badge>
+                    ))
+                )}
+              </div>
             </>
           )}
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0" align="start">
+      <PopoverContent className="w-[250px] p-0" align="start">
         <Command>
           <CommandInput placeholder={title} />
           <CommandList>
