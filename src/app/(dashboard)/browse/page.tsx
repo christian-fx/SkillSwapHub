@@ -41,7 +41,6 @@ import {
 } from "@/components/ui/drawer";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import { Command, CommandList, CommandEmpty, CommandGroup, CommandItem } from '@/components/ui/command';
 import { ALL_SKILLS } from '@/lib/skills';
 
