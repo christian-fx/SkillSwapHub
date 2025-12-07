@@ -62,7 +62,7 @@ export function SkillFilter({
           <CommandInput placeholder={title} />
           <CommandList>
             <CommandEmpty>No results found.</CommandEmpty>
-            <CommandGroup>
+            <CommandGroup className="max-h-60 overflow-auto">
               {allSkills.map((option) => {
                 const isSelected = selectedValues.has(option.name);
                 return (
@@ -112,5 +112,3 @@ export function SkillFilter({
     </Popover>
   );
 }
-
-    

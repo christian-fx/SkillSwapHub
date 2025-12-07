@@ -213,6 +213,9 @@ export default function BrowsePage() {
                        <Button variant="ghost" onClick={clearFilters}>Clear Filters</Button>
                     )}
                 </DrawerFooter>
+                <DrawerClose asChild className="absolute right-4 top-4">
+                  <Button variant="ghost" size="icon"><X className="h-4 w-4" /></Button>
+                </DrawerClose>
                 </div>
             </DrawerContent>
           </Drawer>
@@ -345,5 +348,3 @@ export default function BrowsePage() {
     </>
   );
 }
-
-    
