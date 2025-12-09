@@ -32,12 +32,13 @@ import { UserNav } from "@/components/user-nav";
 import { Logo } from "@/components/logo";
 import { Button } from "@/components/ui/button";
 import { Notifications } from "@/components/notifications";
+import { useChatLayout } from "@/context/chat-layout-context";
 
 const menuItems = [
   { href: "/browse", label: "Swaps", icon: LayoutGrid },
   { href: "/my-swaps", label: "My Swaps", icon: RefreshCw },
   { href: "/marketplace", label: "Marketplace", icon: ShoppingBasket },
-  { href: "/bookings", label: "Bookings", icon: ShoppingCart },
+  { href: "/cart", label: "Bookings", icon: ShoppingCart },
   { href: "/profile", label: "Profile", icon: User },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/settings", label: "Settings", icon: Settings },
@@ -82,23 +83,17 @@ function DashboardNav() {
     )
 }
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
+  const { isChatOpen } = useChatLayout();
   const pathname = usePathname();
   const isMessagesPage = pathname.startsWith('/messages');
+  const hideLayout = isMessagesPage && isChatOpen;
 
   return (
-    <SidebarProvider>
-      <Sidebar>
-        <DashboardNav />
-      </Sidebar>
       <SidebarInset>
         <header className={cn(
           "flex h-14 items-center gap-4 border-b bg-card/50 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-10 backdrop-blur-sm",
-          isMessagesPage && "hidden" // Hide header on messages page
+          hideLayout && "hidden"
         )}>
             <SidebarTrigger className="md:hidden" />
             <div className="w-full flex-1">
@@ -111,14 +106,13 @@ export default function DashboardLayout({
         </header>
         <main className={cn(
           "flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6",
-          // Make main area take full height on messages page and remove padding
-          isMessagesPage && "h-[calc(100svh-1px)] p-0 m-0" 
+          hideLayout && "h-[calc(100svh-0px)] p-0 m-0" 
         )}>
             {children}
         </main>
         <footer className={cn(
           "bg-card border-t",
-          isMessagesPage && "hidden" // Hide footer on messages page
+          hideLayout && "hidden"
         )}>
           <div className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center text-sm text-muted-foreground">
@@ -129,6 +123,21 @@ export default function DashboardLayout({
           </div>
         </footer>
       </SidebarInset>
+  )
+}
+
+export default function DashboardLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+
+  return (
+    <SidebarProvider>
+      <Sidebar>
+        <DashboardNav />
+      </Sidebar>
+      <DashboardLayoutContent>{children}</DashboardLayoutContent>
     </SidebarProvider>
   );
 }
