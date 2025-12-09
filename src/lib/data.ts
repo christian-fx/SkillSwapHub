@@ -49,6 +49,7 @@ export const users: User[] = [
     location: "Kano, KN",
     skillsOffered: ["Creative Writing", "Editing", "Content Strategy"],
     skillsNeeded: ["Personal Finance", "Graphic Design"],
+    isVerified: false,
   },
   {
     id: "user-4",
@@ -60,6 +61,7 @@ export const users: User[] = [
     location: "Ibadan, OY",
     skillsOffered: ["Fitness Coaching", "Nutrition Planning"],
     skillsNeeded: ["Social Media Marketing", "Web Development"],
+    isVerified: true,
   },
   {
     id: "user-5",
@@ -83,6 +85,7 @@ export const users: User[] = [
     location: "Kaduna, KD",
     skillsOffered: ["Public Speaking", "Presentation Design"],
     skillsNeeded: ["React", "Node.js"],
+    isVerified: false,
   },
   {
     id: "user-7",
@@ -94,6 +97,7 @@ export const users: User[] = [
     location: "Lagos, LA",
     skillsOffered: ["Architecture"],
     skillsNeeded: ["Urban Gardening"],
+    isVerified: true,
   },
   {
     id: "user-8",
@@ -105,6 +109,7 @@ export const users: User[] = [
     location: "Benin City, ED",
     skillsOffered: ["Singing"],
     skillsNeeded: ["Calculus"],
+    isVerified: true,
   },
   {
     id: "user-9",
@@ -116,6 +121,7 @@ export const users: User[] = [
     location: "Enugu, EN",
     skillsOffered: ["Physics"],
     skillsNeeded: ["Chemistry"],
+    isVerified: false,
   },
   {
     id: "user-10",
@@ -127,6 +133,7 @@ export const users: User[] = [
     location: "Jos, PL",
     skillsOffered: ["Photography"],
     skillsNeeded: ["Baking"],
+    isVerified: true,
   },
   {
     id: "user-11",
@@ -138,6 +145,7 @@ export const users: User[] = [
     location: "Abeokuta, OG",
     skillsOffered: ["Home Security"],
     skillsNeeded: ["French"],
+    isVerified: false,
   },
   {
     id: "user-12",
@@ -149,6 +157,7 @@ export const users: User[] = [
     location: "Calabar, CR",
     skillsOffered: ["Event Planning"],
     skillsNeeded: ["Knitting"],
+    isVerified: true,
   },
   {
     id: "user-13",
@@ -160,6 +169,7 @@ export const users: User[] = [
     location: "Ilorin, KW",
     skillsOffered: ["Sales", "Improv"],
     skillsNeeded: ["Video Editing"],
+    isVerified: true,
   },
   {
     id: "user-14",
@@ -171,6 +181,7 @@ export const users: User[] = [
     location: "Owerri, IM",
     skillsOffered: ["Problem Solving"],
     skillsNeeded: ["Car Maintenance"],
+    isVerified: false,
   },
   {
     id: "user-15",
@@ -182,6 +193,7 @@ export const users: User[] = [
     location: "Uyo, AK",
     skillsOffered: ["Playwriting"],
     skillsNeeded: ["Web Development"],
+    isVerified: true,
   },
   {
     id: "user-16",
@@ -193,6 +205,7 @@ export const users: User[] = [
     location: "Asaba, DT",
     skillsOffered: ["Watercolor Painting"],
     skillsNeeded: ["Public Speaking"],
+    isVerified: true,
   },
   {
     id: "user-17",
@@ -204,6 +217,7 @@ export const users: User[] = [
     location: "Lokoja, KG",
     skillsOffered: ["Filmmaking"],
     skillsNeeded: ["Smartphone Basics"],
+    isVerified: false,
   },
   {
     id: "user-18",
@@ -215,6 +229,7 @@ export const users: User[] = [
     location: "Lagos, LA",
     skillsOffered: ["Fashion Styling"],
     skillsNeeded: ["Cooking"],
+    isVerified: true,
   },
   {
     id: "user-19",
@@ -226,6 +241,7 @@ export const users: User[] = [
     location: "Abuja, FCT",
     skillsOffered: ["Leadership"],
     skillsNeeded: ["Art History"],
+    isVerified: true,
   },
   {
     id: "user-20",
@@ -237,6 +253,7 @@ export const users: User[] = [
     location: "Port Harcourt, RV",
     skillsOffered: ["Robotics"],
     skillsNeeded: ["Yoga"],
+    isVerified: false,
   },
   {
     id: "user-21",
@@ -248,6 +265,7 @@ export const users: User[] = [
     location: "Kano, KN",
     skillsOffered: ["Creative Writing"],
     skillsNeeded: ["Astronomy"],
+    isVerified: true,
   },
   {
     id: "user-22",
@@ -259,6 +277,7 @@ export const users: User[] = [
     location: "Ibadan, OY",
     skillsOffered: ["Anatomy"],
     skillsNeeded: ["Ethics"],
+    isVerified: true,
   },
   {
     id: "user-23",
@@ -270,6 +289,7 @@ export const users: User[] = [
     location: "Kaduna, KD",
     skillsOffered: ["Chemistry"],
     skillsNeeded: ["Business Management"],
+    isVerified: false,
   },
   {
     id: "user-24",
@@ -281,6 +301,7 @@ export const users: User[] = [
     location: "Benin City, ED",
     skillsOffered: ["Self-Defense"],
     skillsNeeded: ["Pottery"],
+    isVerified: true,
   },
   {
     id: "user-25",
@@ -292,6 +313,7 @@ export const users: User[] = [
     location: "Enugu, EN",
     skillsOffered: ["Meditation"],
     skillsNeeded: ["React"],
+    isVerified: true,
   },
   {
     id: "user-26",
@@ -303,6 +325,7 @@ export const users: User[] = [
     location: "Jos, PL",
     skillsOffered: ["Music"],
     skillsNeeded: ["Electronics Repair"],
+    isVerified: false,
   },
   {
     id: "user-27",
@@ -313,7 +336,8 @@ export const users: User[] = [
     bio: "Headmaster. Can offer lessons in transfiguration and defense against the dark arts. Seeking to understand 'the internet'.",
     location: "Abeokuta, OG",
     skillsOffered: ["Transfiguration", "Ancient Runes" ],
-    skillsNeeded: ["Web Development"]
+    skillsNeeded: ["Web Development"],
+    isVerified: true,
   },
   {
     id: "user-28",
@@ -324,7 +348,8 @@ export const users: User[] = [
     bio: "Can teach sword fighting and the five-point-palm exploding heart technique. I'm interested in learning how to knit.",
     location: "Calabar, CR",
     skillsOffered: ["Swordsmanship"],
-    skillsNeeded: ["Knitting"]
+    skillsNeeded: ["Knitting"],
+    isVerified: true,
   },
   {
     id: "user-29",
@@ -335,7 +360,8 @@ export const users: User[] = [
     bio: "I'm full of ideas! I can teach you about physical comedy and making a grand entrance. I need someone to help me with my taxes.",
     location: "Ilorin, KW",
     skillsOffered: ["Improv"],
-    skillsNeeded: ["Personal Finance"]
+    skillsNeeded: ["Personal Finance"],
+    isVerified: false,
   },
   {
     id: "user-30",
@@ -346,7 +372,8 @@ export const users: User[] = [
     bio: "Medical doctor and FBI agent. I can teach you about forensic science and skepticism. I'm looking to learn photography.",
     location: "Owerri, IM",
     skillsOffered: ["Forensic Science"],
-    skillsNeeded: ["Photography"]
+    skillsNeeded: ["Photography"],
+    isVerified: true,
   },
   {
     id: "user-31",
@@ -357,7 +384,8 @@ export const users: User[] = [
     bio: "I work in publishing. I can edit your manuscript and teach you how to dance... sort of. I want to learn how to do my own plumbing.",
     location: "Uyo, AK",
     skillsOffered: ["Editing"],
-    skillsNeeded: ["Plumbing"]
+    skillsNeeded: ["Plumbing"],
+    isVerified: false,
   },
   {
     id: "user-32",
@@ -368,7 +396,8 @@ export const users: User[] = [
     bio: "I want to believe. Can teach you about unsolved mysteries and the paranormal. Looking for someone to teach me advanced basketball techniques.",
     location: "Asaba, DT",
     skillsOffered: ["Creative Writing"],
-    skillsNeeded: ["Basketball"]
+    skillsNeeded: ["Basketball"],
+    isVerified: true,
   },
   {
     id: "user-33",
@@ -379,7 +408,8 @@ export const users: User[] = [
     bio: "I can teach you how to cook like a real chef. Don't be an idiot sandwich. I'd like to learn how to be more patient.",
     location: "Lokoja, KG",
     skillsOffered: ["Cooking"],
-    skillsNeeded: ["Meditation"]
+    skillsNeeded: ["Meditation"],
+    isVerified: true,
   },
   {
     id: "user-34",
@@ -390,7 +420,8 @@ export const users: User[] = [
     bio: "I can help you with pretty much any subject. I'm particularly good at Arithmancy. I want to learn how to use a computer.",
     location: "Lagos, LA",
     skillsOffered: ["Research"],
-    skillsNeeded: ["Computer Basics"]
+    skillsNeeded: ["Computer Basics"],
+    isVerified: false,
   },
   {
     id: "user-35",
@@ -401,7 +432,8 @@ export const users: User[] = [
     bio: "Archaeology professor and adventurer. I can teach you about ancient history and how to use a whip. I need to learn how to fly a plane.",
     location: "Abuja, FCT",
     skillsOffered: ["Archaeology"],
-    skillsNeeded: ["Piloting"]
+    skillsNeeded: ["Piloting"],
+    isVerified: true,
   },
   {
     id: "user-36",
@@ -412,7 +444,8 @@ export const users: User[] = [
     bio: "Captain. I can teach you how to sail and find treasure. Savvy? I need someone to fix my compass.",
     location: "Port Harcourt, RV",
     skillsOffered: ["Sailing"],
-    skillsNeeded: ["Electronics Repair"]
+    skillsNeeded: ["Electronics Repair"],
+    isVerified: true,
   },
   {
     id: "user-37",
@@ -423,7 +456,8 @@ export const users: User[] = [
     bio: "I can teach you archery and survival skills. I'd like to learn how to bake.",
     location: "Kano, KN",
     skillsOffered: ["Archery"],
-    skillsNeeded: ["Baking"]
+    skillsNeeded: ["Baking"],
+    isVerified: false,
   },
   {
     id: "user-38",
@@ -434,7 +468,8 @@ export const users: User[] = [
     bio: "Head writer for a sketch comedy show. I can teach you how to write jokes. I need help with my night cheese addiction.",
     location: "Ibadan, OY",
     skillsOffered: ["Comedy Writing"],
-    skillsNeeded: ["Nutrition Planning"]
+    skillsNeeded: ["Nutrition Planning"],
+    isVerified: true,
   },
   {
     id: "user-39",
@@ -445,7 +480,8 @@ export const users: User[] = [
     bio: "I can play the guitar pretty well. I need someone to help me fix my DeLorean.",
     location: "Kaduna, KD",
     skillsOffered: ["Guitar"],
-    skillsNeeded: ["Car Maintenance"]
+    skillsNeeded: ["Car Maintenance"],
+    isVerified: false,
   },
   {
     id: "user-40",
@@ -456,7 +492,8 @@ export const users: User[] = [
     bio: "Leader of the Autobots. I can teach you about leadership and intergalactic diplomacy. I wish to learn about human art.",
     location: "Benin City, ED",
     skillsOffered: ["Leadership"],
-    skillsNeeded: ["Art History"]
+    skillsNeeded: ["Art History"],
+    isVerified: true,
   },
   {
     id: "user-41",
@@ -467,7 +504,8 @@ export const users: User[] = [
     bio: "I'm a freelance photographer. I can teach you how to take great pictures. I'm trying to learn more about chemistry.",
     location: "Enugu, EN",
     skillsOffered: ["Photography"],
-    skillsNeeded: ["Chemistry"]
+    skillsNeeded: ["Chemistry"],
+    isVerified: true,
   },
   {
     id: "user-42",
@@ -478,7 +516,8 @@ export const users: User[] = [
     bio: "I enjoy woodworking and breakfast food. I can teach you how to build a canoe. I have no needs.",
     location: "Jos, PL",
     skillsOffered: ["Woodworking"],
-    skillsNeeded: ["Philosophy"]
+    skillsNeeded: ["Philosophy"],
+    isVerified: false,
   },
   {
     id: "user-43",
@@ -489,7 +528,8 @@ export const users: User[] = [
     bio: "I can teach you how to survive judgment day. I need to learn how to weld.",
     location: "Abeokuta, OG",
     skillsOffered: ["Survival Skills"],
-    skillsNeeded: ["Welding"]
+    skillsNeeded: ["Welding"],
+    isVerified: true,
   },
   {
     id: "user-44",
@@ -500,7 +540,8 @@ export const users: User[] = [
     bio: "Consulting detective. I can teach you the science of deduction. I'm looking for someone to teach me the violin.",
     location: "Calabar, CR",
     skillsOffered: ["Problem Solving"],
-    skillsNeeded: ["Violin"]
+    skillsNeeded: ["Violin"],
+    isVerified: true,
   },
   {
     id: "user-45",
@@ -511,7 +552,8 @@ export const users: User[] = [
     bio: "Chocolatier. I can teach you how to make candy. I need help with my factory's accounting.",
     location: "Ilorin, KW",
     skillsOffered: ["Baking"],
-    skillsNeeded: ["Personal Finance"]
+    skillsNeeded: ["Personal Finance"],
+    isVerified: false,
   },
   {
     id: "user-46",
@@ -522,7 +564,8 @@ export const users: User[] = [
     bio: "Jedi Knight. Expert pilot and lightsaber duelist. I can teach you pod-racing. Looking to learn sand-castle building.",
     location: "Owerri, IM",
     skillsOffered: ["Piloting", "Swordsmanship"],
-    skillsNeeded: ["Sculpting"]
+    skillsNeeded: ["Sculpting"],
+    isVerified: true,
   },
   {
     id: "user-47",
@@ -533,7 +576,8 @@ export const users: User[] = [
     bio: "I've been on an adventure. I can teach you map-making and riddles. Seeking lessons in dragon-slaying, just in case.",
     location: "Uyo, AK",
     skillsOffered: ["Storytelling"],
-    skillsNeeded: ["Swordsmanship"]
+    skillsNeeded: ["Swordsmanship"],
+    isVerified: false,
   },
   {
     id: "user-48",
@@ -544,7 +588,8 @@ export const users: User[] = [
     bio: "International art thief. I can teach you geography and history. Looking for someone to teach me how to code.",
     location: "Asaba, DT",
     skillsOffered: ["Geography"],
-    skillsNeeded: ["Web Development"]
+    skillsNeeded: ["Web Development"],
+    isVerified: true,
   },
   {
     id: "user-49",
@@ -555,7 +600,8 @@ export const users: User[] = [
     bio: "Time Lord. I can teach you about all of time and space. I need help fixing my chameleon circuit.",
     location: "Lokoja, KG",
     skillsOffered: ["History"],
-    skillsNeeded: ["Electronics Repair"]
+    skillsNeeded: ["Electronics Repair"],
+    isVerified: true,
   },
   {
     id: "user-50",
@@ -566,7 +612,8 @@ export const users: User[] = [
     bio: "I'm not a smart man, but I know what love is. I can teach you how to run, play ping-pong, and shrimp. I want to learn about computers.",
     location: "Lagos, LA",
     skillsOffered: ["Running"],
-    skillsNeeded: ["Web Development"]
+    skillsNeeded: ["Web Development"],
+    isVerified: false,
   },
   {
     id: "user-51",
@@ -577,7 +624,8 @@ export const users: User[] = [
     bio: "We knows riddles, yes we do. We can teach you how to catch fish with our hands. We needs our precious.",
     location: "Abuja, FCT",
     skillsOffered: ["Riddles"],
-    skillsNeeded: ["Jewelry Making"]
+    skillsNeeded: ["Jewelry Making"],
+    isVerified: true,
   },
   {
     id: "user-52",
@@ -588,7 +636,8 @@ export const users: User[] = [
     bio: "Shaken, not stirred. I can teach you espionage and card games. I'm looking for someone to teach me how to make a proper martini at home.",
     location: "Port Harcourt, RV",
     skillsOffered: ["Problem Solving"],
-    skillsNeeded: ["Mixology"]
+    skillsNeeded: ["Mixology"],
+    isVerified: true,
   },
   {
     id: "user-53",
@@ -599,7 +648,8 @@ export const users: User[] = [
     bio: "Elf of the woodland realm. My eyes are keen. I can teach you archery and how to walk on snow. I wish to learn the ways of the Dwarves.",
     location: "Kano, KN",
     skillsOffered: ["Archery"],
-    skillsNeeded: ["Stonemasonry"]
+    skillsNeeded: ["Stonemasonry"],
+    isVerified: false,
   },
   {
     id: "user-54",
@@ -610,7 +660,8 @@ export const users: User[] = [
     bio: "Practically perfect in every way. I can teach you how to have a tidy nursery and how to fly a kite. I'm looking to learn how to skateboard.",
     location: "Ibadan, OY",
     skillsOffered: ["Child Care"],
-    skillsNeeded: ["Skateboarding"]
+    skillsNeeded: ["Skateboarding"],
+    isVerified: true,
   },
   {
     id: "user-55",
@@ -621,7 +672,8 @@ export const users: User[] = [
     bio: "I know kung fu. I can teach you how to free your mind. I need someone to explain what 'tastee wheat' is.",
     location: "Kaduna, KD",
     skillsOffered: ["Kung Fu"],
-    skillsNeeded: ["Cooking"]
+    skillsNeeded: ["Cooking"],
+    isVerified: true,
   },
   {
     id: "user-56",
@@ -632,7 +684,8 @@ export const users: User[] = [
     bio: "It ain't about how hard you hit. It's about how hard you can get hit and keep moving forward. I can teach you boxing. I want to learn how to read better.",
     location: "Benin City, ED",
     skillsOffered: ["Boxing"],
-    skillsNeeded: ["Literacy"]
+    skillsNeeded: ["Literacy"],
+    isVerified: false,
   }
 ];
 
@@ -1029,5 +1082,222 @@ export const marketplaceItems: MarketplaceItem[] = [
         imageUrl: 'https://picsum.photos/seed/mp32/600/400',
         imageHint: 'money graph',
         type: 'eBook'
+    },
+    {
+        id: 'item-33',
+        title: 'Advanced Calligraphy Drills',
+        author: 'Zainab Balogun',
+        price: 22.50,
+        imageUrl: 'https://picsum.photos/seed/mp33/600/400',
+        imageHint: 'calligraphy pen',
+        type: 'Guide'
+    },
+    {
+        id: 'item-34',
+        title: 'The Art of Storytelling',
+        author: 'Uche Jombo',
+        price: 42.00,
+        imageUrl: 'https://picsum.photos/seed/mp34/600/400',
+        imageHint: 'open book',
+        type: 'eBook'
+    },
+    {
+        id: 'item-35',
+        title: 'Mobile App Wireframe Kit',
+        author: 'Bolanle Adebayo',
+        price: 65.00,
+        imageUrl: 'https://picsum.photos/seed/mp35/600/400',
+        imageHint: 'app wireframe',
+        type: 'Tool'
+    },
+    {
+        id: 'item-36',
+        title: 'DIY Home Decor Projects',
+        author: 'Remi Tinubu',
+        price: 16.00,
+        imageUrl: 'https://picsum.photos/seed/mp36/600/400',
+        imageHint: 'home decor',
+        type: 'Guide'
+    },
+    {
+        id: 'item-37',
+        title: 'Investing 101: A Beginner\'s Guide',
+        author: 'Chinedu Okafor',
+        price: 29.99,
+        imageUrl: 'https://picsum.photos/seed/mp37/600/400',
+        imageHint: 'stock chart',
+        type: 'eBook'
+    },
+    {
+        id: 'item-38',
+        title: 'Email Marketing Templates',
+        author: 'Segun Arinze',
+        price: 38.00,
+        imageUrl: 'https://picsum.photos/seed/mp38/600/400',
+        imageHint: 'email inbox',
+        type: 'Template'
+    },
+    {
+        id: 'item-39',
+        title: 'The Science of Cooking',
+        author: 'Gideon Ramsay',
+        price: 55.00,
+        imageUrl: 'https://picsum.photos/seed/mp39/600/400',
+        imageHint: 'kitchen science',
+        type: 'eBook'
+    },
+    {
+        id: 'item-40',
+        title: 'Personal Budget Spreadsheet',
+        author: 'Chukwudi Kramer',
+        price: 10.00,
+        imageUrl: 'https://picsum.photos/seed/mp40/600/400',
+        imageHint: 'spreadsheet budget',
+        type: 'Tool'
+    },
+    {
+        id: 'item-41',
+        title: 'Advanced Photoshop Techniques',
+        author: 'Adanna Chioma',
+        price: 75.00,
+        imageUrl: 'https://picsum.photos/seed/mp41/600/400',
+        imageHint: 'photoshop interface',
+        type: 'Guide'
+    },
+    {
+        id: 'item-42',
+        title: 'Yoga for Flexibility',
+        author: 'Tunde Ednut',
+        price: 25.00,
+        imageUrl: 'https://picsum.photos/seed/mp42/600/400',
+        imageHint: 'yoga pose',
+        type: 'Guide'
+    },
+    {
+        id: 'item-43',
+        title: 'Guide to Urban Gardening',
+        author: 'Gbenga Adekunle',
+        price: 17.50,
+        imageUrl: 'https://picsum.photos/seed/mp43/600/400',
+        imageHint: 'balcony garden',
+        type: 'eBook'
+    },
+    {
+        id: 'item-44',
+        title: 'Creative Writing Prompt Journal',
+        author: 'Uche Jombo',
+        price: 21.00,
+        imageUrl: 'https://picsum.photos/seed/mp44/600/400',
+        imageHint: 'writing journal',
+        type: 'Template'
+    },
+    {
+        id: 'item-45',
+        title: 'Data Structures in JavaScript',
+        author: 'Bolanle Adebayo',
+        price: 110.00,
+        imageUrl: 'https://picsum.photos/seed/mp45/600/400',
+        imageHint: 'data structure',
+        type: 'Guide'
+    },
+    {
+        id: 'item-46',
+        title: 'Portrait Photography Lighting Setup',
+        author: 'Jide Sanusi',
+        price: 48.00,
+        imageUrl: 'https://picsum.photos/seed/mp46/600/400',
+        imageHint: 'photo studio',
+        type: 'Guide'
+    },
+    {
+        id: 'item-47',
+        title: 'Minimalist Resume Templates',
+        author: 'Adanna Chioma',
+        price: 15.00,
+        imageUrl: 'https://picsum.photos/seed/mp47/600/400',
+        imageHint: 'resume cv',
+        type: 'Template'
+    },
+    {
+        id: 'item-48',
+        title: 'The Psychology of Persuasion',
+        author: 'Musa Adeboye',
+        price: 32.00,
+        imageUrl: 'https://picsum.photos/seed/mp48/600/400',
+        imageHint: 'brain illustration',
+        type: 'eBook'
+    },
+     {
+        id: 'item-49',
+        title: 'Building a Birdhouse',
+        author: 'Emeka Nwosu',
+        price: 8.00,
+        imageUrl: 'https://picsum.photos/seed/mp49/600/400',
+        imageHint: 'birdhouse plan',
+        type: 'Guide'
+    },
+    {
+        id: 'item-50',
+        title: 'Social Media Content Calendar',
+        author: 'Dayo Olumide',
+        price: 25.00,
+        imageUrl: 'https://picsum.photos/seed/mp50/600/400',
+        imageHint: 'social media',
+        type: 'Template'
+    },
+    {
+        id: 'item-51',
+        title: 'AI for Beginners',
+        author: 'Tunde Ednut',
+        price: 99.00,
+        imageUrl: 'https://picsum.photos/seed/mp51/600/400',
+        imageHint: 'robot brain',
+        type: 'eBook'
+    },
+    {
+        id: 'item-52',
+        title: 'Advanced Guitar Solos',
+        author: 'Mohammed McFly',
+        price: 30.00,
+        imageUrl: 'https://picsum.photos/seed/mp52/600/400',
+        imageHint: 'electric guitar',
+        type: 'Guide'
+    },
+    {
+        id: 'item-53',
+        title: 'Travel Itinerary Planner',
+        author: 'Chioma Sandiego',
+        price: 14.00,
+        imageUrl: 'https://picsum.photos/seed/mp53/600/400',
+        imageHint: 'world map',
+        type: 'Template'
+    },
+    {
+        id: 'item-54',
+        title: 'React Native for Dummies',
+        author: 'Bolanle Adebayo',
+        price: 120.00,
+        imageUrl: 'https://picsum.photos/seed/mp54/600/400',
+        imageHint: 'mobile screen',
+        type: 'Guide'
+    },
+    {
+        id: 'item-55',
+        title: 'The Stoic Mind',
+        author: 'Rotimi Swanson',
+        price: 19.99,
+        imageUrl: 'https://picsum.photos/seed/mp55/600/400',
+        imageHint: 'stoic statue',
+        type: 'eBook'
+    },
+    {
+        id: 'item-56',
+        title: 'Home Brewing Beer',
+        author: 'Chukwudi Kramer',
+        price: 28.50,
+        imageUrl: 'https://picsum.photos/seed/mp56/600/400',
+        imageHint: 'beer brewing',
+        type: 'Guide'
     }
 ];
+
