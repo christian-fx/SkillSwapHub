@@ -68,8 +68,12 @@ export default function CartPage() {
     return cart.reduce((total, item) => total + item.price * (item.quantity || 1), 0);
   }, [cart]);
 
-  const tax = subtotal * 0.07; // 7% tax
+  const tax = subtotal * 0.075; // 7.5% VAT
   const total = subtotal + tax;
+
+  const formatPrice = (price: number) => {
+      return `₦${price.toLocaleString('en-NG')}`;
+  }
 
   const handleCheckout = (e: React.FormEvent) => {
       e.preventDefault();
@@ -94,7 +98,7 @@ export default function CartPage() {
                 <div className="flex-grow">
                   <h3 className="font-semibold">{item.title}</h3>
                   <p className="text-sm text-muted-foreground">by {item.author}</p>
-                  <p className="text-sm font-semibold mt-1">${item.price.toFixed(2)}</p>
+                  <p className="text-sm font-semibold mt-1">{formatPrice(item.price)}</p>
                 </div>
                 <div className="flex items-center gap-2">
                     <div className="flex items-center gap-2 border rounded-md">
@@ -128,16 +132,16 @@ export default function CartPage() {
           <CardContent className="space-y-4">
             <div className="flex justify-between">
               <span>Subtotal</span>
-              <span>${subtotal.toFixed(2)}</span>
+              <span>{formatPrice(subtotal)}</span>
             </div>
             <div className="flex justify-between">
-              <span>Tax (7%)</span>
-              <span>${tax.toFixed(2)}</span>
+              <span>Tax (7.5%)</span>
+              <span>{formatPrice(tax)}</span>
             </div>
             <Separator />
             <div className="flex justify-between font-bold text-lg">
               <span>Total</span>
-              <span>${total.toFixed(2)}</span>
+              <span>{formatPrice(total)}</span>
             </div>
           </CardContent>
           <CardFooter>

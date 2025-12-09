@@ -8,7 +8,7 @@ import type { MarketplaceItem } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Check, BadgeCheck, XCircle } from 'lucide-react';
+import { ShoppingCart, Check, BadgeCheck, XCircle, Eye } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -16,14 +16,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog';
 import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 8;
-const userMap = new Map(allUsers.map(u => [u.id, u]));
+const userMap = new Map(allUsers.map(u => [u.name, u]));
 
 const getAuthorByName = (name: string) => {
-    return allUsers.find(user => user.name === name);
+    return userMap.get(name);
 }
 
 // Custom hook for persisting state to localStorage
@@ -99,6 +107,10 @@ export default function MarketplacePage() {
     }
   };
 
+  const formatPrice = (price: number) => {
+      return `₦${price.toLocaleString('en-NG')}`;
+  }
+
 
   return (
     <>
@@ -153,17 +165,37 @@ export default function MarketplacePage() {
                 </p>
               </CardContent>
               <CardFooter className="p-4 pt-0 flex justify-between items-center">
-                <p className="text-xl font-bold">${item.price.toFixed(2)}</p>
-                <Button onClick={() => handleAddToCart(item)} disabled={itemInCart || isSoldOut}>
-                  {isSoldOut ? (
-                    <XCircle className="mr-2 h-4 w-4" />
-                  ) : itemInCart ? (
-                    <Check className="mr-2 h-4 w-4" />
-                  ) : (
-                    <ShoppingCart className="mr-2 h-4 w-4" />
-                  )}
-                  {isSoldOut ? 'Sold Out' : itemInCart ? 'Added' : 'Add to Cart'}
-                </Button>
+                <p className="text-xl font-bold">{formatPrice(item.price)}</p>
+                <div className="flex items-center gap-1">
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button variant="outline" size="icon">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle>Preview: {item.title}</DialogTitle>
+                        <DialogDescription>
+                          Here's a sneak peek of the content.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <div className="prose prose-sm dark:prose-invert max-h-80 overflow-y-auto rounded-md border p-4">
+                        <p>{item.preview || "No preview available for this item."}</p>
+                      </div>
+                    </DialogContent>
+                  </Dialog>
+                  <Button onClick={() => handleAddToCart(item)} disabled={itemInCart || isSoldOut}>
+                    {isSoldOut ? (
+                      <XCircle className="mr-2 h-4 w-4" />
+                    ) : itemInCart ? (
+                      <Check className="mr-2 h-4 w-4" />
+                    ) : (
+                      <ShoppingCart className="mr-2 h-4 w-4" />
+                    )}
+                    {isSoldOut ? 'Sold Out' : itemInCart ? 'Added' : 'Add to Cart'}
+                  </Button>
+                </div>
               </CardFooter>
             </Card>
           )})}
