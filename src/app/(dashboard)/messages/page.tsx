@@ -35,7 +35,7 @@ export default function MessagesPage() {
   const isChatOpen = !!selectedConversation;
 
   return (
-    <div className={cn("grid h-full w-full", isChatOpen && "md:grid-cols-[350px_1fr] lg:grid-cols-[400px_1fr]")}>
+    <div className={cn("grid w-full", isChatOpen ? "h-full" : "h-[calc(100svh-120px)]", isChatOpen && "md:grid-cols-[350px_1fr] lg:grid-cols-[400px_1fr]")}>
     
       {/* Chat List Column */}
       <div className={cn(
