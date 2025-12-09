@@ -2,7 +2,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Search, Settings, SquarePen } from 'lucide-react';
+import { ArrowLeft, Search, SquarePen } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
