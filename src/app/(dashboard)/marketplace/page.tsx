@@ -8,7 +8,7 @@ import type { MarketplaceItem } from '@/lib/types';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ShoppingCart, Check, BadgeCheck } from 'lucide-react';
+import { ShoppingCart, Check, BadgeCheck, XCircle } from 'lucide-react';
 import {
   Select,
   SelectContent,
@@ -124,6 +124,8 @@ export default function MarketplacePage() {
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paginatedItems.map((item) => {
             const author = getAuthorByName(item.author);
+            const isSoldOut = item.isSoldOut;
+            const itemInCart = isItemInCart(item.id);
             return (
             <Card key={item.id} className="flex flex-col overflow-hidden">
               <CardHeader className="p-0">
@@ -135,6 +137,11 @@ export default function MarketplacePage() {
                     className="object-cover"
                     data-ai-hint={item.imageHint}
                   />
+                  {isSoldOut && (
+                      <div className="absolute inset-0 bg-black/50 flex items-center justify-center">
+                          <Badge variant="destructive" className="text-sm">Sold Out</Badge>
+                      </div>
+                  )}
                 </div>
               </CardHeader>
               <CardContent className="flex-grow p-4">
@@ -147,13 +154,15 @@ export default function MarketplacePage() {
               </CardContent>
               <CardFooter className="p-4 pt-0 flex justify-between items-center">
                 <p className="text-xl font-bold">${item.price.toFixed(2)}</p>
-                <Button onClick={() => handleAddToCart(item)} disabled={isItemInCart(item.id)}>
-                  {isItemInCart(item.id) ? (
+                <Button onClick={() => handleAddToCart(item)} disabled={itemInCart || isSoldOut}>
+                  {isSoldOut ? (
+                    <XCircle className="mr-2 h-4 w-4" />
+                  ) : itemInCart ? (
                     <Check className="mr-2 h-4 w-4" />
                   ) : (
                     <ShoppingCart className="mr-2 h-4 w-4" />
                   )}
-                  {isItemInCart(item.id) ? 'Added' : 'Add to Cart'}
+                  {isSoldOut ? 'Sold Out' : itemInCart ? 'Added' : 'Add to Cart'}
                 </Button>
               </CardFooter>
             </Card>
@@ -204,7 +213,7 @@ export default function MarketplacePage() {
             <span className="sr-only">Cart</span>
             {cart.length > 0 && (
                 <Badge variant="destructive" className="absolute -top-1 -right-1 h-6 w-6 justify-center rounded-full p-0 text-xs">
-                    {cart.length}
+                    {cart.reduce((total, item) => total + (item.quantity || 1), 0)}
                 </Badge>
             )}
           </Button>

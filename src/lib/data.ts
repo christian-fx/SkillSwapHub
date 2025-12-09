@@ -802,7 +802,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 15.99,
         imageUrl: findImage('ebook-1').imageUrl,
         imageHint: findImage('ebook-1').imageHint,
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-2',
@@ -811,7 +812,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 25.00,
         imageUrl: findImage('template-1').imageUrl,
         imageHint: findImage('template-1').imageHint,
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-3',
@@ -820,7 +822,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 79.50,
         imageUrl: findImage('tool-1').imageUrl,
         imageHint: findImage('tool-1').imageHint,
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: true,
     },
     {
         id: 'item-4',
@@ -829,7 +832,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 9.99,
         imageUrl: findImage('guide-1').imageUrl,
         imageHint: findImage('guide-1').imageHint,
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
      {
         id: 'item-5',
@@ -838,7 +842,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 12.00,
         imageUrl: findImage('ebook-2').imageUrl,
         imageHint: findImage('ebook-2').imageHint,
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-6',
@@ -847,7 +852,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 29.99,
         imageUrl: findImage('guide-2').imageUrl,
         imageHint: findImage('guide-2').imageHint,
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-7',
@@ -856,7 +862,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 199.00,
         imageUrl: 'https://picsum.photos/seed/mp7/600/400',
         imageHint: 'data analytics',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-8',
@@ -865,7 +872,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 22.00,
         imageUrl: 'https://picsum.photos/seed/mp8/600/400',
         imageHint: 'organized desk',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-9',
@@ -874,7 +882,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 45.00,
         imageUrl: 'https://picsum.photos/seed/mp9/600/400',
         imageHint: 'python code',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: true,
     },
     {
         id: 'item-10',
@@ -883,7 +892,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 55.00,
         imageUrl: 'https://picsum.photos/seed/mp10/600/400',
         imageHint: 'UI design',
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: false,
     },
     {
         id: 'item-11',
@@ -892,7 +902,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 18.50,
         imageUrl: 'https://picsum.photos/seed/mp11/600/400',
         imageHint: 'business meeting',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-12',
@@ -901,7 +912,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 14.00,
         imageUrl: 'https://picsum.photos/seed/mp12/600/400',
         imageHint: 'healthy food',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-13',
@@ -910,7 +922,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 35.00,
         imageUrl: 'https://picsum.photos/seed/mp13/600/400',
         imageHint: 'local map',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-14',
@@ -919,7 +932,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 60.00,
         imageUrl: 'https://picsum.photos/seed/mp14/600/400',
         imageHint: 'javascript code',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-15',
@@ -928,7 +942,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 30.00,
         imageUrl: 'https://picsum.photos/seed/mp15/600/400',
         imageHint: 'photo editing',
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: false,
     },
     {
         id: 'item-16',
@@ -937,7 +952,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 19.99,
         imageUrl: 'https://picsum.photos/seed/mp16/600/400',
         imageHint: 'microphone podcast',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-17',
@@ -946,7 +962,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 28.00,
         imageUrl: 'https://picsum.photos/seed/mp17/600/400',
         imageHint: 'calendar plan',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-18',
@@ -955,7 +972,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 150.00,
         imageUrl: 'https://picsum.photos/seed/mp18/600/400',
         imageHint: 'financial chart',
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: false,
     },
     {
         id: 'item-19',
@@ -964,7 +982,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 24.99,
         imageUrl: 'https://picsum.photos/seed/mp19/600/400',
         imageHint: 'person working',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-20',
@@ -973,7 +992,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 85.00,
         imageUrl: 'https://picsum.photos/seed/mp20/600/400',
         imageHint: 'code editor',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: true,
     },
     {
         id: 'item-21',
@@ -982,7 +1002,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 5.00,
         imageUrl: 'https://picsum.photos/seed/mp21/600/400',
         imageHint: 'gym workout',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-22',
@@ -991,7 +1012,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 40.00,
         imageUrl: 'https://picsum.photos/seed/mp22/600/400',
         imageHint: 'woodworking tools',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-23',
@@ -1000,7 +1022,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 15.00,
         imageUrl: 'https://picsum.photos/seed/mp23/600/400',
         imageHint: 'wedding photo',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-24',
@@ -1009,7 +1032,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 33.00,
         imageUrl: 'https://picsum.photos/seed/mp24/600/400',
         imageHint: 'stage presentation',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-25',
@@ -1018,7 +1042,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 45.00,
         imageUrl: 'https://picsum.photos/seed/mp25/600/400',
         imageHint: 'branding design',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-26',
@@ -1027,7 +1052,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 95.00,
         imageUrl: 'https://picsum.photos/seed/mp26/600/400',
         imageHint: 'server code',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-27',
@@ -1036,7 +1062,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 12.99,
         imageUrl: 'https://picsum.photos/seed/mp27/600/400',
         imageHint: 'fresh pasta',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-28',
@@ -1045,7 +1072,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 20.00,
         imageUrl: 'https://picsum.photos/seed/mp28/600/400',
         imageHint: 'person jumping',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-29',
@@ -1054,7 +1082,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 18.00,
         imageUrl: 'https://picsum.photos/seed/mp29/600/400',
         imageHint: 'wooden chair',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-30',
@@ -1063,7 +1092,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 50.00,
         imageUrl: 'https://picsum.photos/seed/mp30/600/400',
         imageHint: 'presentation slides',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-31',
@@ -1072,7 +1102,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 4.99,
         imageUrl: 'https://picsum.photos/seed/mp31/600/400',
         imageHint: 'guitar chords',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-32',
@@ -1081,7 +1112,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 89.00,
         imageUrl: 'https://picsum.photos/seed/mp32/600/400',
         imageHint: 'money graph',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-33',
@@ -1090,7 +1122,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 22.50,
         imageUrl: 'https://picsum.photos/seed/mp33/600/400',
         imageHint: 'calligraphy pen',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-34',
@@ -1099,7 +1132,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 42.00,
         imageUrl: 'https://picsum.photos/seed/mp34/600/400',
         imageHint: 'open book',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-35',
@@ -1108,7 +1142,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 65.00,
         imageUrl: 'https://picsum.photos/seed/mp35/600/400',
         imageHint: 'app wireframe',
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: false,
     },
     {
         id: 'item-36',
@@ -1117,7 +1152,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 16.00,
         imageUrl: 'https://picsum.photos/seed/mp36/600/400',
         imageHint: 'home decor',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-37',
@@ -1126,7 +1162,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 29.99,
         imageUrl: 'https://picsum.photos/seed/mp37/600/400',
         imageHint: 'stock chart',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-38',
@@ -1135,7 +1172,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 38.00,
         imageUrl: 'https://picsum.photos/seed/mp38/600/400',
         imageHint: 'email inbox',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-39',
@@ -1144,7 +1182,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 55.00,
         imageUrl: 'https://picsum.photos/seed/mp39/600/400',
         imageHint: 'kitchen science',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-40',
@@ -1153,7 +1192,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 10.00,
         imageUrl: 'https://picsum.photos/seed/mp40/600/400',
         imageHint: 'spreadsheet budget',
-        type: 'Tool'
+        type: 'Tool',
+        isSoldOut: false,
     },
     {
         id: 'item-41',
@@ -1162,7 +1202,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 75.00,
         imageUrl: 'https://picsum.photos/seed/mp41/600/400',
         imageHint: 'photoshop interface',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-42',
@@ -1171,7 +1212,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 25.00,
         imageUrl: 'https://picsum.photos/seed/mp42/600/400',
         imageHint: 'yoga pose',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-43',
@@ -1180,7 +1222,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 17.50,
         imageUrl: 'https://picsum.photos/seed/mp43/600/400',
         imageHint: 'balcony garden',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-44',
@@ -1189,7 +1232,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 21.00,
         imageUrl: 'https://picsum.photos/seed/mp44/600/400',
         imageHint: 'writing journal',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-45',
@@ -1198,7 +1242,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 110.00,
         imageUrl: 'https://picsum.photos/seed/mp45/600/400',
         imageHint: 'data structure',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-46',
@@ -1207,7 +1252,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 48.00,
         imageUrl: 'https://picsum.photos/seed/mp46/600/400',
         imageHint: 'photo studio',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-47',
@@ -1216,7 +1262,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 15.00,
         imageUrl: 'https://picsum.photos/seed/mp47/600/400',
         imageHint: 'resume cv',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-48',
@@ -1225,7 +1272,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 32.00,
         imageUrl: 'https://picsum.photos/seed/mp48/600/400',
         imageHint: 'brain illustration',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
      {
         id: 'item-49',
@@ -1234,7 +1282,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 8.00,
         imageUrl: 'https://picsum.photos/seed/mp49/600/400',
         imageHint: 'birdhouse plan',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-50',
@@ -1243,7 +1292,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 25.00,
         imageUrl: 'https://picsum.photos/seed/mp50/600/400',
         imageHint: 'social media',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-51',
@@ -1252,7 +1302,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 99.00,
         imageUrl: 'https://picsum.photos/seed/mp51/600/400',
         imageHint: 'robot brain',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-52',
@@ -1261,7 +1312,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 30.00,
         imageUrl: 'https://picsum.photos/seed/mp52/600/400',
         imageHint: 'electric guitar',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-53',
@@ -1270,7 +1322,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 14.00,
         imageUrl: 'https://picsum.photos/seed/mp53/600/400',
         imageHint: 'world map',
-        type: 'Template'
+        type: 'Template',
+        isSoldOut: false,
     },
     {
         id: 'item-54',
@@ -1279,7 +1332,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 120.00,
         imageUrl: 'https://picsum.photos/seed/mp54/600/400',
         imageHint: 'mobile screen',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     },
     {
         id: 'item-55',
@@ -1288,7 +1342,8 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 19.99,
         imageUrl: 'https://picsum.photos/seed/mp55/600/400',
         imageHint: 'stoic statue',
-        type: 'eBook'
+        type: 'eBook',
+        isSoldOut: false,
     },
     {
         id: 'item-56',
@@ -1297,7 +1352,9 @@ export const marketplaceItems: MarketplaceItem[] = [
         price: 28.50,
         imageUrl: 'https://picsum.photos/seed/mp56/600/400',
         imageHint: 'beer brewing',
-        type: 'Guide'
+        type: 'Guide',
+        isSoldOut: false,
     }
 ];
+
 

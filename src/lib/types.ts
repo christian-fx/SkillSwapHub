@@ -67,4 +67,6 @@ export type MarketplaceItem = {
   imageUrl: string;
   imageHint: string;
   type: 'eBook' | 'Template' | 'Guide' | 'Tool';
+  isSoldOut?: boolean;
+  quantity?: number;
 };

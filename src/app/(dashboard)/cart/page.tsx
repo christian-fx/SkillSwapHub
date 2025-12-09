@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
-import { CreditCard, Trash2 } from 'lucide-react';
+import { CreditCard, Trash2, Plus, Minus } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
@@ -97,13 +97,15 @@ export default function CartPage() {
                   <p className="text-sm font-semibold mt-1">${item.price.toFixed(2)}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                    <Input
-                        type="number"
-                        min="1"
-                        value={item.quantity || 1}
-                        onChange={(e) => handleQuantityChange(item.id, parseInt(e.target.value))}
-                        className="w-16 h-9"
-                    />
+                    <div className="flex items-center gap-2 border rounded-md">
+                         <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(item.id, (item.quantity || 1) - 1)}>
+                            <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center">{item.quantity || 1}</span>
+                         <Button variant="ghost" size="icon" className="h-9 w-9" onClick={() => handleQuantityChange(item.id, (item.quantity || 1) + 1)}>
+                            <Plus className="h-4 w-4" />
+                        </Button>
+                    </div>
                   <Button variant="ghost" size="icon" onClick={() => handleRemoveFromCart(item.id)}>
                     <Trash2 className="h-4 w-4" />
                   </Button>
