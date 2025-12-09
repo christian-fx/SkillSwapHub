@@ -1,7 +1,7 @@
 
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import { marketplaceItems, users as allUsers } from '@/lib/data';
 import type { MarketplaceItem } from '@/lib/types';
@@ -20,12 +20,41 @@ import { useToast } from '@/hooks/use-toast';
 import Link from 'next/link';
 
 const ITEMS_PER_PAGE = 8;
-const userMap = new Map(allUsers.map(u => [u.name, u]));
+const userMap = new Map(allUsers.map(u => [u.id, u]));
+
+const getAuthorByName = (name: string) => {
+    return allUsers.find(user => user.name === name);
+}
+
+// Custom hook for persisting state to localStorage
+function usePersistentState<T>(key: string, initialState: T): [T, React.Dispatch<React.SetStateAction<T>>] {
+    const [state, setState] = useState<T>(() => {
+        if (typeof window === 'undefined') {
+            return initialState;
+        }
+        try {
+            const item = window.localStorage.getItem(key);
+            return item ? JSON.parse(item) : initialState;
+        } catch (error) {
+            console.error(error);
+            return initialState;
+        }
+    });
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            window.localStorage.setItem(key, JSON.stringify(state));
+        }
+    }, [key, state]);
+
+    return [state, setState];
+}
+
 
 export default function MarketplacePage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [sortOrder, setSortOrder] = useState<'default' | 'price-asc' | 'price-desc'>('default');
-  const [cart, setCart] = useState<MarketplaceItem[]>([]);
+  const [cart, setCart] = usePersistentState<MarketplaceItem[]>('cart', []);
   const { toast } = useToast();
 
   const handleAddToCart = (item: MarketplaceItem) => {
@@ -94,7 +123,7 @@ export default function MarketplacePage() {
         </div>
         <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {paginatedItems.map((item) => {
-            const author = userMap.get(item.author);
+            const author = getAuthorByName(item.author);
             return (
             <Card key={item.id} className="flex flex-col overflow-hidden">
               <CardHeader className="p-0">
@@ -168,12 +197,16 @@ export default function MarketplacePage() {
           )}
       </div>
 
-      <div className="fixed bottom-6 right-6">
-        <Link href="#">
-          <Button size="lg" className="rounded-full shadow-lg">
-            <ShoppingCart className="mr-2 h-5 w-5" />
-            Cart
-            <Badge className="ml-2" variant="secondary">{cart.length}</Badge>
+      <div className="fixed bottom-6 right-6 z-50">
+        <Link href="/cart">
+          <Button size="lg" className="rounded-full shadow-lg h-16 w-16 flex items-center justify-center relative">
+            <ShoppingCart className="h-6 w-6" />
+            <span className="sr-only">Cart</span>
+            {cart.length > 0 && (
+                <Badge variant="destructive" className="absolute -top-1 -right-1 h-6 w-6 justify-center rounded-full p-0 text-xs">
+                    {cart.length}
+                </Badge>
+            )}
           </Button>
         </Link>
       </div>

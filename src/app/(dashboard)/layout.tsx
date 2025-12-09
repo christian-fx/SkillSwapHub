@@ -10,6 +10,7 @@ import {
   User,
   X,
   ShoppingBasket,
+  ShoppingCart,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -33,6 +34,7 @@ import { Notifications } from "@/components/notifications";
 const menuItems = [
   { href: "/browse", label: "Browse", icon: LayoutGrid },
   { href: "/marketplace", label: "Marketplace", icon: ShoppingBasket },
+  { href: "/cart", label: "Cart", icon: ShoppingCart },
   { href: "/profile", label: "Profile", icon: User },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/settings", label: "Settings", icon: Settings },
