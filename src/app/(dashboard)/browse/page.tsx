@@ -54,6 +54,44 @@ const USERS_PER_PAGE = 8;
 
 type RecommendationType = "bestMatches" | "needsMySkills" | "offersMyNeeds" | "none";
 
+// Helper function for smart pagination
+const getPaginationRange = (totalPages: number, currentPage: number, siblingCount = 1) => {
+    const totalPageNumbers = siblingCount + 5;
+
+    if (totalPageNumbers >= totalPages) {
+        return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+
+    const leftSiblingIndex = Math.max(currentPage - siblingCount, 1);
+    const rightSiblingIndex = Math.min(currentPage + siblingCount, totalPages);
+
+    const shouldShowLeftDots = leftSiblingIndex > 2;
+    const shouldShowRightDots = rightSiblingIndex < totalPages - 2;
+
+    const firstPageIndex = 1;
+    const lastPageIndex = totalPages;
+
+    if (!shouldShowLeftDots && shouldShowRightDots) {
+        let leftItemCount = 3 + 2 * siblingCount;
+        let leftRange = Array.from({ length: leftItemCount }, (_, i) => i + 1);
+        return [...leftRange, '...', totalPages];
+    }
+
+    if (shouldShowLeftDots && !shouldShowRightDots) {
+        let rightItemCount = 3 + 2 * siblingCount;
+        let rightRange = Array.from({ length: rightItemCount }, (_, i) => totalPages - rightItemCount + 1 + i);
+        return [firstPageIndex, '...', ...rightRange];
+    }
+
+    if (shouldShowLeftDots && shouldShowRightDots) {
+        let middleRange = Array.from({ length: rightSiblingIndex - leftSiblingIndex + 1 }, (_, i) => leftSiblingIndex + i);
+        return [firstPageIndex, '...', ...middleRange, '...', lastPageIndex];
+    }
+    
+    return []; // Should not happen
+};
+
+
 export default function BrowsePage() {
   const { user: authUser, loading: userLoading } = useUser();
   const firestore = useFirestore();
@@ -139,8 +177,12 @@ export default function BrowsePage() {
     (currentPage - 1) * USERS_PER_PAGE,
     currentPage * USERS_PER_PAGE
   );
+  
+  const paginationRange = useMemo(() => getPaginationRange(totalPages, currentPage), [totalPages, currentPage]);
 
-  const handlePageChange = (page: number) => {
+
+  const handlePageChange = (page: number | '...') => {
+    if (page === '...') return;
     if (page >= 1 && page <= totalPages) {
       setCurrentPage(page);
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -347,7 +389,7 @@ export default function BrowsePage() {
         </div>
       ) : (
       <>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 mt-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
             {paginatedUsers.map((user) => (
             <Card key={user.id} className="flex flex-col">
                 <CardHeader className="flex flex-row items-center gap-4">
@@ -425,17 +467,22 @@ export default function BrowsePage() {
                         Previous
                     </Button>
                     <div className="flex items-center gap-1 text-sm">
-                        {Array.from({ length: totalPages }, (_, i) => i + 1).map(page => (
-                            <Button 
-                                key={page}
-                                variant={currentPage === page ? "default" : "ghost"}
-                                size="icon"
-                                className="h-8 w-8"
-                                onClick={() => handlePageChange(page)}
-                            >
-                                {page}
-                            </Button>
-                        ))}
+                        {paginationRange.map((page, index) => {
+                            if (page === '...') {
+                                return <span key={index} className="px-2 py-1">...</span>;
+                            }
+                            return (
+                                <Button 
+                                    key={index}
+                                    variant={currentPage === page ? "default" : "ghost"}
+                                    size="icon"
+                                    className="h-8 w-8"
+                                    onClick={() => handlePageChange(page)}
+                                >
+                                    {page}
+                                </Button>
+                            );
+                        })}
                     </div>
                     <Button 
                         variant="outline"
