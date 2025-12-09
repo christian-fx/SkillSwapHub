@@ -47,6 +47,7 @@ import { recommendUsers } from '@/ai/flows/recommend-users';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLoader } from '@/context/loader-context';
+import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
 const USERS_PER_PAGE = 8;
@@ -67,6 +68,7 @@ export default function BrowsePage() {
   const [recommendedUserIds, setRecommendedUserIds] = useState<string[] | null>(null);
   const [recommendationLoading, setRecommendationLoading] = useState(false);
   const [currentUserProfile, setCurrentUserProfile] = useState<UserProfile | null>(null);
+  const [showVerifiedOnly, setShowVerifiedOnly] = useState(false);
 
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
   
@@ -74,6 +76,7 @@ export default function BrowsePage() {
   const [drawerSearch, setDrawerSearch] = useState('');
   const [drawerSort, setDrawerSort] = useState<'random' | 'asc' | 'desc'>('random');
   const [drawerAiRecommendation, setDrawerAiRecommendation] = useState<RecommendationType>('none');
+  const [drawerShowVerified, setDrawerShowVerified] = useState(false);
 
   useEffect(() => {
     if(!userLoading) {
@@ -122,9 +125,13 @@ export default function BrowsePage() {
         (user.skillsNeeded && user.skillsNeeded.some(skill => skill.toLowerCase().includes(lowercasedQuery)))
       );
     }
+
+    if (showVerifiedOnly) {
+        users = users.filter(user => user.isVerified);
+    }
     
     return users;
-  }, [searchQuery, sortOrder, shuffledUsers, aiRecommendation, recommendedUserIds]);
+  }, [searchQuery, sortOrder, shuffledUsers, aiRecommendation, recommendedUserIds, showVerifiedOnly]);
 
 
   const totalPages = Math.ceil(sortedAndFilteredUsers.length / USERS_PER_PAGE);
@@ -148,6 +155,8 @@ export default function BrowsePage() {
     setAiRecommendation("none");
     setDrawerAiRecommendation("none");
     setRecommendedUserIds(null);
+    setShowVerifiedOnly(false);
+    setDrawerShowVerified(false);
     setCurrentPage(1);
   }, []);
 
@@ -155,6 +164,7 @@ export default function BrowsePage() {
     setSearchQuery(drawerSearch);
     setSortOrder(drawerSort);
     setAiRecommendation(drawerAiRecommendation);
+    setShowVerifiedOnly(drawerShowVerified);
     setCurrentPage(1);
     
     if (drawerAiRecommendation !== 'none') {
@@ -198,11 +208,12 @@ export default function BrowsePage() {
       setDrawerSearch(searchQuery);
       setDrawerSort(sortOrder);
       setDrawerAiRecommendation(aiRecommendation);
+      setDrawerShowVerified(showVerifiedOnly);
     }
     setIsDrawerOpen(open);
   }
   
-  const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random' || aiRecommendation !== 'none';
+  const hasActiveFilters = searchQuery !== '' || sortOrder !== 'random' || aiRecommendation !== 'none' || showVerifiedOnly;
   
   const getRecommendationLabel = (value: RecommendationType) => {
     switch (value) {
@@ -270,6 +281,16 @@ export default function BrowsePage() {
                   
                   <Separator />
 
+                   <div className="flex items-center justify-between">
+                     <Label htmlFor="verified-only" className="text-sm font-medium flex items-center gap-2">
+                        <BadgeCheck className="h-4 w-4 text-primary" /> Verified Users Only
+                    </Label>
+                    <Switch id="verified-only" checked={drawerShowVerified} onCheckedChange={setDrawerShowVerified} />
+                  </div>
+
+                  <Separator />
+
+
                   <div>
                     <Label className="text-sm font-medium">Sort by Name</Label>
                     <RadioGroup value={drawerSort} onValueChange={(value) => setDrawerSort(value as 'random' | 'asc' | 'desc')}>
@@ -309,6 +330,9 @@ export default function BrowsePage() {
             {aiRecommendation !== 'none' && <Badge variant="secondary" className="flex items-center gap-1">
                 <Zap className="h-3 w-3" />
                 {getRecommendationLabel(aiRecommendation)}
+            </Badge>}
+            {showVerifiedOnly && <Badge variant="secondary" className="flex items-center gap-1">
+                <BadgeCheck className="h-3 w-3" /> Verified
             </Badge>}
             <Button variant="ghost" size="icon" className="h-5 w-5" onClick={clearFilters}><X className="h-4 w-4" /></Button>
           </div>

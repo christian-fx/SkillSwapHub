@@ -796,4 +796,238 @@ export const marketplaceItems: MarketplaceItem[] = [
         imageHint: findImage('guide-2').imageHint,
         type: 'Guide'
     },
+    {
+        id: 'item-7',
+        title: 'Advanced SEO Strategies 2024',
+        author: 'Segun Arinze',
+        price: 199.00,
+        imageUrl: 'https://picsum.photos/seed/mp7/600/400',
+        imageHint: 'data analytics',
+        type: 'eBook'
+    },
+    {
+        id: 'item-8',
+        title: 'Notion Planner for Creatives',
+        author: 'Uche Jombo',
+        price: 22.00,
+        imageUrl: 'https://picsum.photos/seed/mp8/600/400',
+        imageHint: 'organized desk',
+        type: 'Template'
+    },
+    {
+        id: 'item-9',
+        title: 'Introduction to Python Course',
+        author: 'Victor Osimhen',
+        price: 45.00,
+        imageUrl: 'https://picsum.photos/seed/mp9/600/400',
+        imageHint: 'python code',
+        type: 'Guide'
+    },
+    {
+        id: 'item-10',
+        title: 'Figma UI Kit for Startups',
+        author: 'Adanna Chioma',
+        price: 55.00,
+        imageUrl: 'https://picsum.photos/seed/mp10/600/400',
+        imageHint: 'UI design',
+        type: 'Tool'
+    },
+    {
+        id: 'item-11',
+        title: 'The Art of Negotiation',
+        author: 'Musa Adeboye',
+        price: 18.50,
+        imageUrl: 'https://picsum.photos/seed/mp11/600/400',
+        imageHint: 'business meeting',
+        type: 'eBook'
+    },
+    {
+        id: 'item-12',
+        title: 'Meal Prep Like a Pro',
+        author: 'Dayo Olumide',
+        price: 14.00,
+        imageUrl: 'https://picsum.photos/seed/mp12/600/400',
+        imageHint: 'healthy food',
+        type: 'Guide'
+    },
+    {
+        id: 'item-13',
+        title: 'Local SEO Checklist',
+        author: 'Segun Arinze',
+        price: 35.00,
+        imageUrl: 'https://picsum.photos/seed/mp13/600/400',
+        imageHint: 'local map',
+        type: 'Template'
+    },
+    {
+        id: 'item-14',
+        title: 'JavaScript Algorithms Course',
+        author: 'Bolanle Adebayo',
+        price: 60.00,
+        imageUrl: 'https://picsum.photos/seed/mp14/600/400',
+        imageHint: 'javascript code',
+        type: 'Guide'
+    },
+    {
+        id: 'item-15',
+        title: 'Photography Presets for Lightroom',
+        author: 'Jide Sanusi',
+        price: 30.00,
+        imageUrl: 'https://picsum.photos/seed/mp15/600/400',
+        imageHint: 'photo editing',
+        type: 'Tool'
+    },
+    {
+        id: 'item-16',
+        title: 'How to Launch a Podcast',
+        author: 'Habiba Ibrahim',
+        price: 19.99,
+        imageUrl: 'https://picsum.photos/seed/mp16/600/400',
+        imageHint: 'microphone podcast',
+        type: 'eBook'
+    },
+    {
+        id: 'item-17',
+        title: 'Content Creator\'s Planner',
+        author: 'Tunde Ednut',
+        price: 28.00,
+        imageUrl: 'https://picsum.photos/seed/mp17/600/400',
+        imageHint: 'calendar plan',
+        type: 'Template'
+    },
+    {
+        id: 'item-18',
+        title: 'SaaS Financial Model',
+        author: 'Chinedu Okafor',
+        price: 150.00,
+        imageUrl: 'https://picsum.photos/seed/mp18/600/400',
+        imageHint: 'financial chart',
+        type: 'Tool'
+    },
+    {
+        id: 'item-19',
+        title: 'The Freelancer\'s Handbook',
+        author: 'Adanna Chioma',
+        price: 24.99,
+        imageUrl: 'https://picsum.photos/seed/mp19/600/400',
+        imageHint: 'person working',
+        type: 'eBook'
+    },
+    {
+        id: 'item-20',
+        title: 'Vue.js Masterclass',
+        author: 'Bolanle Adebayo',
+        price: 85.00,
+        imageUrl: 'https://picsum.photos/seed/mp20/600/400',
+        imageHint: 'code editor',
+        type: 'Guide'
+    },
+    {
+        id: 'item-21',
+        title: 'Weekly Workout Splits',
+        author: 'Dayo Olumide',
+        price: 5.00,
+        imageUrl: 'https://picsum.photos/seed/mp21/600/400',
+        imageHint: 'gym workout',
+        type: 'Template'
+    },
+    {
+        id: 'item-22',
+        title: 'Handmade Furniture Blueprints',
+        author: 'Emeka Nwosu',
+        price: 40.00,
+        imageUrl: 'https://picsum.photos/seed/mp22/600/400',
+        imageHint: 'woodworking tools',
+        type: 'Guide'
+    },
+    {
+        id: 'item-23',
+        title: 'Wedding Photography Shot List',
+        author: 'Jide Sanusi',
+        price: 15.00,
+        imageUrl: 'https://picsum.photos/seed/mp23/600/400',
+        imageHint: 'wedding photo',
+        type: 'Template'
+    },
+    {
+        id: 'item-24',
+        title: 'The Art of Public Speaking',
+        author: 'Fatima Bello',
+        price: 33.00,
+        imageUrl: 'https://picsum.photos/seed/mp24/600/400',
+        imageHint: 'stage presentation',
+        type: 'Guide'
+    },
+    {
+        id: 'item-25',
+        title: 'Brand Style Guide Template',
+        author: 'Adanna Chioma',
+        price: 45.00,
+        imageUrl: 'https://picsum.photos/seed/mp25/600/400',
+        imageHint: 'branding design',
+        type: 'Template'
+    },
+    {
+        id: 'item-26',
+        title: 'Node.js API Development',
+        author: 'Bolanle Adebayo',
+        price: 95.00,
+        imageUrl: 'https://picsum.photos/seed/mp26/600/400',
+        imageHint: 'server code',
+        type: 'Guide'
+    },
+    {
+        id: 'item-27',
+        title: 'Italian Pasta Making',
+        author: 'Bolanle Adebayo',
+        price: 12.99,
+        imageUrl: 'https://picsum.photos/seed/mp27/600/400',
+        imageHint: 'fresh pasta',
+        type: 'eBook'
+    },
+    {
+        id: 'item-28',
+        title: 'HIIT Workout Program',
+        author: 'Dayo Olumide',
+        price: 20.00,
+        imageUrl: 'https://picsum.photos/seed/mp28/600/400',
+        imageHint: 'person jumping',
+        type: 'Guide'
+    },
+    {
+        id: 'item-29',
+        title: 'Custom Wooden Chair Plan',
+        author: 'Emeka Nwosu',
+        price: 18.00,
+        imageUrl: 'https://picsum.photos/seed/mp29/600/400',
+        imageHint: 'wooden chair',
+        type: 'Guide'
+    },
+    {
+        id: 'item-30',
+        title: 'Pitch Deck Template',
+        author: 'Musa Adeboye',
+        price: 50.00,
+        imageUrl: 'https://picsum.photos/seed/mp30/600/400',
+        imageHint: 'presentation slides',
+        type: 'Template'
+    },
+    {
+        id: 'item-31',
+        title: 'Beginner Guitar Chord Chart',
+        author: 'Emeka Nwosu',
+        price: 4.99,
+        imageUrl: 'https://picsum.photos/seed/mp31/600/400',
+        imageHint: 'guitar chords',
+        type: 'Guide'
+    },
+    {
+        id: 'item-32',
+        title: 'Content Monetization Strategies',
+        author: 'Tunde Ednut',
+        price: 89.00,
+        imageUrl: 'https://picsum.photos/seed/mp32/600/400',
+        imageHint: 'money graph',
+        type: 'eBook'
+    }
 ];

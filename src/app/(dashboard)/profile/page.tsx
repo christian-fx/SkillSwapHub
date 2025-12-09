@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2, BadgeCheck } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2, BadgeCheck, ShieldCheck, TrendingUp, Star } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -143,6 +143,12 @@ export default function ProfilePage() {
   const [aiSuggestions, setAiSuggestions] = useState<SkillSwapOutput>([]);
   const [suggestionsLoading, setSuggestionsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('profile');
+
+  const verificationBenefits = [
+    { icon: ShieldCheck, text: "Increased trust from other users" },
+    { icon: TrendingUp, text: "Higher visibility in search results" },
+    { icon: Star, text: "Exclusive access to premium features" },
+  ];
 
   useEffect(() => {
     if (user) {
@@ -328,60 +334,82 @@ export default function ProfilePage() {
           <TabsTrigger value="suggestions">AI Suggestions</TabsTrigger>
         </TabsList>
         <TabsContent value="profile">
-          <Card>
-            <CardHeader className="flex flex-row items-center justify-between">
-              <div>
-                <CardTitle>Profile Details</CardTitle>
-                <CardDescription>
-                  {isEditingProfile ? "Update your personal information." : "View your personal information."}
-                </CardDescription>
-              </div>
-               {!isEditingProfile ? (
-                    <Button variant="outline" size="icon" onClick={() => setIsEditingProfile(true)}>
-                        <Edit className="h-4 w-4" />
-                    </Button>
-                ) : (
-                    <div className="flex gap-2">
-                        <Button size="icon" onClick={handleSaveChanges}>
-                            <Save className="h-4 w-4" />
+          <div className="grid gap-6">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between">
+                <div>
+                    <CardTitle>Profile Details</CardTitle>
+                    <CardDescription>
+                    {isEditingProfile ? "Update your personal information." : "View your personal information."}
+                    </CardDescription>
+                </div>
+                {!isEditingProfile ? (
+                        <Button variant="outline" size="icon" onClick={() => setIsEditingProfile(true)}>
+                            <Edit className="h-4 w-4" />
                         </Button>
-                         <Button variant="ghost" size="icon" onClick={handleCancelEdit}>
-                            <X className="h-4 w-4" />
-                        </Button>
-                    </div>
-                )}
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-2">
-                <Label htmlFor="name">Name</Label>
-                 {isEditingProfile ? (
-                    <Input id="name" value={formData.name} onChange={handleInputChange} />
-                ) : (
-                    <p className="text-sm p-2">{profile.name}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
-                <p className="text-sm p-2 text-muted-foreground">{profile.email}</p>
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="location">Location</Label>
-                {isEditingProfile ? (
-                    <Input id="location" value={formData.location} onChange={handleInputChange} />
-                ) : (
-                    <p className="text-sm p-2">{profile.location}</p>
-                )}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="bio">Bio</Label>
-                 {isEditingProfile ? (
-                    <Textarea id="bio" value={formData.bio} onChange={handleInputChange} />
-                ) : (
-                    <p className="text-sm p-2 whitespace-pre-wrap">{profile.bio || "No bio yet."}</p>
-                )}
-              </div>
-            </CardContent>
-          </Card>
+                    ) : (
+                        <div className="flex gap-2">
+                            <Button size="icon" onClick={handleSaveChanges}>
+                                <Save className="h-4 w-4" />
+                            </Button>
+                            <Button variant="ghost" size="icon" onClick={handleCancelEdit}>
+                                <X className="h-4 w-4" />
+                            </Button>
+                        </div>
+                    )}
+                </CardHeader>
+                <CardContent className="space-y-4">
+                <div className="space-y-2">
+                    <Label htmlFor="name">Name</Label>
+                    {isEditingProfile ? (
+                        <Input id="name" value={formData.name} onChange={handleInputChange} />
+                    ) : (
+                        <p className="text-sm p-2">{profile.name}</p>
+                    )}
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <p className="text-sm p-2 text-muted-foreground">{profile.email}</p>
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="location">Location</Label>
+                    {isEditingProfile ? (
+                        <Input id="location" value={formData.location} onChange={handleInputChange} />
+                    ) : (
+                        <p className="text-sm p-2">{profile.location}</p>
+                    )}
+                </div>
+                <div className="space-y-2">
+                    <Label htmlFor="bio">Bio</Label>
+                    {isEditingProfile ? (
+                        <Textarea id="bio" value={formData.bio} onChange={handleInputChange} />
+                    ) : (
+                        <p className="text-sm p-2 whitespace-pre-wrap">{profile.bio || "No bio yet."}</p>
+                    )}
+                </div>
+                </CardContent>
+            </Card>
+
+            {!profile.isVerified && (
+              <Card>
+                <CardHeader>
+                    <CardTitle>Get Verified</CardTitle>
+                    <CardDescription>Stand out in the community and unlock new benefits.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ul className="space-y-3 mb-6">
+                        {verificationBenefits.map((benefit, index) => (
+                             <li key={index} className="flex items-center gap-3">
+                                <benefit.icon className="h-5 w-5 text-primary"/>
+                                <span className="text-sm">{benefit.text}</span>
+                             </li>
+                        ))}
+                    </ul>
+                    <Button>Get Verified Now</Button>
+                </CardContent>
+              </Card>
+            )}
+          </div>
         </TabsContent>
         <TabsContent value="skills">
           <div className="grid md:grid-cols-2 gap-6">
