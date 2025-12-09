@@ -72,7 +72,7 @@ export default function BrowsePage() {
   const [drawerAiRecommendation, setDrawerAiRecommendation] = useState<RecommendationType>('none');
 
   useEffect(() => {
-    if (authUser) {
+    if (authUser && firestore) {
       const fetchProfile = async () => {
         const userDocRef = doc(firestore, 'users', authUser.uid);
         const userDoc = await getDoc(userDocRef);
@@ -152,7 +152,7 @@ export default function BrowsePage() {
             toast({
                 variant: 'destructive',
                 title: "Profile Not Found",
-                description: "Could not fetch your profile for AI recommendations. Please try again."
+                description: "Could not fetch your profile for AI recommendations. Please complete your profile and try again."
             })
             return;
         }
@@ -170,8 +170,8 @@ export default function BrowsePage() {
             console.error("Error fetching AI recommendations:", error);
             toast({
                 variant: "destructive",
-                title: "AI Error",
-                description: "Could not fetch AI recommendations."
+                title: "AI Recommendation Error",
+                description: "Could not fetch AI recommendations at this time. Please try again later."
             });
             setRecommendedUserIds([]);
         } finally {

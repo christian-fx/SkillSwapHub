@@ -17,7 +17,7 @@ import { Label } from "@/components/ui/label";
 import { Logo } from "@/components/logo";
 import { useAuth } from "@/firebase";
 import { useToast } from "@/hooks/use-toast";
-import { Mail, TriangleAlert } from "lucide-react";
+import { Mail, TriangleAlert, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 
@@ -42,7 +42,12 @@ export default function ForgotPasswordPage() {
                 description: "Check your inbox for instructions to reset your password.",
             });
         } catch (error: any) {
-            setError(error.message);
+            if (error.code === 'auth/user-not-found') {
+                setError("No account found with this email address.");
+            } else {
+                setError("An error occurred. Please try again.");
+            }
+            console.error(error);
         } finally {
             setLoading(false);
         }
@@ -93,6 +98,7 @@ export default function ForgotPasswordPage() {
                                 </div>
                             </div>
                             <Button type="submit" className="w-full" disabled={loading}>
+                                {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                                 {loading ? "Sending..." : "Send Reset Link"}
                             </Button>
                         </form>

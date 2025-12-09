@@ -100,7 +100,7 @@ export default function SignupPage() {
   ) => {
     if (!firestore) return;
     const userRef = doc(firestore, 'users', user.uid);
-    
+
     const docSnap = await getDoc(userRef);
     if (!docSnap.exists()) {
       await setDoc(userRef, {
@@ -138,10 +138,20 @@ export default function SignupPage() {
       );
       await updateProfile(userCredential.user, { displayName: name });
       await createUserProfile(userCredential.user, name, email, null);
-      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
+      toast({
+        title: 'Account Created!',
+        description: 'Welcome to SkillSwap Hub.',
+      });
       router.push('/browse');
     } catch (error: any) {
-      setError(error.message);
+      if (error.code === 'auth/email-already-in-use') {
+        setError('An account with this email already exists. Please log in.');
+      } else if (error.code === 'auth/weak-password') {
+        setError('The password is too weak. Please choose a stronger one.');
+      } else {
+        setError('An unexpected error occurred. Please try again.');
+      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -163,10 +173,18 @@ export default function SignupPage() {
         userCredential.user.email,
         userCredential.user.phoneNumber
       );
-      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
+      toast({
+        title: 'Account Created!',
+        description: 'Welcome to SkillSwap Hub.',
+      });
       router.push('/browse');
     } catch (error: any) {
-      setError(error.message);
+      if (error.code === 'auth/popup-closed-by-user') {
+        setError('The sign-up window was closed. Please try again.');
+      } else {
+        setError('Could not sign up with Google. Please try again.');
+      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -190,7 +208,12 @@ export default function SignupPage() {
         description: 'Check your phone for the verification code.',
       });
     } catch (error: any) {
-      setError(error.message);
+      if (error.code === 'auth/invalid-phone-number') {
+        setError('The phone number is not valid. Please include the country code.');
+      } else {
+        setError('Could not send OTP. Please check the number and try again.');
+      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -209,10 +232,18 @@ export default function SignupPage() {
       const user = result.user;
       await updateProfile(user, { displayName: name });
       await createUserProfile(user, name, null, phone);
-      toast({ title: "Account Created!", description: "Welcome to SkillSwap Hub." });
+      toast({
+        title: 'Account Created!',
+        description: 'Welcome to SkillSwap Hub.',
+      });
       router.push('/browse');
     } catch (error: any) {
-      setError(error.message);
+      if (error.code === 'auth/invalid-verification-code') {
+        setError('Invalid OTP. Please check the code and try again.');
+      } else {
+        setError('Could not verify OTP. Please try again.');
+      }
+      console.error(error);
     } finally {
       setLoading(false);
     }
@@ -289,7 +320,9 @@ export default function SignupPage() {
                           id="password"
                           type={passwordVisible ? 'text' : 'password'}
                           className="pl-8 pr-10"
-                          onChange={(e) => checkPasswordStrength(e.target.value)}
+                          onChange={(e) =>
+                            checkPasswordStrength(e.target.value)
+                          }
                           value={password}
                           required
                         />
@@ -354,7 +387,9 @@ export default function SignupPage() {
                     className="w-full"
                     disabled={loading || !agreedToTerms}
                   >
-                    {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                    {loading && (
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    )}
                     {loading ? 'Creating Account...' : 'Create Account'}
                   </Button>
                 </form>
@@ -404,7 +439,9 @@ export default function SignupPage() {
                       className="w-full"
                       disabled={loading}
                     >
-                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {loading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
                       {loading ? 'Sending OTP...' : 'Send OTP'}
                     </Button>
                   </form>
@@ -432,7 +469,9 @@ export default function SignupPage() {
                       className="w-full"
                       disabled={loading || !agreedToTerms}
                     >
-                      {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                      {loading && (
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      )}
                       {loading ? 'Verifying...' : 'Verify OTP & Sign Up'}
                     </Button>
                   </form>

@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2 } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -186,8 +186,8 @@ export default function ProfilePage() {
         console.error("Error fetching AI suggestions:", error);
         toast({
             variant: "destructive",
-            title: "Error",
-            description: "Could not fetch AI suggestions."
+            title: "AI Suggestion Error",
+            description: "Could not fetch AI-powered suggestions at this time. Please try again later."
         });
     } finally {
         setSuggestionsLoading(false);
@@ -232,8 +232,8 @@ export default function ProfilePage() {
         console.error("Error updating profile: ", error);
         toast({
             variant: "destructive",
-            title: "Error",
-            description: "Could not update your profile. Please try again."
+            title: "Update Failed",
+            description: "Could not save your profile changes. Please try again."
         });
     }
   }
@@ -255,8 +255,8 @@ export default function ProfilePage() {
           console.error("Error updating skills:", error);
           toast({
             variant: "destructive",
-            title: "Error",
-            description: "Could not update your skills. Please try again."
+            title: "Update Failed",
+            description: "Could not save your skill changes. Please try again."
         });
       }
   }
@@ -290,11 +290,14 @@ export default function ProfilePage() {
   
 
   if (loading || userLoading) {
-    return <div>Loading profile...</div>;
+    return <div className="flex justify-center items-center h-full"><Loader2 className="h-8 w-8 animate-spin" /></div>;
   }
 
   if (!user || !profile) {
-    return <div>Please log in to view your profile.</div>;
+    return <div className="text-center p-8">
+        <h2 className="text-xl font-semibold">Profile Not Found</h2>
+        <p className="text-muted-foreground">Please log in to view and edit your profile.</p>
+        </div>;
   }
 
   return (
@@ -370,7 +373,7 @@ export default function ProfilePage() {
                  {isEditingProfile ? (
                     <Textarea id="bio" value={formData.bio} onChange={handleInputChange} />
                 ) : (
-                    <p className="text-sm p-2 whitespace-pre-wrap">{profile.bio}</p>
+                    <p className="text-sm p-2 whitespace-pre-wrap">{profile.bio || "No bio yet."}</p>
                 )}
               </div>
             </CardContent>
@@ -411,7 +414,8 @@ export default function ProfilePage() {
             </CardHeader>
             <CardContent className="space-y-4">
               {suggestionsLoading ? (
-                 <div className="flex items-center justify-center p-8">
+                 <div className="flex items-center justify-center p-8 gap-2">
+                    <Loader2 className="h-5 w-5 animate-spin" />
                     <p>Finding the best matches for you...</p>
                  </div>
               ) : aiSuggestions.length > 0 ? (
