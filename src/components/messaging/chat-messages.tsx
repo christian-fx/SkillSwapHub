@@ -14,7 +14,6 @@ interface ChatMessagesProps {
 }
 
 export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
-  const scrollAreaRef = useRef<HTMLDivElement>(null);
   const viewportRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
 
   return (
     <ScrollArea className="flex-1" viewportRef={viewportRef}>
-      <div className="space-y-4 p-4 bg-muted/20">
+      <div className="space-y-4 p-4">
         {conversation.messages.map((message) => (
           <div
             key={message.id}
