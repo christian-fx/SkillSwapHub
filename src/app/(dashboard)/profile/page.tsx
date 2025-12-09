@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
@@ -25,6 +26,7 @@ import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
 import { suggestSkillSwaps, type SkillSwapOutput } from '@/ai/flows/skill-match-suggestions';
+import { cn } from '@/lib/utils';
 
 
 type UserProfile = {
@@ -37,6 +39,7 @@ type UserProfile = {
   skillsOffered: string[];
   skillsNeeded: string[];
   isVerified?: boolean;
+  status?: 'online' | 'offline';
 };
 
 const SkillManager = ({
@@ -162,6 +165,7 @@ export default function ProfilePage() {
               ...data,
               skillsOffered: data.skillsOffered || [],
               skillsNeeded: data.skillsNeeded || [],
+              status: 'online', // Default to online for demo
           });
           setFormData({
               name: data.name || '',
@@ -310,15 +314,18 @@ export default function ProfilePage() {
   return (
     <div className="grid gap-6">
       <div className="flex items-center gap-4">
-        <Avatar className="h-24 w-24">
-          <AvatarImage src={profile.avatarUrl} alt={profile.name} />
-          <AvatarFallback>
-            {profile.name
-              .split(' ')
-              .map((n) => n[0])
-              .join('')}
-          </AvatarFallback>
-        </Avatar>
+        <div className="relative">
+          <Avatar className="h-24 w-24">
+            <AvatarImage src={profile.avatarUrl} alt={profile.name} />
+            <AvatarFallback>
+              {profile.name
+                .split(' ')
+                .map((n) => n[0])
+                .join('')}
+            </AvatarFallback>
+          </Avatar>
+           <div className={cn("absolute bottom-2 right-2 h-4 w-4 rounded-full border-2 border-background", profile.status === 'online' ? 'bg-green-500' : 'bg-gray-400')} />
+        </div>
         <div>
           <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
             {profile.name}

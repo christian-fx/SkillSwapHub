@@ -1,4 +1,4 @@
-import type { User, Conversation, Notification, MarketplaceItem } from "@/lib/types";
+import type { User, Conversation, Notification, MarketplaceItem, SwapRequest } from "@/lib/types";
 import placeholderData from "@/lib/placeholder-images.json";
 import { ALL_SKILLS } from "@/lib/skills";
 
@@ -26,6 +26,9 @@ export const users: User[] = [
     skillsOffered: ["Graphic Design", "Illustration", "Branding"],
     skillsNeeded: ["Pottery", "Creative Writing"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-2",
@@ -38,6 +41,9 @@ export const users: User[] = [
     skillsOffered: ["Web Development", "React", "Node.js"],
     skillsNeeded: ["Cooking", "Guitar"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 2 days ago",
+    status: 'offline',
   },
   {
     id: "user-3",
@@ -50,6 +56,9 @@ export const users: User[] = [
     skillsOffered: ["Creative Writing", "Editing", "Content Strategy"],
     skillsNeeded: ["Personal Finance", "Graphic Design"],
     isVerified: false,
+    rating: 4.5,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-4",
@@ -62,6 +71,9 @@ export const users: User[] = [
     skillsOffered: ["Fitness Coaching", "Nutrition Planning"],
     skillsNeeded: ["Social Media Marketing", "Web Development"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-5",
@@ -74,6 +86,9 @@ export const users: User[] = [
     skillsOffered: ["Carpentry", "Woodworking"],
     skillsNeeded: ["Guitar"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
    {
     id: "user-6",
@@ -86,6 +101,9 @@ export const users: User[] = [
     skillsOffered: ["Public Speaking", "Presentation Design"],
     skillsNeeded: ["React", "Node.js"],
     isVerified: false,
+    rating: 4.6,
+    lastActive: "Active 4 hours ago",
+    status: 'online',
   },
   {
     id: "user-7",
@@ -98,6 +116,9 @@ export const users: User[] = [
     skillsOffered: ["Architecture"],
     skillsNeeded: ["Urban Gardening"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-8",
@@ -110,6 +131,9 @@ export const users: User[] = [
     skillsOffered: ["Singing"],
     skillsNeeded: ["Calculus"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 5 days ago",
+    status: 'offline',
   },
   {
     id: "user-9",
@@ -122,6 +146,9 @@ export const users: User[] = [
     skillsOffered: ["Physics"],
     skillsNeeded: ["Chemistry"],
     isVerified: false,
+    rating: 4.2,
+    lastActive: "Active 2 weeks ago",
+    status: 'offline',
   },
   {
     id: "user-10",
@@ -134,6 +161,9 @@ export const users: User[] = [
     skillsOffered: ["Photography"],
     skillsNeeded: ["Baking"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-11",
@@ -146,6 +176,9 @@ export const users: User[] = [
     skillsOffered: ["Home Security"],
     skillsNeeded: ["French"],
     isVerified: false,
+    rating: 4.4,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-12",
@@ -158,6 +191,9 @@ export const users: User[] = [
     skillsOffered: ["Event Planning"],
     skillsNeeded: ["Knitting"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active 1 hour ago",
+    status: 'online',
   },
   {
     id: "user-13",
@@ -170,6 +206,9 @@ export const users: User[] = [
     skillsOffered: ["Sales", "Improv"],
     skillsNeeded: ["Video Editing"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-14",
@@ -182,6 +221,9 @@ export const users: User[] = [
     skillsOffered: ["Problem Solving"],
     skillsNeeded: ["Car Maintenance"],
     isVerified: false,
+    rating: 4.1,
+    lastActive: "Active 3 days ago",
+    status: 'offline',
   },
   {
     id: "user-15",
@@ -194,6 +236,9 @@ export const users: User[] = [
     skillsOffered: ["Playwriting"],
     skillsNeeded: ["Web Development"],
     isVerified: true,
+    rating: 4.6,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-16",
@@ -206,6 +251,9 @@ export const users: User[] = [
     skillsOffered: ["Watercolor Painting"],
     skillsNeeded: ["Public Speaking"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-17",
@@ -218,6 +266,9 @@ export const users: User[] = [
     skillsOffered: ["Filmmaking"],
     skillsNeeded: ["Smartphone Basics"],
     isVerified: false,
+    rating: 4.3,
+    lastActive: "Active last month",
+    status: 'offline',
   },
   {
     id: "user-18",
@@ -230,6 +281,9 @@ export const users: User[] = [
     skillsOffered: ["Fashion Styling"],
     skillsNeeded: ["Cooking"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-19",
@@ -242,6 +296,9 @@ export const users: User[] = [
     skillsOffered: ["Leadership"],
     skillsNeeded: ["Art History"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active 2 hours ago",
+    status: 'online',
   },
   {
     id: "user-20",
@@ -254,6 +311,9 @@ export const users: User[] = [
     skillsOffered: ["Robotics"],
     skillsNeeded: ["Yoga"],
     isVerified: false,
+    rating: 4.0,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-21",
@@ -266,6 +326,9 @@ export const users: User[] = [
     skillsOffered: ["Creative Writing"],
     skillsNeeded: ["Astronomy"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-22",
@@ -278,6 +341,9 @@ export const users: User[] = [
     skillsOffered: ["Anatomy"],
     skillsNeeded: ["Ethics"],
     isVerified: true,
+    rating: 4.5,
+    lastActive: "Active 6 days ago",
+    status: 'offline',
   },
   {
     id: "user-23",
@@ -290,6 +356,9 @@ export const users: User[] = [
     skillsOffered: ["Chemistry"],
     skillsNeeded: ["Business Management"],
     isVerified: false,
+    rating: 4.2,
+    lastActive: "Active 2 weeks ago",
+    status: 'offline',
   },
   {
     id: "user-24",
@@ -302,6 +371,9 @@ export const users: User[] = [
     skillsOffered: ["Self-Defense"],
     skillsNeeded: ["Pottery"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-25",
@@ -314,6 +386,9 @@ export const users: User[] = [
     skillsOffered: ["Meditation"],
     skillsNeeded: ["React"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-26",
@@ -326,6 +401,9 @@ export const users: User[] = [
     skillsOffered: ["Music"],
     skillsNeeded: ["Electronics Repair"],
     isVerified: false,
+    rating: 4.3,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-27",
@@ -338,6 +416,9 @@ export const users: User[] = [
     skillsOffered: ["Transfiguration", "Ancient Runes" ],
     skillsNeeded: ["Web Development"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active 1 month ago",
+    status: 'offline',
   },
   {
     id: "user-28",
@@ -350,6 +431,9 @@ export const users: User[] = [
     skillsOffered: ["Swordsmanship"],
     skillsNeeded: ["Knitting"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-29",
@@ -362,6 +446,9 @@ export const users: User[] = [
     skillsOffered: ["Improv"],
     skillsNeeded: ["Personal Finance"],
     isVerified: false,
+    rating: 4.0,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-30",
@@ -374,6 +461,9 @@ export const users: User[] = [
     skillsOffered: ["Forensic Science"],
     skillsNeeded: ["Photography"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-31",
@@ -386,6 +476,9 @@ export const users: User[] = [
     skillsOffered: ["Editing"],
     skillsNeeded: ["Plumbing"],
     isVerified: false,
+    rating: 4.2,
+    lastActive: "Active 2 days ago",
+    status: 'offline',
   },
   {
     id: "user-32",
@@ -398,6 +491,9 @@ export const users: User[] = [
     skillsOffered: ["Creative Writing"],
     skillsNeeded: ["Basketball"],
     isVerified: true,
+    rating: 4.6,
+    lastActive: "Active 10 hours ago",
+    status: 'online',
   },
   {
     id: "user-33",
@@ -410,6 +506,9 @@ export const users: User[] = [
     skillsOffered: ["Cooking"],
     skillsNeeded: ["Meditation"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active now",
+    status: 'online',
   },
   {
     id: "user-34",
@@ -422,6 +521,9 @@ export const users: User[] = [
     skillsOffered: ["Research"],
     skillsNeeded: ["Computer Basics"],
     isVerified: false,
+    rating: 4.7,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-35",
@@ -434,6 +536,9 @@ export const users: User[] = [
     skillsOffered: ["Archaeology"],
     skillsNeeded: ["Piloting"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 3 days ago",
+    status: 'offline',
   },
   {
     id: "user-36",
@@ -446,6 +551,9 @@ export const users: User[] = [
     skillsOffered: ["Sailing"],
     skillsNeeded: ["Electronics Repair"],
     isVerified: true,
+    rating: 4.5,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-37",
@@ -458,6 +566,9 @@ export const users: User[] = [
     skillsOffered: ["Archery"],
     skillsNeeded: ["Baking"],
     isVerified: false,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-38",
@@ -470,6 +581,9 @@ export const users: User[] = [
     skillsOffered: ["Comedy Writing"],
     skillsNeeded: ["Nutrition Planning"],
     isVerified: true,
+    rating: 4.4,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-39",
@@ -482,6 +596,9 @@ export const users: User[] = [
     skillsOffered: ["Guitar"],
     skillsNeeded: ["Car Maintenance"],
     isVerified: false,
+    rating: 4.6,
+    lastActive: "Active 2 hours ago",
+    status: 'online',
   },
   {
     id: "user-40",
@@ -494,6 +611,9 @@ export const users: User[] = [
     skillsOffered: ["Leadership"],
     skillsNeeded: ["Art History"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-41",
@@ -506,6 +626,9 @@ export const users: User[] = [
     skillsOffered: ["Photography"],
     skillsNeeded: ["Chemistry"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active 4 days ago",
+    status: 'offline',
   },
   {
     id: "user-42",
@@ -518,6 +641,9 @@ export const users: User[] = [
     skillsOffered: ["Woodworking"],
     skillsNeeded: ["Philosophy"],
     isVerified: false,
+    rating: 4.8,
+    lastActive: "Active last week",
+    status: 'offline',
   },
   {
     id: "user-43",
@@ -530,6 +656,9 @@ export const users: User[] = [
     skillsOffered: ["Survival Skills"],
     skillsNeeded: ["Welding"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-44",
@@ -542,6 +671,9 @@ export const users: User[] = [
     skillsOffered: ["Problem Solving"],
     skillsNeeded: ["Violin"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-45",
@@ -554,6 +686,9 @@ export const users: User[] = [
     skillsOffered: ["Baking"],
     skillsNeeded: ["Personal Finance"],
     isVerified: false,
+    rating: 4.5,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-46",
@@ -566,6 +701,9 @@ export const users: User[] = [
     skillsOffered: ["Piloting", "Swordsmanship"],
     skillsNeeded: ["Sculpting"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active 5 hours ago",
+    status: 'online',
   },
   {
     id: "user-47",
@@ -578,6 +716,9 @@ export const users: User[] = [
     skillsOffered: ["Storytelling"],
     skillsNeeded: ["Swordsmanship"],
     isVerified: false,
+    rating: 4.6,
+    lastActive: "Active 3 weeks ago",
+    status: 'offline',
   },
   {
     id: "user-48",
@@ -590,6 +731,9 @@ export const users: User[] = [
     skillsOffered: ["Geography"],
     skillsNeeded: ["Web Development"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-49",
@@ -602,6 +746,9 @@ export const users: User[] = [
     skillsOffered: ["History"],
     skillsNeeded: ["Electronics Repair"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active now",
+    status: 'online',
   },
   {
     id: "user-50",
@@ -614,6 +761,9 @@ export const users: User[] = [
     skillsOffered: ["Running"],
     skillsNeeded: ["Web Development"],
     isVerified: false,
+    rating: 4.9,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-51",
@@ -626,6 +776,9 @@ export const users: User[] = [
     skillsOffered: ["Riddles"],
     skillsNeeded: ["Jewelry Making"],
     isVerified: true,
+    rating: 3.5,
+    lastActive: "Active last year",
+    status: 'offline',
   },
   {
     id: "user-52",
@@ -638,6 +791,9 @@ export const users: User[] = [
     skillsOffered: ["Problem Solving"],
     skillsNeeded: ["Mixology"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-53",
@@ -650,6 +806,9 @@ export const users: User[] = [
     skillsOffered: ["Archery"],
     skillsNeeded: ["Stonemasonry"],
     isVerified: false,
+    rating: 4.7,
+    lastActive: "Active 2 days ago",
+    status: 'offline',
   },
   {
     id: "user-54",
@@ -662,6 +821,9 @@ export const users: User[] = [
     skillsOffered: ["Child Care"],
     skillsNeeded: ["Skateboarding"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active now",
+    status: 'online',
   },
   {
     id: "user-55",
@@ -674,6 +836,9 @@ export const users: User[] = [
     skillsOffered: ["Kung Fu"],
     skillsNeeded: ["Cooking"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 1 hour ago",
+    status: 'online',
   },
   {
     id: "user-56",
@@ -686,6 +851,9 @@ export const users: User[] = [
     skillsOffered: ["Boxing"],
     skillsNeeded: ["Literacy"],
     isVerified: false,
+    rating: 4.9,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-57",
@@ -698,6 +866,9 @@ export const users: User[] = [
     skillsOffered: ["Analysis", "Mathematics"],
     skillsNeeded: ["Poetry"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active last month",
+    status: 'offline',
   },
   {
     id: "user-58",
@@ -710,6 +881,9 @@ export const users: User[] = [
     skillsOffered: ["Music Production", "Songwriting"],
     skillsNeeded: ["Cooking"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-59",
@@ -722,6 +896,9 @@ export const users: User[] = [
     skillsOffered: ["Creative Writing", "Storytelling"],
     skillsNeeded: ["Social Media Marketing"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-60",
@@ -734,6 +911,9 @@ export const users: User[] = [
     skillsOffered: ["Songwriting", "Music Production"],
     skillsNeeded: ["Investing"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active now",
+    status: 'online',
   },
   {
     id: "user-61",
@@ -746,6 +926,9 @@ export const users: User[] = [
     skillsOffered: ["Guitar", "Music"],
     skillsNeeded: ["Computer Basics"],
     isVerified: false,
+    rating: 4.5,
+    lastActive: "Active this month",
+    status: 'offline',
   },
   {
     id: "user-62",
@@ -758,6 +941,9 @@ export const users: User[] = [
     skillsOffered: ["Acting", "Filmmaking"],
     skillsNeeded: ["Web Development"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 2 days ago",
+    status: 'offline',
   },
   {
     id: "user-63",
@@ -770,6 +956,9 @@ export const users: User[] = [
     skillsOffered: ["Acting", "Filmmaking"],
     skillsNeeded: ["Painting"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-64",
@@ -782,6 +971,9 @@ export const users: User[] = [
     skillsOffered: ["History"],
     skillsNeeded: ["Political Science"],
     isVerified: false,
+    rating: 4.2,
+    lastActive: "Active last year",
+    status: 'offline',
   },
   {
     id: "user-65",
@@ -794,6 +986,9 @@ export const users: User[] = [
     skillsOffered: ["Songwriting", "Music"],
     skillsNeeded: ["Piano"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active 10 days ago",
+    status: 'offline',
   },
   {
     id: "user-66",
@@ -806,6 +1001,9 @@ export const users: User[] = [
     skillsOffered: ["Poetry", "Playwriting"],
     skillsNeeded: ["Computer Basics"],
     isVerified: false,
+    rating: 4.4,
+    lastActive: "Active last month",
+    status: 'offline',
   },
   {
     id: "user-67",
@@ -818,6 +1016,9 @@ export const users: User[] = [
     skillsOffered: ["Guitar", "Music"],
     skillsNeeded: ["Music Production"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-68",
@@ -830,6 +1031,9 @@ export const users: User[] = [
     skillsOffered: ["Saxophone", "Music"],
     skillsNeeded: ["Cryptography"],
     isVerified: true,
+    rating: 4.7,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-69",
@@ -842,6 +1046,9 @@ export const users: User[] = [
     skillsOffered: ["Singing"],
     skillsNeeded: ["Social Media Marketing"],
     isVerified: false,
+    rating: 4.8,
+    lastActive: "Active last week",
+    status: 'offline',
   },
   {
     id: "user-70",
@@ -854,6 +1061,9 @@ export const users: User[] = [
     skillsOffered: ["Political Science"],
     skillsNeeded: ["Python"],
     isVerified: false,
+    rating: 4.3,
+    lastActive: "Active 2 months ago",
+    status: 'offline',
   },
   {
     id: "user-71",
@@ -866,6 +1076,9 @@ export const users: User[] = [
     skillsOffered: ["Music Production", "Rap"],
     skillsNeeded: ["Fashion Design"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active 3 hours ago",
+    status: 'online',
   },
   {
     id: "user-72",
@@ -878,6 +1091,9 @@ export const users: User[] = [
     skillsOffered: ["Acting"],
     skillsNeeded: ["Smartphone Basics"],
     isVerified: false,
+    rating: 4.7,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-73",
@@ -890,6 +1106,9 @@ export const users: User[] = [
     skillsOffered: ["Leadership", "Strategy"],
     skillsNeeded: ["Architecture"],
     isVerified: false,
+    rating: 4.9,
+    lastActive: "Active centuries ago",
+    status: 'offline',
   },
   {
     id: "user-74",
@@ -902,6 +1121,9 @@ export const users: User[] = [
     skillsOffered: ["Acting", "Filmmaking"],
     skillsNeeded: ["Creative Writing"],
     isVerified: true,
+    rating: 4.8,
+    lastActive: "Active yesterday",
+    status: 'offline',
   },
   {
     id: "user-75",
@@ -914,6 +1136,9 @@ export const users: User[] = [
     skillsOffered: ["Songwriting", "Singing"],
     skillsNeeded: ["Urban Gardening"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active this month",
+    status: 'offline',
   },
   {
     id: "user-76",
@@ -926,6 +1151,9 @@ export const users: User[] = [
     skillsOffered: ["Singing", "Performance"],
     skillsNeeded: ["Business Management"],
     isVerified: true,
+    rating: 4.9,
+    lastActive: "Active today",
+    status: 'online',
   },
   {
     id: "user-77",
@@ -938,6 +1166,9 @@ export const users: User[] = [
     skillsOffered: ["Theology", "History"],
     skillsNeeded: ["Computer Basics"],
     isVerified: false,
+    rating: 4.5,
+    lastActive: "Active centuries ago",
+    status: 'offline',
   },
   {
     id: "user-78",
@@ -950,6 +1181,9 @@ export const users: User[] = [
     skillsOffered: ["Music Production", "Songwriting"],
     skillsNeeded: ["Painting"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active now",
+    status: 'online',
   },
   {
     id: "user-79",
@@ -962,6 +1196,9 @@ export const users: User[] = [
     skillsOffered: ["Creative Writing", "Playwriting"],
     skillsNeeded: ["Computer Basics"],
     isVerified: true,
+    rating: 5.0,
+    lastActive: "Active this week",
+    status: 'offline',
   },
   {
     id: "user-80",
@@ -974,6 +1211,9 @@ export const users: User[] = [
     skillsOffered: ["Painting"],
     skillsNeeded: ["Adobe Photoshop"],
     isVerified: false,
+    rating: 4.8,
+    lastActive: "Active last month",
+    status: 'offline',
   },
 ];
 
@@ -1010,7 +1250,7 @@ export const conversations: Conversation[] = [
     messages: [
       { id: "msg-3-1", senderId: "user-4", text: "Proposal: I'll trade you a 1-month fitness and nutrition plan for some help setting up a social media strategy for my coaching business. Interested?", timestamp: "2024-05-22T09:00:00Z" },
       { id: "msg-3-2", senderId: "user-1", text: "Hi Dayo, yes! Absolutely. I've been wanting to get back on track with my fitness. Your profile looks great.", timestamp: "2024-05-22T09:05:00Z" },
-      { id: "msg-3-3", senderId: "user-4", text: "Awesome. Let's start with a quick call to discuss your goals. I can also give you access to my client portal. I need help figuring out Instagram and TikTok推广.", timestamp: "2024-05-22T09:10:00Z" },
+      { id: "msg-3-3", senderId: "user-4", text: "Awesome. Let's start with a quick call to discuss your goals. I can also give you access to my client portal. I need help figuring out Instagram and TikTok.", timestamp: "2024-05-22T09:10:00Z" },
       { id: "msg-3-4", senderId: "user-1", text: "Perfect. I can definitely help with that. I'll draft a content calendar and some post ideas for you this week.", timestamp: "2024-05-22T09:12:00Z" },
     ],
     get lastMessage() { return this.messages[this.messages.length - 1] },
@@ -1260,3 +1500,51 @@ export const marketplaceItems: MarketplaceItem[] = [
         preview: "Chapter 1: Finding Your Niche. What are you passionate about? What could you talk about for hours? The most successful podcasts are born from genuine passion. This chapter includes a worksheet with 10 questions to help you brainstorm and identify a unique niche for your podcast that you can be excited about."
     },
 ];
+
+export const swapRequests: SwapRequest[] = [
+  {
+    id: 'swap-1',
+    user: users.find(u => u.id === 'user-2')!,
+    offeredSkill: 'Web Development',
+    requestedSkill: 'Graphic Design',
+    status: 'accepted',
+    date: '2024-05-25T10:00:00Z',
+    message: 'Hey Adanna, I saw you needed a hand with some web dev stuff. I\'d love to trade for some branding help for my new project!',
+  },
+  {
+    id: 'swap-2',
+    user: users.find(u => u.id === 'user-4')!,
+    offeredSkill: 'Fitness Coaching',
+    requestedSkill: 'Social Media Marketing',
+    status: 'pending',
+    date: '2024-05-28T14:00:00Z',
+    message: 'Hi, I can get you set up with a full fitness plan. I need some help growing my Instagram presence. Let me know if you\'re interested.',
+  },
+  {
+    id: 'swap-3',
+    user: users.find(u => u.id === 'user-3')!,
+    offeredSkill: 'Creative Writing',
+    requestedSkill: 'Personal Finance',
+    status: 'pending',
+    date: '2024-06-01T11:00:00Z',
+    message: 'I can help you write compelling copy for your website. I need some advice on how to manage my freelance income. Can you help?',
+  },
+  {
+    id: 'swap-4',
+    user: users.find(u => u.id === 'user-5')!,
+    offeredSkill: 'Carpentry',
+    requestedSkill: 'Guitar',
+    status: 'completed',
+    date: '2024-04-15T18:00:00Z',
+    message: 'Built a custom shelf for Bolanle, and he taught me the basics of guitar. Great experience!',
+  },
+    {
+    id: 'swap-5',
+    user: users.find(u => u.id === 'user-6')!,
+    offeredSkill: 'Public Speaking',
+    requestedSkill: 'React',
+    status: 'declined',
+    date: '2024-05-20T12:00:00Z',
+    message: 'I was hoping to learn React, but it looks like our schedules just don\'t line up. Maybe another time!',
+  }
+]

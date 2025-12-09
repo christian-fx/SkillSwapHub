@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -11,6 +12,7 @@ import {
   X,
   ShoppingBasket,
   ShoppingCart,
+  RefreshCw,
 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
@@ -32,9 +34,10 @@ import { Button } from "@/components/ui/button";
 import { Notifications } from "@/components/notifications";
 
 const menuItems = [
-  { href: "/browse", label: "Browse", icon: LayoutGrid },
+  { href: "/browse", label: "Swaps", icon: LayoutGrid },
+  { href: "/my-swaps", label: "My Swaps", icon: RefreshCw },
   { href: "/marketplace", label: "Marketplace", icon: ShoppingBasket },
-  { href: "/cart", label: "Cart", icon: ShoppingCart },
+  { href: "/bookings", label: "Bookings", icon: ShoppingCart },
   { href: "/profile", label: "Profile", icon: User },
   { href: "/messages", label: "Messages", icon: MessageCircle },
   { href: "/settings", label: "Settings", icon: Settings },

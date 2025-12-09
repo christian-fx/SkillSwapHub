@@ -1,9 +1,10 @@
+
 'use client';
 
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA, Plus, Zap, Loader2, BadgeCheck } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA, Plus, Zap, Loader2, BadgeCheck, Star, MessageCircle } from 'lucide-react';
 
 import { users as allUsers } from '@/lib/data';
 import type { User, UserProfile } from '@/lib/types';
@@ -392,64 +393,78 @@ export default function BrowsePage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mt-4">
             {paginatedUsers.map((user) => (
             <Card key={user.id} className="flex flex-col">
-                <CardHeader className="flex flex-row items-center gap-4">
-                <Avatar className="h-12 w-12">
-                    <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={user.avatarHint} />
-                    <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                </Avatar>
-                <div>
-                    <CardTitle className="flex items-center gap-2">
-                        {user.name}
-                        {user.isVerified && <BadgeCheck className="h-5 w-5 text-primary" />}
-                    </CardTitle>
-                    <CardDescription>{user.location}</CardDescription>
-                </div>
+                <CardHeader className="p-4">
+                    <div className="flex items-start gap-4">
+                        <div className="relative">
+                            <Avatar className="h-16 w-16 border-2 border-background shadow">
+                                <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={user.avatarHint} />
+                                <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                            </Avatar>
+                             <div className={cn("absolute bottom-1 right-1 h-3 w-3 rounded-full border-2 border-background", user.status === 'online' ? 'bg-green-500' : 'bg-gray-400')} />
+                        </div>
+                        <div className="flex-1">
+                            <div className="flex items-center gap-2">
+                                <CardTitle className="text-lg">{user.name}</CardTitle>
+                                {user.isVerified && <BadgeCheck className="h-5 w-5 text-primary" />}
+                            </div>
+                            <CardDescription className="text-xs">{user.lastActive}</CardDescription>
+                            <div className="flex items-center gap-1 mt-1">
+                                <Star className="h-4 w-4 text-yellow-400 fill-yellow-400" />
+                                <span className="text-sm font-semibold">{user.rating.toFixed(1)}</span>
+                            </div>
+                        </div>
+                    </div>
                 </CardHeader>
-                <CardContent className="flex-grow">
+                <CardContent className="flex-grow p-4 pt-0">
                 <div>
                     <h3 className="text-sm font-semibold mb-2">Offers:</h3>
                     <div className="flex flex-wrap gap-1">
-                    {user.skillsOffered.map((skill) => (
+                    {user.skillsOffered.slice(0, 3).map((skill) => (
                         <Badge key={skill} variant="secondary">
                         {skill}
                         </Badge>
                     ))}
+                     {user.skillsOffered.length > 3 && <Badge variant="outline">+{user.skillsOffered.length - 3}</Badge>}
                     </div>
                 </div>
                 <div className="mt-4">
                     <h3 className="text-sm font-semibold mb-2">Needs:</h3>
                     <div className="flex flex-wrap gap-1">
-                    {user.skillsNeeded.map((skill) => (
+                    {user.skillsNeeded.slice(0, 3).map((skill) => (
                         <Badge key={skill} variant="outline">
                         {skill}
                         </Badge>
                     ))}
+                    {user.skillsNeeded.length > 3 && <Badge variant="outline">+{user.skillsNeeded.length - 3}</Badge>}
                     </div>
                 </div>
                 </CardContent>
-                <CardFooter>
-                <Dialog>
-                    <DialogTrigger asChild>
-                    <Button className="w-full">
-                        Propose Swap <ArrowRight className="ml-2 h-4 w-4" />
-                    </Button>
-                    </DialogTrigger>
-                    <DialogContent>
-                    <DialogHeader>
-                        <DialogTitle>Propose a Swap with {user.name}</DialogTitle>
-                        <DialogDescription>
-                        Let them know what you'd like to exchange.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                        <Label htmlFor="message">Your Message</Label>
-                        <Textarea id="message" placeholder={`Hi ${user.name}, I'd love to learn...`} />
+                <CardFooter className="p-4 pt-0 gap-2">
+                    <Dialog>
+                        <DialogTrigger asChild>
+                        <Button className="w-full">
+                            Propose Swap <ArrowRight className="ml-2 h-4 w-4" />
+                        </Button>
+                        </DialogTrigger>
+                        <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Propose a Swap with {user.name}</DialogTitle>
+                            <DialogDescription>
+                            Let them know what you'd like to exchange.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid gap-2">
+                            <Label htmlFor="message">Your Message</Label>
+                            <Textarea id="message" placeholder={`Hi ${user.name}, I'd love to learn...`} />
+                            </div>
                         </div>
-                    </div>
-                    <Button>Send Proposal</Button>
-                    </DialogContent>
-                </Dialog>
+                        <Button>Send Proposal</Button>
+                        </DialogContent>
+                    </Dialog>
+                    <Button variant="outline" size="icon" asChild>
+                        <Link href="/messages"><MessageCircle className="h-4 w-4" /></Link>
+                    </Button>
                 </CardFooter>
             </Card>
             ))}

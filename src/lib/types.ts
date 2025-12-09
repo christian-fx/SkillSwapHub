@@ -16,6 +16,9 @@ export type User = {
   skillsOffered: string[];
   skillsNeeded: string[];
   isVerified?: boolean;
+  rating: number;
+  lastActive: string;
+  status: 'online' | 'offline';
 };
 
 export type UserProfile = {
@@ -29,6 +32,7 @@ export type UserProfile = {
     skillsOffered?: string[];
     skillsNeeded?: string[];
     isVerified?: boolean;
+    status?: 'online' | 'offline';
 }
 
 export type Message = {
@@ -46,7 +50,7 @@ export type Conversation = {
 };
 
 export type Notification = {
-  id: string;
+  id:string;
   type: 'message' | 'swap' | 'ai';
   title: string;
   description: string;
@@ -70,4 +74,14 @@ export type MarketplaceItem = {
   isSoldOut?: boolean;
   quantity?: number;
   preview?: string;
+};
+
+export type SwapRequest = {
+  id: string;
+  user: User;
+  offeredSkill: string;
+  requestedSkill: string;
+  status: 'pending' | 'accepted' | 'declined' | 'completed';
+  date: string;
+  message: string;
 };

@@ -1,3 +1,4 @@
+
 'use client';
 
 import { useState, useMemo, useEffect } from 'react';
@@ -87,7 +88,7 @@ export default function CartPage() {
   return (
     <div className="grid md:grid-cols-3 gap-8">
       <div className="md:col-span-2">
-        <h1 className="text-2xl font-bold tracking-tight font-headline mb-6">Shopping Cart</h1>
+        <h1 className="text-2xl font-bold tracking-tight font-headline mb-6">My Bookings</h1>
         {cart.length > 0 ? (
           <div className="space-y-4">
             {cart.map(item => (
@@ -119,8 +120,8 @@ export default function CartPage() {
           </div>
         ) : (
           <div className="text-center py-16 border rounded-lg bg-card">
-            <h2 className="text-xl font-semibold">Your cart is empty</h2>
-            <p className="text-muted-foreground mt-2">Looks like you haven't added anything to your cart yet.</p>
+            <h2 className="text-xl font-semibold">Your booking list is empty</h2>
+            <p className="text-muted-foreground mt-2">Looks like you haven't added anything yet.</p>
           </div>
         )}
       </div>
