@@ -2,7 +2,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Search, Settings, SquarePen } from 'lucide-react';
+import { ArrowLeft, Search, SquarePen } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Conversation, User } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Link from 'next/link';
 
 interface ChatListProps {
@@ -36,10 +35,6 @@ export function ChatList({
         </div>
         <div className="flex items-center gap-1">
             <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
-              <Settings className="h-4 w-4" />
-              <span className="sr-only">Settings</span>
-            </Button>
-            <Button variant="ghost" size="icon" className="rounded-full h-8 w-8">
               <SquarePen className="h-4 w-4" />
               <span className="sr-only">New Chat</span>
             </Button>
@@ -54,14 +49,6 @@ export function ChatList({
             className="pl-9 h-9 rounded-full bg-muted border-none focus-visible:ring-1 focus-visible:ring-primary"
           />
         </div>
-      </div>
-       <div className="px-4 pt-2 pb-2 border-b">
-         <Tabs defaultValue="inbox" className="w-full">
-          <TabsList className="grid w-full grid-cols-2 bg-muted">
-            <TabsTrigger value="inbox">Inbox</TabsTrigger>
-            <TabsTrigger value="communities">Communities</TabsTrigger>
-          </TabsList>
-        </Tabs>
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2">
