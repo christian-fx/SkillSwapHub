@@ -34,41 +34,38 @@ export default function MessagesPage() {
 
   const isChatOpen = !!selectedConversation;
 
-  // This outer div will control the overall layout and height
   return (
-    <div className={cn(isChatOpen ? "h-full w-full" : "")}>
-        <div className={cn("grid h-full w-full gap-4", isChatOpen && "md:grid-cols-[350px_1fr] lg:grid-cols-[400px_1fr]")}>
-        
-        {/* Chat List Column */}
-        <div className={cn(
-            "flex-col",
-            isChatOpen ? "hidden md:flex" : "flex"
-        )}>
-            <ChatList
-            conversations={conversations}
-            selectedConversation={selectedConversation}
-            onSelectConversation={handleSelectConversation}
-            currentUser={currentUser}
-            />
-        </div>
-        
-        {/* Chat Window Column */}
-        <div className={cn(
-            "flex-col",
-             // On mobile, only show this when a conversation is selected
-            isChatOpen ? "flex" : "hidden md:flex"
-        )}>
-            {selectedConversation ? (
-            <ChatWindow
-                conversation={selectedConversation}
-                currentUser={currentUser}
-                onBack={handleBack}
-            />
-            ) : (
-            <WelcomeMessage />
-            )}
-        </div>
-        </div>
+    <div className={cn("grid h-full w-full", isChatOpen && "md:grid-cols-[350px_1fr] lg:grid-cols-[400px_1fr]")}>
+    
+      {/* Chat List Column */}
+      <div className={cn(
+          "flex-col",
+          isChatOpen ? "hidden md:flex" : "flex"
+      )}>
+          <ChatList
+          conversations={conversations}
+          selectedConversation={selectedConversation}
+          onSelectConversation={handleSelectConversation}
+          currentUser={currentUser}
+          />
+      </div>
+      
+      {/* Chat Window Column */}
+      <div className={cn(
+          "flex-col",
+            // On mobile, only show this when a conversation is selected
+          isChatOpen ? "flex" : "hidden md:flex"
+      )}>
+          {selectedConversation ? (
+          <ChatWindow
+              conversation={selectedConversation}
+              currentUser={currentUser}
+              onBack={handleBack}
+          />
+          ) : (
+          <WelcomeMessage />
+          )}
+      </div>
     </div>
   );
 }

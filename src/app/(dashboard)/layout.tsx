@@ -92,21 +92,23 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
   return (
       <SidebarInset>
         <header className={cn(
-          "flex h-14 items-center gap-4 border-b bg-card/50 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-10 backdrop-blur-sm",
+          "flex h-14 items-center justify-between gap-4 border-b bg-card/50 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-10 backdrop-blur-sm",
           hideLayout && "hidden"
         )}>
-            <SidebarTrigger className="md:hidden" />
-            <div className="w-full flex-1">
-                {/* Header content can go here, like a search bar */}
-            </div>
             <div className="flex items-center gap-2">
+                <SidebarTrigger className="md:hidden" />
+                <div className="hidden md:block">
+                    {/* Desktop-only header content can go here */}
+                </div>
+            </div>
+            <div className="flex flex-1 items-center justify-end gap-2">
                 <Notifications />
                 <UserNav />
             </div>
         </header>
         <main className={cn(
           "flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6",
-          hideLayout && "h-[calc(100svh-0px)] p-0 m-0" 
+          hideLayout && "h-[calc(100svh)] p-0 m-0" 
         )}>
             {children}
         </main>
