@@ -2,7 +2,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Search, SquarePen } from 'lucide-react';
+import { ArrowLeft, Search, SquarePen, PlusCircle } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -52,7 +52,11 @@ export function ChatList({
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2">
-        {/* Messages removed for debugging */}
+            <div className="flex flex-col items-center justify-center h-full pt-16 text-center">
+                <PlusCircle className="h-12 w-12 text-muted-foreground/50" />
+                <h3 className="mt-4 text-lg font-semibold">Start a Conversation</h3>
+                <p className="text-muted-foreground mt-1 text-sm">Click the new chat icon to find someone to talk to.</p>
+            </div>
         </div>
       </ScrollArea>
     </div>
