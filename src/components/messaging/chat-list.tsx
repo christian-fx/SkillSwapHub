@@ -2,7 +2,7 @@
 'use client';
 
 import { formatDistanceToNow } from 'date-fns';
-import { ArrowLeft, Search, SquarePen } from 'lucide-react';
+import { ArrowLeft, Search, Settings, SquarePen } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
@@ -52,43 +52,7 @@ export function ChatList({
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2">
-        {conversations.map((convo) => (
-          <div
-            key={convo.id}
-            onClick={() => onSelectConversation(convo)}
-            className={cn(
-                'rounded-lg cursor-pointer w-full',
-                selectedConversation?.id === convo.id ? 'bg-accent' : 'hover:bg-accent/50'
-              )}
-          >
-            <div className="flex items-center gap-3 p-2">
-                <Avatar className="h-12 w-12 border flex-shrink-0">
-                  <AvatarImage
-                    src={convo.participant.avatarUrl}
-                    alt={convo.participant.name}
-                    data-ai-hint={convo.participant.avatarHint}
-                  />
-                  <AvatarFallback>
-                    {convo.participant.name.charAt(0)}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <div className="flex justify-between items-center">
-                    <p className="font-semibold truncate text-base">{convo.participant.name}</p>
-                    <p className="text-xs text-muted-foreground flex-shrink-0 ml-2">
-                      {formatDistanceToNow(
-                        new Date(convo.lastMessage.timestamp),
-                        { addSuffix: true }
-                      )}
-                    </p>
-                  </div>
-                  <p className="text-sm text-muted-foreground truncate">
-                    {convo.lastMessage.text}
-                  </p>
-                </div>
-              </div>
-          </div>
-        ))}
+        {/* Messages removed for debugging */}
         </div>
       </ScrollArea>
     </div>
