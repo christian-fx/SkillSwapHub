@@ -101,7 +101,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
                     {/* Desktop-only header content can go here */}
                 </div>
             </div>
-            <div className="flex flex-1 items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 flex-shrink-0">
                 <Notifications />
                 <UserNav />
             </div>

@@ -67,10 +67,10 @@ export function ChatList({
                     {convo.participant.name.charAt(0)}
                   </AvatarFallback>
                 </Avatar>
-                <div className="flex-1">
+                <div className="flex-1 overflow-hidden">
                   <div className="flex justify-between items-center">
-                    <p className="font-semibold">{convo.participant.name}</p>
-                    <p className="text-xs text-muted-foreground">
+                    <p className="font-semibold truncate">{convo.participant.name}</p>
+                    <p className="text-xs text-muted-foreground flex-shrink-0">
                       {formatDistanceToNow(
                         new Date(convo.lastMessage.timestamp),
                         { addSuffix: true }
