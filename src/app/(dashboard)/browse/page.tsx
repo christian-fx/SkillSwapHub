@@ -3,7 +3,7 @@
 import { useState, useMemo, useCallback, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
-import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA, Plus, Zap, Loader2 } from 'lucide-react';
+import { Search, SlidersHorizontal, ArrowRight, X, ArrowDownAZ, ArrowUpZA, Plus, Zap, Loader2, BadgeCheck } from 'lucide-react';
 
 import { users as allUsers } from '@/lib/data';
 import type { User, UserProfile } from '@/lib/types';
@@ -47,6 +47,7 @@ import { recommendUsers } from '@/ai/flows/recommend-users';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useLoader } from '@/context/loader-context';
+import { cn } from '@/lib/utils';
 
 const USERS_PER_PAGE = 8;
 
@@ -331,7 +332,10 @@ export default function BrowsePage() {
                     <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
                 </Avatar>
                 <div>
-                    <CardTitle>{user.name}</CardTitle>
+                    <CardTitle className="flex items-center gap-2">
+                        {user.name}
+                        {user.isVerified && <BadgeCheck className="h-5 w-5 text-primary" />}
+                    </CardTitle>
                     <CardDescription>{user.location}</CardDescription>
                 </div>
                 </CardHeader>

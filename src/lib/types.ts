@@ -15,6 +15,7 @@ export type User = {
   location: string;
   skillsOffered: string[];
   skillsNeeded: string[];
+  isVerified?: boolean;
 };
 
 export type UserProfile = {
@@ -27,6 +28,7 @@ export type UserProfile = {
     location?: string;
     skillsOffered?: string[];
     skillsNeeded?: string[];
+    isVerified?: boolean;
 }
 
 export type Message = {
@@ -55,4 +57,14 @@ export type Notification = {
     avatarUrl: string;
     avatarHint: string;
   }
+};
+
+export type MarketplaceItem = {
+  id: string;
+  title: string;
+  author: string;
+  price: number;
+  imageUrl: string;
+  imageHint: string;
+  type: 'eBook' | 'Template' | 'Guide' | 'Tool';
 };

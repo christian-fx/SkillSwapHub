@@ -19,7 +19,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2 } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2, BadgeCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -36,6 +36,7 @@ type UserProfile = {
   avatarUrl: string;
   skillsOffered: string[];
   skillsNeeded: string[];
+  isVerified?: boolean;
 };
 
 const SkillManager = ({
@@ -313,7 +314,10 @@ export default function ProfilePage() {
           </AvatarFallback>
         </Avatar>
         <div>
-          <h1 className="text-3xl font-bold font-headline">{profile.name}</h1>
+          <h1 className="text-3xl font-bold font-headline flex items-center gap-2">
+            {profile.name}
+            {profile.isVerified && <BadgeCheck className="h-7 w-7 text-primary" />}
+            </h1>
           <p className="text-muted-foreground">{profile.location}</p>
         </div>
       </div>

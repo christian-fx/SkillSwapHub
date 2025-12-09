@@ -1,4 +1,4 @@
-import type { User, Conversation, Notification } from "@/lib/types";
+import type { User, Conversation, Notification, MarketplaceItem } from "@/lib/types";
 import placeholderData from "@/lib/placeholder-images.json";
 import { ALL_SKILLS } from "@/lib/skills";
 
@@ -25,6 +25,7 @@ export const users: User[] = [
     location: "Lagos, LA",
     skillsOffered: ["Graphic Design", "Illustration", "Branding"],
     skillsNeeded: ["Pottery", "Creative Writing"],
+    isVerified: true,
   },
   {
     id: "user-2",
@@ -36,6 +37,7 @@ export const users: User[] = [
     location: "Abuja, FCT",
     skillsOffered: ["Web Development", "React", "Node.js"],
     skillsNeeded: ["Cooking", "Guitar"],
+    isVerified: true,
   },
   {
     id: "user-3",
@@ -69,6 +71,7 @@ export const users: User[] = [
     location: "Port Harcourt, RV",
     skillsOffered: ["Carpentry", "Woodworking"],
     skillsNeeded: ["Guitar"],
+    isVerified: true,
   },
    {
     id: "user-6",
@@ -735,5 +738,62 @@ export const notifications: Notification[] = [
             avatarUrl: findImage("user-3").imageUrl,
             avatarHint: findImage("user-3").imageHint,
         }
+    },
+];
+
+export const marketplaceItems: MarketplaceItem[] = [
+    {
+        id: 'item-1',
+        title: 'The Ultimate Guide to Sourdough',
+        author: 'Jide Sanusi',
+        price: 15.99,
+        imageUrl: findImage('ebook-1').imageUrl,
+        imageHint: findImage('ebook-1').imageHint,
+        type: 'eBook'
+    },
+    {
+        id: 'item-2',
+        title: 'Canva Social Media Templates',
+        author: 'Adanna Chioma',
+        price: 25.00,
+        imageUrl: findImage('template-1').imageUrl,
+        imageHint: findImage('template-1').imageHint,
+        type: 'Template'
+    },
+    {
+        id: 'item-3',
+        title: 'React Component Library',
+        author: 'Bolanle Adebayo',
+        price: 79.50,
+        imageUrl: findImage('tool-1').imageUrl,
+        imageHint: findImage('tool-1').imageHint,
+        type: 'Tool'
+    },
+    {
+        id: 'item-4',
+        title: 'Beginner\'s Guide to Fitness',
+        author: 'Dayo Olumide',
+        price: 9.99,
+        imageUrl: findImage('guide-1').imageUrl,
+        imageHint: findImage('guide-1').imageHint,
+        type: 'Guide'
+    },
+     {
+        id: 'item-5',
+        title: 'Woodworking Project Plans',
+        author: 'Emeka Nwosu',
+        price: 12.00,
+        imageUrl: findImage('ebook-2').imageUrl,
+        imageHint: findImage('ebook-2').imageHint,
+        type: 'Guide'
+    },
+    {
+        id: 'item-6',
+        title: 'Public Speaking Confidence Kit',
+        author: 'Fatima Bello',
+        price: 29.99,
+        imageUrl: findImage('guide-2').imageUrl,
+        imageHint: findImage('guide-2').imageHint,
+        type: 'Guide'
     },
 ];
