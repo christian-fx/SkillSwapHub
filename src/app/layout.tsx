@@ -3,6 +3,8 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
+import { LoaderProvider } from '@/context/loader-context';
+import { GlobalLoader } from '@/components/global-loader';
 
 export const metadata: Metadata = {
   title: 'SkillSwap Hub',
@@ -29,8 +31,11 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            {children}
-            <Toaster />
+            <LoaderProvider>
+              {children}
+              <Toaster />
+              <GlobalLoader />
+            </LoaderProvider>
           </ThemeProvider>
         </FirebaseClientProvider>
       </body>

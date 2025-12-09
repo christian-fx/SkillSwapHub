@@ -36,6 +36,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/firebase';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useLoader } from '@/context/loader-context';
 
 declare global {
   interface Window {
@@ -57,6 +58,7 @@ export default function LoginPage() {
   const auth = useAuth();
   const router = useRouter();
   const { toast } = useToast();
+  const { showLoader, hideLoader } = useLoader();
 
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
@@ -77,6 +79,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast({
@@ -85,6 +88,7 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (
         error.code === 'auth/user-not-found' ||
         error.code === 'auth/wrong-password' ||
@@ -103,6 +107,7 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
@@ -112,6 +117,7 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (error.code === 'auth/popup-closed-by-user') {
         setError('The sign-in window was closed. Please try again.');
       } else {
@@ -157,6 +163,7 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       await window.confirmationResult.confirm(otp);
       toast({
@@ -165,6 +172,7 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (error.code === 'auth/invalid-verification-code') {
         setError('Invalid OTP. Please check the code and try again.');
       } else {
@@ -215,6 +223,7 @@ export default function LoginPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -238,6 +247,7 @@ export default function LoginPage() {
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         required
+                        disabled={loading}
                       />
                       <button
                         type="button"
@@ -256,7 +266,7 @@ export default function LoginPage() {
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {loading ? 'Logging in...' : 'Login'}
+                    Login
                   </Button>
                 </form>
               </TabsContent>
@@ -275,6 +285,7 @@ export default function LoginPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           required
+                          disabled={loading}
                         />
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -299,13 +310,14 @@ export default function LoginPage() {
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         required
+                        disabled={loading}
                       />
                     </div>
                     <Button type="submit" className="w-full" disabled={loading}>
                       {loading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
-                      {loading ? 'Verifying...' : 'Verify OTP & Login'}
+                      Verify OTP & Login
                     </Button>
                   </form>
                 )}

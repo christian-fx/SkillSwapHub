@@ -40,6 +40,7 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth, useFirestore } from '@/firebase';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
+import { useLoader } from '@/context/loader-context';
 
 declare global {
   interface Window {
@@ -67,6 +68,7 @@ export default function SignupPage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
+  const { showLoader, hideLoader } = useLoader();
 
   useEffect(() => {
     if (!window.recaptchaVerifier) {
@@ -130,6 +132,7 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
@@ -144,6 +147,7 @@ export default function SignupPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (error.code === 'auth/email-already-in-use') {
         setError('An account with this email already exists. Please log in.');
       } else if (error.code === 'auth/weak-password') {
@@ -164,6 +168,7 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
@@ -179,6 +184,7 @@ export default function SignupPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (error.code === 'auth/popup-closed-by-user') {
         setError('The sign-up window was closed. Please try again.');
       } else {
@@ -227,6 +233,7 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
+    showLoader();
     try {
       const result = await window.confirmationResult.confirm(otp);
       const user = result.user;
@@ -238,6 +245,7 @@ export default function SignupPage() {
       });
       router.push('/browse');
     } catch (error: any) {
+      hideLoader();
       if (error.code === 'auth/invalid-verification-code') {
         setError('Invalid OTP. Please check the code and try again.');
       } else {
@@ -293,6 +301,7 @@ export default function SignupPage() {
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -308,6 +317,7 @@ export default function SignupPage() {
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
+                        disabled={loading}
                       />
                     </div>
                   </div>
@@ -325,6 +335,7 @@ export default function SignupPage() {
                           }
                           value={password}
                           required
+                          disabled={loading}
                         />
                         <button
                           type="button"
@@ -365,6 +376,7 @@ export default function SignupPage() {
                           value={confirmPassword}
                           onChange={(e) => setConfirmPassword(e.target.value)}
                           required
+                          disabled={loading}
                         />
                         <button
                           type="button"
@@ -390,7 +402,7 @@ export default function SignupPage() {
                     {loading && (
                       <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                     )}
-                    {loading ? 'Creating Account...' : 'Create Account'}
+                    Create Account
                   </Button>
                 </form>
               </TabsContent>
@@ -413,6 +425,7 @@ export default function SignupPage() {
                           value={name}
                           onChange={(e) => setName(e.target.value)}
                           required
+                          disabled={loading}
                         />
                       </div>
                     </div>
@@ -428,6 +441,7 @@ export default function SignupPage() {
                           value={phone}
                           onChange={(e) => setPhone(e.target.value)}
                           required
+                          disabled={loading}
                         />
                       </div>
                       <p className="text-xs text-muted-foreground">
@@ -462,6 +476,7 @@ export default function SignupPage() {
                         value={otp}
                         onChange={(e) => setOtp(e.target.value)}
                         required
+                        disabled={loading}
                       />
                     </div>
                     <Button
@@ -472,7 +487,7 @@ export default function SignupPage() {
                       {loading && (
                         <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                       )}
-                      {loading ? 'Verifying...' : 'Verify OTP & Sign Up'}
+                      Verify OTP & Sign Up
                     </Button>
                   </form>
                 )}
@@ -485,6 +500,7 @@ export default function SignupPage() {
                   onCheckedChange={(checked) =>
                     setAgreedToTerms(checked as boolean)
                   }
+                  disabled={loading}
                 />
                 <Label
                   htmlFor="terms"

@@ -21,13 +21,17 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ThemeToggle } from "./theme-toggle"
 import { useUser } from "@/firebase";
+import { useLoader } from "@/context/loader-context";
 
 export function UserNav() {
   const { user, loading } = useUser();
   const router = useRouter();
   const auth = getAuth();
+  const { showLoader } = useLoader();
+
 
   const handleLogout = async () => {
+    showLoader();
     await signOut(auth);
     router.push("/");
   };
