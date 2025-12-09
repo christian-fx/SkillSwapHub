@@ -87,13 +87,19 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const pathname = usePathname();
+  const isMessagesPage = pathname.startsWith('/messages');
+
   return (
     <SidebarProvider>
       <Sidebar>
         <DashboardNav />
       </Sidebar>
       <SidebarInset>
-        <header className="flex h-14 items-center gap-4 border-b bg-card/50 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-10 backdrop-blur-sm">
+        <header className={cn(
+          "flex h-14 items-center gap-4 border-b bg-card/50 px-4 lg:h-[60px] lg:px-6 sticky top-0 z-10 backdrop-blur-sm",
+          isMessagesPage && "hidden" // Hide header on messages page
+        )}>
             <SidebarTrigger className="md:hidden" />
             <div className="w-full flex-1">
                 {/* Header content can go here, like a search bar */}
@@ -103,10 +109,17 @@ export default function DashboardLayout({
                 <UserNav />
             </div>
         </header>
-        <main className="flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6">
+        <main className={cn(
+          "flex flex-1 flex-col gap-4 p-4 lg:gap-6 lg:p-6",
+          // Make main area take full height on messages page and remove padding
+          isMessagesPage && "h-[calc(100svh-1px)] p-0 m-0" 
+        )}>
             {children}
         </main>
-        <footer className="bg-card border-t">
+        <footer className={cn(
+          "bg-card border-t",
+          isMessagesPage && "hidden" // Hide footer on messages page
+        )}>
           <div className="container mx-auto px-4 py-4 sm:px-6 lg:px-8">
             <div className="flex justify-center items-center text-sm text-muted-foreground">
               <Link href="/help" className="hover:text-primary">Help</Link>
