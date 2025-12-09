@@ -15,7 +15,9 @@ export function ChatWindow({ conversation, currentUser, onBack }: ChatWindowProp
   return (
     <div className="flex flex-col border rounded-lg h-full bg-card">
       <ChatHeader conversation={conversation} onBack={onBack} />
-      <ChatMessages conversation={conversation} currentUser={currentUser} />
+      <div className="flex-1 overflow-y-auto">
+        <ChatMessages conversation={conversation} currentUser={currentUser} />
+      </div>
       <ChatInput />
     </div>
   );

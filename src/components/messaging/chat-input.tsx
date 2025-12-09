@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Paperclip, Send } from 'lucide-react';
+import { Paperclip, Send, Mic } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 
@@ -15,9 +15,13 @@ export function ChatInput() {
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
-          className="pr-24"
+          className="pr-32"
         />
         <div className="absolute top-1/2 right-2 -translate-y-1/2 flex items-center gap-1">
+          <Button variant="ghost" size="icon">
+            <Mic className="h-5 w-5" />
+            <span className="sr-only">Record voice message</span>
+          </Button>
           <Button variant="ghost" size="icon">
             <Paperclip className="h-5 w-5" />
             <span className="sr-only">Attach file</span>

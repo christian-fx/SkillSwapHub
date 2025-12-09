@@ -6,6 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Conversation, User } from '@/lib/types';
 import { cn } from '@/lib/utils';
+import { useEffect, useRef } from 'react';
 
 interface ChatMessagesProps {
   conversation: Conversation;
@@ -13,9 +14,21 @@ interface ChatMessagesProps {
 }
 
 export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
+  const scrollAreaRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (scrollAreaRef.current) {
+        const viewport = scrollAreaRef.current.querySelector('div[data-radix-scroll-area-viewport]');
+        if (viewport) {
+            viewport.scrollTop = viewport.scrollHeight;
+        }
+    }
+  }, [conversation.messages]);
+
+
   return (
-    <ScrollArea className="flex-1 p-4 bg-muted/20">
-      <div className="space-y-4">
+    <ScrollArea className="flex-1" ref={scrollAreaRef}>
+      <div className="space-y-4 p-4 bg-muted/20">
         {conversation.messages.map((message) => (
           <div
             key={message.id}
