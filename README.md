@@ -82,7 +82,7 @@ Next, push your project code to your GitHub repository.
     ```bash
     git init -b main
     ```
-
+ 
 2.  **Add all the files to the staging area:**
     ```bash
     git add .
