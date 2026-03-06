@@ -52,17 +52,29 @@ Follow these instructions to get a local copy up and running for development and
     - Create a new project on the [Firebase Console](https://console.firebase.google.com/).
     - In your project, go to **Project Settings** > **General**.
     - Under "Your apps", create a new Web app.
-    - Copy the `firebaseConfig` object and paste it into `src/firebase/config.ts`.
+    - Copy the `firebaseConfig` object. You will need these values for your environment variables in the next step.
     - Go to **Authentication** > **Sign-in method** and enable **Email/Password**, **Google**, and **Phone** providers.
     - Go to **Firestore Database** and create a new database in production mode.
     - Copy the rules from `firestore.rules` and paste them into the **Rules** tab of your Firestore database.
 
 4.  **Set up Environment Variables:**
-    - Create a `.env.local` file at the root of your project.
-    - If you are using AI features with Genkit, add your Google AI API key:
-      ```
+    - Create a `.env.local` file in the root of your project.
+    - Add the Firebase configuration values you copied in the previous step. It should look like this:
+
+      ```env
+      # Firebase Config
+      NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
+      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
+      NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
+      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
+      NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
+
+      # Genkit AI Config (used server-side)
       GEMINI_API_KEY=YOUR_GOOGLE_AI_API_KEY
       ```
+    - **Important:** Environment variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Be careful not to expose sensitive keys. The `GEMINI_API_KEY` is used server-side and should NOT have the prefix.
 
 5.  **Run the development server:**
     ```bash
@@ -106,10 +118,24 @@ If you've initialized this project locally and want to push it to a new GitHub r
 
 ## ☁️ Deployment
 
-This application is optimized for deployment on [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
+This application is ready for deployment on modern hosting platforms that support Next.js.
+
+### Option 1: Vercel (Recommended for Next.js)
+
+You can easily deploy this project to [Vercel](https://vercel.com).
+
+1.  **Push your code to GitHub:** Make sure your latest code is on your GitHub repository.
+2.  **Import Project on Vercel:** Go to your Vercel dashboard and import the GitHub repository.
+3.  **Configure Environment Variables:** During the import process, Vercel will ask for your environment variables. Copy all the keys and values from your `.env.local` file and add them to your Vercel project settings.
+4.  **Deploy:** Click the "Deploy" button. Vercel will build and deploy your application.
+
+### Option 2: Firebase App Hosting
+
+This application is also optimized for deployment on [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
 
 - Connect your GitHub repository to a Firebase App Hosting backend.
 - The `apphosting.yaml` file provides the necessary run configuration.
+- You will need to configure the environment variables from your `.env.local` file in the App Hosting settings for the backend to connect to your Firebase project and AI services.
 - Firebase will automatically handle the build and deployment process.
 
 ---
