@@ -26,68 +26,59 @@ SkillSwap Hub is a modern, full-stack web application that connects a community 
 - **Form Management:** [React Hook Form](https://react-hook-form.com/)
 - **Schema Validation:** [Zod](https://zod.dev/)
 
-## 🚀 Getting Started
+## 🚀 Getting Started & Deployment
 
-Follow these instructions to get a local copy up and running for development and testing purposes.
+Follow these instructions to get your local copy running, push it to GitHub, and deploy it to the web.
 
-### Prerequisites
+### 1. Local Setup
 
-- [Node.js](https://nodejs.org/) (v18 or newer recommended)
-- `npm`, `yarn`, or `pnpm`
+First, get the application running on your local machine.
 
-### Installation & Setup
+- **Prerequisites:** Make sure you have [Node.js](https://nodejs.org/) (v18 or newer) installed.
 
-1.  **Clone the repository:**
-    ```bash
-    git clone https://github.com/your-username/skillswap-hub.git
-    cd skillswap-hub
-    ```
+- **Install dependencies:**
+  ```bash
+  npm install
+  ```
 
-2.  **Install dependencies:**
-    ```bash
-    npm install
-    ```
+- **Set up Firebase:**
+  1. Create a new project on the [Firebase Console](https://console.firebase.google.com/).
+  2. In your project, go to **Project Settings** > **General**.
+  3. Under "Your apps", create a new Web app.
+  4. Copy the `firebaseConfig` object. You will need these values for your environment variables.
+  5. Go to **Authentication** > **Sign-in method** and enable **Email/Password**, **Google**, and **Phone** providers.
+  6. Go to **Firestore Database** and create a new database in production mode.
+  7. Copy the rules from `firestore.rules` and paste them into the **Rules** tab of your Firestore database.
 
-3.  **Set up Firebase:**
-    - Create a new project on the [Firebase Console](https://console.firebase.google.com/).
-    - In your project, go to **Project Settings** > **General**.
-    - Under "Your apps", create a new Web app.
-    - Copy the `firebaseConfig` object. You will need these values for your environment variables in the next step.
-    - Go to **Authentication** > **Sign-in method** and enable **Email/Password**, **Google**, and **Phone** providers.
-    - Go to **Firestore Database** and create a new database in production mode.
-    - Copy the rules from `firestore.rules` and paste them into the **Rules** tab of your Firestore database.
+- **Set up Environment Variables:**
+  1. Create a `.env.local` file in the root of your project.
+  2. Add the Firebase and Genkit API keys. It should look like this:
+     ```env
+     # Firebase Config (for the browser)
+     NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
+     NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
+     NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
+     NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
+     NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
+     NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
+     NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
 
-4.  **Set up Environment Variables:**
-    - Create a `.env.local` file in the root of your project.
-    - Add the Firebase configuration values you copied in the previous step. It should look like this:
+     # Genkit AI Config (for the server)
+     GEMINI_API_KEY=YOUR_GOOGLE_AI_API_KEY
+     ```
+  3. **Important:** Your `GEMINI_API_KEY` is a server-side secret and should NOT have the `NEXT_PUBLIC_` prefix.
 
-      ```env
-      # Firebase Config
-      NEXT_PUBLIC_FIREBASE_API_KEY=YOUR_API_KEY
-      NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=YOUR_AUTH_DOMAIN
-      NEXT_PUBLIC_FIREBASE_PROJECT_ID=YOUR_PROJECT_ID
-      NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=YOUR_STORAGE_BUCKET
-      NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=YOUR_MESSAGING_SENDER_ID
-      NEXT_PUBLIC_FIREBASE_APP_ID=YOUR_APP_ID
-      NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID=YOUR_MEASUREMENT_ID
+- **Run the development server:**
+  ```bash
+  npm run dev
+  ```
+  The application should now be running on http://localhost:9002.
 
-      # Genkit AI Config (used server-side)
-      GEMINI_API_KEY=YOUR_GOOGLE_AI_API_KEY
-      ```
-    - **Important:** Environment variables prefixed with `NEXT_PUBLIC_` are exposed to the browser. Be careful not to expose sensitive keys. The `GEMINI_API_KEY` is used server-side and should NOT have the prefix.
+### 2. Pushing to Your GitHub Repository
 
-5.  **Run the development server:**
-    ```bash
-    npm run dev
-    ```
+Next, push your project code to your GitHub repository.
 
-    The application should now be running on [http://localhost:3000](http://localhost:3000).
-
-## 📁 Pushing to GitHub
-
-If you've initialized this project locally and want to push it to a new GitHub repository, follow these steps:
-
-1.  **Initialize a new Git repository in your project folder:**
+1.  **Initialize a Git repository in your project folder:**
     ```bash
     git init -b main
     ```
@@ -97,46 +88,28 @@ If you've initialized this project locally and want to push it to a new GitHub r
     git add .
     ```
 
-3.  **Commit the files with an initial message:**
+3.  **Commit the files:**
     ```bash
-    git commit -m "Initial commit"
+    git commit -m "Initial commit of SkillSwap Hub project"
     ```
 
-4.  **Go to [GitHub](https://github.com/new) and create a new, empty repository.** Do not initialize it with a README or license file.
-
-5.  **Copy the repository URL** provided by GitHub. It will look like this: `https://github.com/your-username/your-repo-name.git`.
-
-6.  **Link your local repository to the remote one on GitHub:**
+4.  **Link your local repository to the remote one on GitHub:**
     ```bash
-    git remote add origin https://github.com/your-username/your-repo-name.git
+    git remote add origin https://github.com/christian-fx/Skillswap-Hub.git
     ```
 
-7.  **Push your local commit to the remote repository:**
+5.  **Push your code to GitHub:**
     ```bash
     git push -u origin main
     ```
 
-## ☁️ Deployment
+### 3. Deploying to Vercel
 
-This application is ready for deployment on modern hosting platforms that support Next.js.
+With your code on GitHub, you can now deploy it live on the web with [Vercel](https://vercel.com).
 
-### Option 1: Vercel (Recommended for Next.js)
-
-You can easily deploy this project to [Vercel](https://vercel.com).
-
-1.  **Push your code to GitHub:** Make sure your latest code is on your GitHub repository.
-2.  **Import Project on Vercel:** Go to your Vercel dashboard and import the GitHub repository.
-3.  **Configure Environment Variables:** During the import process, Vercel will ask for your environment variables. Copy all the keys and values from your `.env.local` file and add them to your Vercel project settings.
-4.  **Deploy:** Click the "Deploy" button. Vercel will build and deploy your application.
-
-### Option 2: Firebase App Hosting
-
-This application is also optimized for deployment on [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
-
-- Connect your GitHub repository to a Firebase App Hosting backend.
-- The `apphosting.yaml` file provides the necessary run configuration.
-- You will need to configure the environment variables from your `.env.local` file in the App Hosting settings for the backend to connect to your Firebase project and AI services.
-- Firebase will automatically handle the build and deployment process.
+1.  **Import Project on Vercel:** Go to your Vercel dashboard and import the GitHub repository you just created.
+2.  **Configure Environment Variables:** During the import process, Vercel will ask for your environment variables. Copy all the keys and values from your `.env.local` file and add them to your Vercel project's settings.
+3.  **Deploy:** Click the "Deploy" button. Vercel will handle the rest!
 
 ---
 
