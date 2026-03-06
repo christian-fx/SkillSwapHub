@@ -48,7 +48,6 @@ import { doc, getDoc } from 'firebase/firestore';
 import { recommendUsers } from '@/ai/flows/recommend-users';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { useLoader } from '@/context/loader-context';
 import { Switch } from '@/components/ui/switch';
 import { cn } from '@/lib/utils';
 
@@ -98,7 +97,6 @@ export default function BrowsePage() {
   const { user: authUser, loading: userLoading } = useUser();
   const firestore = useFirestore();
   const { toast } = useToast();
-  const { hideLoader } = useLoader();
 
 
   const [searchQuery, setSearchQuery] = useState('');
@@ -118,11 +116,6 @@ export default function BrowsePage() {
   const [drawerAiRecommendation, setDrawerAiRecommendation] = useState<RecommendationType>('none');
   const [drawerShowVerified, setDrawerShowVerified] = useState(false);
 
-  useEffect(() => {
-    if (!userLoading) {
-      hideLoader();
-    }
-  }, [userLoading, hideLoader]);
 
   useEffect(() => {
     if (authUser && firestore) {
@@ -539,7 +532,7 @@ export default function BrowsePage() {
                         variant={currentPage === page ? "default" : "ghost"}
                         size="icon"
                         className="h-8 w-8"
-                        onClick={() => handlePageChange(page)}
+                        onClick={() => handlePageChange(page as number | "...")}
                       >
                         {page}
                       </Button>
