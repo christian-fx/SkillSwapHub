@@ -95,7 +95,7 @@ Next, push your project code to your GitHub repository.
 
 4.  **Link your local repository to the remote one on GitHub:**
     ```bash
-    git remote add origin https://github.com/christian-fx/Skillswap-Hub.git
+    git remote add origin https://github.com/your name/Skillswap-Hub.git
     ```
 
 5.  **Push your code to GitHub:**
