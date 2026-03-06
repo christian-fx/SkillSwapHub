@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -40,7 +40,6 @@ import { Progress } from '@/components/ui/progress';
 import { useAuth, useFirestore } from '@/firebase';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { useLoader } from '@/context/loader-context';
 
 declare global {
   interface Window {
@@ -68,20 +67,19 @@ export default function SignupPage() {
   const firestore = useFirestore();
   const router = useRouter();
   const { toast } = useToast();
-  const { showLoader, hideLoader } = useLoader();
 
-  useEffect(() => {
+  const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
       window.recaptchaVerifier = new RecaptchaVerifier(
         auth,
         'recaptcha-container',
         {
           size: 'invisible',
-          callback: (response: any) => {},
+          callback: (response: any) => { },
         }
       );
     }
-  }, [auth]);
+  };
 
   const checkPasswordStrength = (value: string) => {
     let strength = 0;
@@ -105,13 +103,17 @@ export default function SignupPage() {
 
     const docSnap = await getDoc(userRef);
     if (!docSnap.exists()) {
+      const safeName = name || user.displayName || 'Anonymous';
+      const safeEmail = email || user.email || null;
+      const safePhone = phone || user.phoneNumber || null;
+
       await setDoc(userRef, {
         uid: user.uid,
-        name: name || user.displayName,
-        email: email || user.email,
-        phone: phone || user.phoneNumber,
+        name: safeName,
+        email: safeEmail,
+        phone: safePhone,
         avatarUrl:
-          user.photoURL || `https://avatar.vercel.sh/${name || user.email}.png`,
+          user.photoURL || `https://avatar.vercel.sh/${safeName.replace(/[^a-zA-Z0-9]/g, '')}.png`,
         bio: '',
         location: '',
         skillsOffered: [],
@@ -132,14 +134,18 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email,
         password
       );
-      await updateProfile(userCredential.user, { displayName: name });
+      // updateProfile is non-critical — don't let it block signup redirect
+      try {
+        await updateProfile(userCredential.user, { displayName: name });
+      } catch (profileError) {
+        console.warn('updateProfile failed (non-critical):', profileError);
+      }
       await createUserProfile(userCredential.user, name, email, null);
       toast({
         title: 'Account Created!',
@@ -147,7 +153,6 @@ export default function SignupPage() {
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (error.code === 'auth/email-already-in-use') {
         setError('An account with this email already exists. Please log in.');
       } else if (error.code === 'auth/weak-password') {
@@ -168,23 +173,26 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       const provider = new GoogleAuthProvider();
       const userCredential = await signInWithPopup(auth, provider);
-      await createUserProfile(
-        userCredential.user,
-        userCredential.user.displayName!,
-        userCredential.user.email,
-        userCredential.user.phoneNumber
-      );
+
+      try {
+        await createUserProfile(
+          userCredential.user,
+          userCredential.user.displayName || '',
+          userCredential.user.email,
+          userCredential.user.phoneNumber
+        );
+      } catch (profileError) {
+        console.warn("Failed to create user profile in Firestore:", profileError);
+      }
       toast({
         title: 'Account Created!',
         description: 'Welcome to SkillSwap Hub.',
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (error.code === 'auth/popup-closed-by-user') {
         setError('The sign-up window was closed. Please try again.');
       } else {
@@ -201,6 +209,7 @@ export default function SignupPage() {
     setLoading(true);
     setError(null);
     try {
+      setupRecaptcha();
       const appVerifier = window.recaptchaVerifier!;
       const confirmationResult = await signInWithPhoneNumber(
         auth,
@@ -233,19 +242,27 @@ export default function SignupPage() {
     }
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       const result = await window.confirmationResult.confirm(otp);
       const user = result.user;
-      await updateProfile(user, { displayName: name });
-      await createUserProfile(user, name, null, phone);
+
+      try {
+        await updateProfile(user, { displayName: name });
+      } catch (profileError) {
+        console.warn('updateProfile failed (non-critical):', profileError);
+      }
+
+      try {
+        await createUserProfile(user, name, null, phone);
+      } catch (profileError) {
+        console.warn("Failed to create user profile in Firestore:", profileError);
+      }
       toast({
         title: 'Account Created!',
         description: 'Welcome to SkillSwap Hub.',
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (error.code === 'auth/invalid-verification-code') {
         setError('Invalid OTP. Please check the code and try again.');
       } else {
@@ -359,8 +376,8 @@ export default function SignupPage() {
                             {passwordStrength < 3
                               ? 'Weak'
                               : passwordStrength < 5
-                              ? 'Medium'
-                              : 'Strong'}
+                                ? 'Medium'
+                                : 'Strong'}
                           </p>
                         </div>
                       )}

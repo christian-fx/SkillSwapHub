@@ -36,7 +36,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/firebase';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { useToast } from '@/hooks/use-toast';
-import { useLoader } from '@/context/loader-context';
 
 declare global {
   interface Window {
@@ -58,7 +57,6 @@ export default function LoginPage() {
   const auth = useAuth();
   const router = useRouter();
   const { toast } = useToast();
-  const { showLoader, hideLoader } = useLoader();
 
   const setupRecaptcha = () => {
     if (!window.recaptchaVerifier) {
@@ -79,7 +77,6 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       await signInWithEmailAndPassword(auth, email, password);
       toast({
@@ -88,7 +85,6 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (
         error.code === 'auth/user-not-found' ||
         error.code === 'auth/wrong-password' ||
@@ -107,7 +103,6 @@ export default function LoginPage() {
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
@@ -117,7 +112,6 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (error.code === 'auth/popup-closed-by-user') {
         setError('The sign-in window was closed. Please try again.');
       } else {
@@ -148,7 +142,7 @@ export default function LoginPage() {
         description: 'Check your phone for the verification code.',
       });
     } catch (error: any) {
-       if (error.code === 'auth/invalid-phone-number') {
+      if (error.code === 'auth/invalid-phone-number') {
         setError('The phone number is not valid. Please include the country code.');
       } else {
         setError('Could not send OTP. Please check the number and try again.');
@@ -163,7 +157,6 @@ export default function LoginPage() {
     e.preventDefault();
     setLoading(true);
     setError(null);
-    showLoader();
     try {
       await window.confirmationResult.confirm(otp);
       toast({
@@ -172,7 +165,6 @@ export default function LoginPage() {
       });
       router.push('/browse');
     } catch (error: any) {
-      hideLoader();
       if (error.code === 'auth/invalid-verification-code') {
         setError('Invalid OTP. Please check the code and try again.');
       } else {

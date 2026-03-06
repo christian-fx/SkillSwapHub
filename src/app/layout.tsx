@@ -1,11 +1,9 @@
 
-import type {Metadata} from 'next';
+import type { Metadata } from 'next';
 import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
-import { LoaderProvider } from '@/context/loader-context';
-import { GlobalLoader } from '@/components/global-loader';
 import { ChatLayoutProvider } from '@/context/chat-layout-context';
 
 export const metadata: Metadata = {
@@ -33,13 +31,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <LoaderProvider>
-              <ChatLayoutProvider>
-                {children}
-              </ChatLayoutProvider>
-              <Toaster />
-              <GlobalLoader />
-            </LoaderProvider>
+            <ChatLayoutProvider>
+              {children}
+            </ChatLayoutProvider>
+            <Toaster />
           </ThemeProvider>
         </FirebaseClientProvider>
       </body>
