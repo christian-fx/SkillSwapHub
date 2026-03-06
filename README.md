@@ -71,6 +71,39 @@ Follow these instructions to get a local copy up and running for development and
 
     The application should now be running on [http://localhost:3000](http://localhost:3000).
 
+## 📁 Pushing to GitHub
+
+If you've initialized this project locally and want to push it to a new GitHub repository, follow these steps:
+
+1.  **Initialize a new Git repository in your project folder:**
+    ```bash
+    git init -b main
+    ```
+
+2.  **Add all the files to the staging area:**
+    ```bash
+    git add .
+    ```
+
+3.  **Commit the files with an initial message:**
+    ```bash
+    git commit -m "Initial commit"
+    ```
+
+4.  **Go to [GitHub](https://github.com/new) and create a new, empty repository.** Do not initialize it with a README or license file.
+
+5.  **Copy the repository URL** provided by GitHub. It will look like this: `https://github.com/your-username/your-repo-name.git`.
+
+6.  **Link your local repository to the remote one on GitHub:**
+    ```bash
+    git remote add origin https://github.com/your-username/your-repo-name.git
+    ```
+
+7.  **Push your local commit to the remote repository:**
+    ```bash
+    git push -u origin main
+    ```
+
 ## ☁️ Deployment
 
 This application is optimized for deployment on [Firebase App Hosting](https://firebase.google.com/docs/app-hosting).
