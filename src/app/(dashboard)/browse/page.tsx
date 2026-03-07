@@ -127,6 +127,12 @@ export default function BrowsePage() {
       return;
     }
 
+    const isEmailAuth = authUser.providerData.some((p) => p.providerId === 'password');
+    if (isEmailAuth && !authUser.emailVerified) {
+      toast({ title: "Email Not Verified", description: "You must verify your email address before proposing swaps.", variant: "destructive" });
+      return;
+    }
+
     setIsProposing(true);
     try {
       const swapsCol = collection(firestore, 'swaps');

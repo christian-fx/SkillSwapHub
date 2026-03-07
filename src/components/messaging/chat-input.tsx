@@ -12,6 +12,9 @@ export function ChatInput({ conversationId }: { conversationId: string }) {
   const { user: authUser } = useUser();
   const firestore = useFirestore();
 
+  const isEmailAuth = authUser?.providerData.some((p) => p.providerId === 'password');
+  const isUnverified = isEmailAuth && !authUser?.emailVerified;
+
   const handleSendMessage = async () => {
     if (!message.trim() || !authUser || !firestore || !conversationId) return;
 
@@ -44,24 +47,25 @@ export function ChatInput({ conversationId }: { conversationId: string }) {
     <div className="p-4 border-t bg-card">
       <div className="relative">
         <Input
-          placeholder="Type a message..."
+          placeholder={isUnverified ? "Please verify your email to chat." : "Type a message..."}
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={(e) => {
             if (e.key === 'Enter') handleSendMessage();
           }}
           className="pr-32"
+          disabled={isUnverified}
         />
         <div className="absolute top-1/2 right-2 -translate-y-1/2 flex items-center gap-1">
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" disabled={isUnverified}>
             <Mic className="h-5 w-5" />
             <span className="sr-only">Record voice message</span>
           </Button>
-          <Button variant="ghost" size="icon">
+          <Button variant="ghost" size="icon" disabled={isUnverified}>
             <Paperclip className="h-5 w-5" />
             <span className="sr-only">Attach file</span>
           </Button>
-          <Button size="icon" disabled={!message.trim()} onClick={handleSendMessage}>
+          <Button size="icon" disabled={!message.trim() || isUnverified} onClick={handleSendMessage}>
             <Send className="h-5 w-5" />
             <span className="sr-only">Send message</span>
           </Button>

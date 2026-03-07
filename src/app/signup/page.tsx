@@ -18,6 +18,7 @@ import {
   updateProfile,
   signInWithPopup,
   GoogleAuthProvider,
+  sendEmailVerification,
 } from 'firebase/auth';
 import { doc, setDoc, getDoc } from 'firebase/firestore';
 
@@ -170,6 +171,13 @@ export default function SignupPage() {
       }
 
       await createUserProfile(userCredential.user, name, email, gender, finalAvatarUrl);
+
+      // Send the verification email immediately
+      try {
+        await sendEmailVerification(userCredential.user);
+      } catch (verifyError) {
+        console.error('Failed to send verification email:', verifyError);
+      }
 
       toast({
         title: 'Account Created!',

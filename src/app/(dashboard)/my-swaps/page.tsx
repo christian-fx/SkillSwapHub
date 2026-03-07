@@ -12,6 +12,7 @@ import { ArrowRightLeft, Calendar, Check, Clock, X, Loader2 } from 'lucide-react
 import { format } from 'date-fns';
 import { useUser, useFirestore } from '@/firebase';
 import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc, addDoc } from 'firebase/firestore';
+import { useToast } from '@/hooks/use-toast';
 
 export type EnrichedSwapRequest = SwapRequest & {
   otherUser?: UserProfile;
@@ -77,6 +78,7 @@ const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapR
 export default function MySwapsPage() {
   const { user: authUser, loading: userLoading } = useUser();
   const firestore = useFirestore();
+  const { toast } = useToast();
 
   const [swapRequests, setSwapRequests] = useState<EnrichedSwapRequest[]>([]);
   const [loadingSwaps, setLoadingSwaps] = useState(false);
@@ -135,6 +137,14 @@ export default function MySwapsPage() {
 
   const handleUpdateStatus = async (swapId: string, newStatus: string) => {
     try {
+      if (newStatus === 'accepted' && authUser) {
+        const isEmailAuth = authUser.providerData.some((p) => p.providerId === 'password');
+        if (isEmailAuth && !authUser.emailVerified) {
+          toast({ title: "Email Not Verified", description: "You must verify your email address to accept swaps.", variant: "destructive" });
+          return;
+        }
+      }
+
       const swap = swapRequests.find(s => s.id === swapId);
       if (newStatus === 'accepted' && swap) {
         // Create a chat automatically based on the accepted swap
