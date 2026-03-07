@@ -3,14 +3,44 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
 
-    // Helper function to check if the user is the owner of a document.
-    function isOwner(userId) {
-      return request.auth.uid == userId;
+    // Helper function to check if the user is authenticated
+    function isAuthenticated() {
+      return request.auth != null;
     }
 
-    // Users can only read and write their own profile data.
+    // Helper function to check if the user is the owner of a document.
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Users
+    // Anyone authenticated can read user profiles (needed for Browse page).
+    // Only the user themselves can write to their own profile.
     match /users/{userId} {
-      allow read, write: if isOwner(userId);
+      allow read: if isAuthenticated();
+      allow write: if isOwner(userId);
+    }
+
+    // Swaps
+    // Users can only read, create, or update a swap if they are a participant (sender or receiver).
+    match /swaps/{swapId} {
+      allow create: if isAuthenticated() && request.resource.data.senderId == request.auth.uid;
+      allow read, update, delete: if isAuthenticated() && (resource.data.senderId == request.auth.uid || resource.data.receiverId == request.auth.uid);
+    }
+
+    // Chats
+    // Users can read/update a chat if their ID is in the 'participants' array.
+    match /chats/{chatId} {
+      allow create: if isAuthenticated() && (request.auth.uid in request.resource.data.participants);
+      allow read, update: if isAuthenticated() && (request.auth.uid in resource.data.participants);
+      
+      // Messages inside a chat
+      match /messages/{messageId} {
+        // Must be a participant of the parent chat to read or send messages
+        allow read: if isAuthenticated() && (request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants);
+        allow create: if isAuthenticated() && (request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants) && request.resource.data.senderId == request.auth.uid;
+        allow update, delete: if isAuthenticated() && resource.data.senderId == request.auth.uid;
+      }
     }
   }
 }
