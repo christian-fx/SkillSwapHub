@@ -5,6 +5,7 @@ import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { FirebaseClientProvider } from '@/firebase/client-provider';
 import { ChatLayoutProvider } from '@/context/chat-layout-context';
+import { NotificationProvider } from '@/context/notification-context';
 
 export const metadata: Metadata = {
   title: 'SkillSwap Hub',
@@ -32,7 +33,9 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <ChatLayoutProvider>
-              {children}
+              <NotificationProvider>
+                {children}
+              </NotificationProvider>
             </ChatLayoutProvider>
             <Toaster />
           </ThemeProvider>

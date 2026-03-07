@@ -60,8 +60,9 @@ export type Notification = {
   user?: {
     name: string;
     avatarUrl: string;
-    avatarHint: string;
-  }
+    avatarHint?: string;
+  };
+  link?: string;
 };
 
 export type MarketplaceItem = {

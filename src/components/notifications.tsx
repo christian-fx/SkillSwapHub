@@ -13,11 +13,11 @@ import {
 } from '@/components/ui/popover';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { notifications as initialNotifications } from '@/lib/data';
 import type { Notification } from '@/lib/types';
 import { Avatar, AvatarFallback, AvatarImage } from './ui/avatar';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useNotifications } from '@/context/notification-context';
 
 const NOTIFICATION_ICONS = {
   message: <MessageCircle className="h-5 w-5" />,
@@ -30,19 +30,19 @@ function NotificationItem({ notification }: { notification: Notification }) {
   const avatar = notification.user?.avatarUrl;
 
   return (
-    <Link href="#" className="block hover:bg-accent -mx-2 px-2 rounded-lg">
+    <Link href={notification.link || "#"} className="block hover:bg-accent -mx-2 px-2 rounded-lg">
       <div className="flex items-start gap-3 py-3">
         <div className="flex-shrink-0">
-            {avatar ? (
-                <Avatar className="h-8 w-8">
-                    <AvatarImage src={avatar} alt={notification.user?.name} data-ai-hint={notification.user?.avatarHint} />
-                    <AvatarFallback>{notification.user?.name.charAt(0)}</AvatarFallback>
-                </Avatar>
-            ) : (
-                <div className="h-8 w-8 flex items-center justify-center rounded-full bg-secondary text-secondary-foreground">
-                    {Icon}
-                </div>
-            )}
+          {avatar ? (
+            <Avatar className="h-8 w-8">
+              <AvatarImage src={avatar} alt={notification.user?.name} data-ai-hint={notification.user?.avatarHint} />
+              <AvatarFallback>{notification.user?.name.charAt(0)}</AvatarFallback>
+            </Avatar>
+          ) : (
+            <div className="h-8 w-8 flex items-center justify-center rounded-full bg-secondary text-secondary-foreground">
+              {Icon}
+            </div>
+          )}
         </div>
         <div className="flex-1">
           <p className="text-sm font-medium">{notification.title}</p>
@@ -64,17 +64,20 @@ function NotificationItem({ notification }: { notification: Notification }) {
 }
 
 export function Notifications() {
-  const [notifications, setNotifications] =
-    useState<Notification[]>(initialNotifications);
+  const { notifications } = useNotifications();
+
+  // The local `read` mocking can be simplified, but for a real app you'd want a 
+  // function exposed from the provider to actually update Firestore documents `read: true`.
+  // Since we derive notifications dynamically, "Mark all as read" would ideally mark chats 
+  // and swaps. For UI purposes, we'll keep deriving unreadCount from the context source array.
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
+  // Function is currently a stub because modifying real data requires updating the underlying swaps/chats docs.
   const markAllAsRead = () => {
-    setNotifications(
-      notifications.map((n) => ({ ...n, read: true }))
-    );
+    console.log("Mark all as read triggered (Requires updating source tables)");
   };
-  
+
   const allNotifications = notifications;
   const unreadNotifications = notifications.filter(n => !n.read);
 
@@ -107,25 +110,25 @@ export function Notifications() {
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="all">All</TabsTrigger>
             <TabsTrigger value="unread">
-                Unread {unreadCount > 0 && `(${unreadCount})`}
+              Unread {unreadCount > 0 && `(${unreadCount})`}
             </TabsTrigger>
           </TabsList>
           <TabsContent value="all" className="max-h-96 overflow-y-auto space-y-2">
             {allNotifications.length > 0 ? (
-                allNotifications.map((notification) => (
-                    <NotificationItem key={notification.id} notification={notification} />
-                ))
+              allNotifications.map((notification) => (
+                <NotificationItem key={notification.id} notification={notification} />
+              ))
             ) : (
-                <p className="text-sm text-center text-muted-foreground py-8">No notifications yet.</p>
+              <p className="text-sm text-center text-muted-foreground py-8">No notifications yet.</p>
             )}
           </TabsContent>
           <TabsContent value="unread" className="max-h-96 overflow-y-auto space-y-2">
             {unreadNotifications.length > 0 ? (
-                unreadNotifications.map((notification) => (
-                    <NotificationItem key={notification.id} notification={notification} />
-                ))
+              unreadNotifications.map((notification) => (
+                <NotificationItem key={notification.id} notification={notification} />
+              ))
             ) : (
-                <p className="text-sm text-center text-muted-foreground py-8">No unread notifications.</p>
+              <p className="text-sm text-center text-muted-foreground py-8">No unread notifications.</p>
             )}
           </TabsContent>
         </Tabs>

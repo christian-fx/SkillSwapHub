@@ -34,6 +34,8 @@ import { Button } from "@/components/ui/button";
 import { Notifications } from "@/components/notifications";
 import { useChatLayout } from "@/context/chat-layout-context";
 import { EmailVerificationModal } from "@/components/auth/email-verification-modal";
+import { useNotifications } from "@/context/notification-context";
+import { Badge } from "@/components/ui/badge";
 
 const menuItems = [
   { href: "/browse", label: "Swaps", icon: LayoutGrid },
@@ -48,6 +50,7 @@ const menuItems = [
 function DashboardNav() {
   const pathname = usePathname();
   const { setOpenMobile } = useSidebar();
+  const { unreadChatCount, pendingSwapCount } = useNotifications();
 
   const handleLinkClick = () => {
     setOpenMobile(false);
@@ -73,7 +76,17 @@ function DashboardNav() {
                   className="text-base"
                 >
                   <item.icon />
-                  <span>{item.label}</span>
+                  <span className="flex-1">{item.label}</span>
+                  {item.href === "/messages" && unreadChatCount > 0 && (
+                    <Badge variant="destructive" className="ml-auto h-5 w-5 justify-center rounded-full p-0 text-xs text-white">
+                      {unreadChatCount > 99 ? '99+' : unreadChatCount}
+                    </Badge>
+                  )}
+                  {item.href === "/my-swaps" && pendingSwapCount > 0 && (
+                    <Badge variant="destructive" className="ml-auto h-5 w-5 justify-center rounded-full p-0 text-xs text-white">
+                      {pendingSwapCount > 99 ? '99+' : pendingSwapCount}
+                    </Badge>
+                  )}
                 </SidebarMenuButton>
               </Link>
             </SidebarMenuItem>
