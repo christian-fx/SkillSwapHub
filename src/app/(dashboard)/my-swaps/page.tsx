@@ -1,63 +1,73 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
-import type { SwapRequest } from '@/lib/types';
+import type { SwapRequest, UserProfile } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import { ArrowRightLeft, Calendar, Check, Clock, X, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
-import { useUser } from '@/firebase';
+import { useUser, useFirestore } from '@/firebase';
+import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc } from 'firebase/firestore';
 
-const SwapCard = ({ swap }: { swap: SwapRequest }) => {
+export type EnrichedSwapRequest = SwapRequest & {
+  otherUser?: UserProfile;
+};
+
+const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapRequest, currentUserId: string, onUpdateStatus: (id: string, status: string) => void }) => {
   const isPending = swap.status === 'pending';
   const isCompleted = swap.status === 'completed';
   const isUpcoming = swap.status === 'accepted';
+  const isReceiver = swap.receiverId === currentUserId; // True if someone proposed TO the current user
+
+  const otherUserName = swap.otherUser?.name || 'Unknown User';
+  const otherUserAvatar = swap.otherUser?.avatarUrl || `https://avatar.vercel.sh/${swap.senderId === currentUserId ? swap.receiverId : swap.senderId}.png`;
 
   return (
     <Card>
       <CardHeader>
         <div className="flex items-start gap-4">
           <Avatar className="w-12 h-12">
-            <AvatarImage src={swap.user.avatarUrl} alt={swap.user.name} data-ai-hint={swap.user.avatarHint} />
-            <AvatarFallback>{swap.user.name.charAt(0)}</AvatarFallback>
+            <AvatarImage src={otherUserAvatar} alt={otherUserName} />
+            <AvatarFallback>{otherUserName.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="text-lg">Swap with {swap.user.name}</CardTitle>
+            <CardTitle className="text-lg">Swap with {otherUserName}</CardTitle>
             <CardDescription className="flex items-center gap-2 text-sm mt-1">
               {isUpcoming || isCompleted ? <Calendar className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
-              {format(new Date(swap.date), isCompleted ? 'PPP' : 'PPP p')}
+              {swap.createdAt ? format(new Date(swap.createdAt?.toDate ? swap.createdAt.toDate() : swap.createdAt), isCompleted ? 'PPP' : 'PPP p') : 'Unknown Date'}
             </CardDescription>
           </div>
         </div>
       </CardHeader>
       <CardContent>
-        <div className="flex items-center gap-4 text-sm">
-          <div className="text-center p-2 rounded-md bg-secondary/50 flex-1">
-            <p className="text-xs text-muted-foreground">You Offered</p>
-            <p className="font-semibold">{swap.offeredSkill}</p>
-          </div>
-          <ArrowRightLeft className="h-5 w-5 text-muted-foreground" />
-          <div className="text-center p-2 rounded-md bg-secondary/50 flex-1">
-            <p className="text-xs text-muted-foreground">You Requested</p>
-            <p className="font-semibold">{swap.requestedSkill}</p>
-          </div>
-        </div>
-        <p className="text-sm text-muted-foreground mt-4 p-3 bg-secondary/30 rounded-md border">"{swap.message}"</p>
+        {/*
+            Phase 3 Note: Since we decoupled the hardcoded User object in the schema 
+            but kept the simplified component strings, we might need a richer UI later.
+            For now, we'll just display a generic "Requested a swap" message since 
+            skills aren't string scalars on the new component structure explicitly anymore, 
+            but rely on the message. 
+        */}
+        <p className="text-sm text-muted-foreground mt-4 p-3 bg-secondary/30 rounded-md border">"{swap.message || 'I would like to swap skills!'}"</p>
       </CardContent>
-      {isPending && (
+      {isPending && isReceiver && (
         <CardFooter className="gap-2">
-          <Button className="w-full">
+          <Button className="w-full" onClick={() => onUpdateStatus(swap.id, 'accepted')}>
             <Check className="h-4 w-4 mr-2" />
             Accept
           </Button>
-          <Button variant="outline" className="w-full">
+          <Button variant="outline" className="w-full" onClick={() => onUpdateStatus(swap.id, 'declined')}>
             <X className="h-4 w-4 mr-2" />
             Decline
           </Button>
+        </CardFooter>
+      )}
+      {isPending && !isReceiver && (
+        <CardFooter>
+          <p className="text-sm text-muted-foreground italic w-full text-center">Waiting for {otherUserName} to respond...</p>
         </CardFooter>
       )}
     </Card>
@@ -66,11 +76,75 @@ const SwapCard = ({ swap }: { swap: SwapRequest }) => {
 
 export default function MySwapsPage() {
   const { user: authUser, loading: userLoading } = useUser();
+  const firestore = useFirestore();
 
-  // Using empty arrays temporarily until Phase 3 firestore hooks are added
-  const upcomingSwaps: SwapRequest[] = [];
-  const pendingRequests: SwapRequest[] = [];
-  const pastSwaps: SwapRequest[] = [];
+  const [swapRequests, setSwapRequests] = useState<EnrichedSwapRequest[]>([]);
+  const [loadingSwaps, setLoadingSwaps] = useState(false);
+
+  useEffect(() => {
+    if (!authUser || !firestore) return;
+
+    setLoadingSwaps(true);
+    const swapsCol = collection(firestore, 'swaps');
+    const q = query(
+      swapsCol,
+      or(
+        where('senderId', '==', authUser.uid),
+        where('receiverId', '==', authUser.uid)
+      )
+    );
+
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const pendingSwaps = snapshot.docs.map(async (docData) => {
+        const data = docData.data();
+        const otherUserId = data.senderId === authUser.uid ? data.receiverId : data.senderId;
+
+        let otherUser = undefined;
+        try {
+          const userRef = doc(firestore, 'users', otherUserId);
+          const userSnap = await getDoc(userRef);
+          if (userSnap.exists()) {
+            otherUser = userSnap.data() as UserProfile;
+          }
+        } catch (e) { console.error('Error fetching foreign swap profile', e) }
+
+        return {
+          id: docData.id,
+          ...data,
+          otherUser
+        } as EnrichedSwapRequest;
+      });
+
+      const enriched = await Promise.all(pendingSwaps);
+      // Sort by creation date descending
+      enriched.sort((a, b) => {
+        const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(a.createdAt || 0);
+        const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(b.createdAt || 0);
+        return dateB.getTime() - dateA.getTime();
+      });
+
+      setSwapRequests(enriched);
+      setLoadingSwaps(false);
+    }, (error) => {
+      console.error("Error fetching swaps:", error);
+      setLoadingSwaps(false);
+    });
+
+    return () => unsubscribe();
+  }, [authUser, firestore]);
+
+  const handleUpdateStatus = async (swapId: string, newStatus: string) => {
+    try {
+      const swapRef = doc(firestore, 'swaps', swapId);
+      await updateDoc(swapRef, { status: newStatus, updatedAt: new Date() });
+    } catch (err) {
+      console.error("Error updating swap status:", err);
+    }
+  };
+
+  const upcomingSwaps = swapRequests.filter(s => s.status === 'accepted');
+  const pendingRequests = swapRequests.filter(s => s.status === 'pending');
+  const pastSwaps = swapRequests.filter(s => s.status === 'completed' || s.status === 'declined');
 
   if (userLoading) {
     return <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
@@ -104,9 +178,11 @@ export default function MySwapsPage() {
           <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
         <TabsContent value="upcoming">
-          {upcomingSwaps.length > 0 ? (
+          {loadingSwaps ? (
+            <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+          ) : upcomingSwaps.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {upcomingSwaps.map(swap => <SwapCard key={swap.id} swap={swap} />)}
+              {upcomingSwaps.map(swap => <SwapCard key={swap.id} swap={swap} currentUserId={authUser?.uid || ''} onUpdateStatus={handleUpdateStatus} />)}
             </div>
           ) : (
             <div className="text-center py-16 border rounded-lg bg-card">
@@ -116,9 +192,11 @@ export default function MySwapsPage() {
           )}
         </TabsContent>
         <TabsContent value="pending">
-          {pendingRequests.length > 0 ? (
+          {loadingSwaps ? (
+            <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+          ) : pendingRequests.length > 0 ? (
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-              {pendingRequests.map(swap => <SwapCard key={swap.id} swap={swap} />)}
+              {pendingRequests.map(swap => <SwapCard key={swap.id} swap={swap} currentUserId={authUser?.uid || ''} onUpdateStatus={handleUpdateStatus} />)}
             </div>
           ) : (
             <div className="text-center py-16 border rounded-lg bg-card">
@@ -128,9 +206,11 @@ export default function MySwapsPage() {
           )}
         </TabsContent>
         <TabsContent value="history">
-          {pastSwaps.length > 0 ? (
+          {loadingSwaps ? (
+            <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
+          ) : pastSwaps.length > 0 ? (
             <div className="space-y-4">
-              {pastSwaps.map(swap => <SwapCard key={swap.id} swap={swap} />)}
+              {pastSwaps.map(swap => <SwapCard key={swap.id} swap={swap} currentUserId={authUser?.uid || ''} onUpdateStatus={handleUpdateStatus} />)}
             </div>
           ) : (
             <div className="text-center py-16 border rounded-lg bg-card">

@@ -44,7 +44,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
 import { useUser, useFirestore } from '@/firebase';
-import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs, addDoc } from 'firebase/firestore';
 import { recommendUsers } from '@/ai/flows/recommend-users';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -117,6 +117,36 @@ export default function BrowsePage() {
   const [drawerSort, setDrawerSort] = useState<'random' | 'asc' | 'desc'>('random');
   const [drawerAiRecommendation, setDrawerAiRecommendation] = useState<RecommendationType>('none');
   const [drawerShowVerified, setDrawerShowVerified] = useState(false);
+
+  const [swapMessage, setSwapMessage] = useState('');
+  const [isProposing, setIsProposing] = useState(false);
+
+  const handleProposeSwap = async (receiver: User) => {
+    if (!authUser) {
+      toast({ title: "Not logged in", description: "You must be logged in to propose a swap.", variant: "destructive" });
+      return;
+    }
+
+    setIsProposing(true);
+    try {
+      const swapsCol = collection(firestore, 'swaps');
+      await addDoc(swapsCol, {
+        senderId: authUser.uid,
+        receiverId: receiver.id,
+        status: 'pending',
+        message: swapMessage,
+        createdAt: new Date(),
+        updatedAt: new Date()
+      });
+      toast({ title: "Swap Proposed", description: `Your proposal to ${receiver.name} was sent!` });
+      setSwapMessage('');
+    } catch (error) {
+      console.error("Error proposing swap:", error);
+      toast({ title: "Error", description: "Could not send proposal.", variant: "destructive" });
+    } finally {
+      setIsProposing(false);
+    }
+  };
 
   useEffect(() => {
     const fetchRealUsers = async () => {
@@ -542,10 +572,17 @@ export default function BrowsePage() {
                       <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
                           <Label htmlFor="message">Your Message</Label>
-                          <Textarea id="message" placeholder={`Hi ${user.name}, I'd love to learn...`} />
+                          <Textarea
+                            id="message"
+                            placeholder={`Hi ${user.name}, I'd love to learn...`}
+                            value={swapMessage}
+                            onChange={(e) => setSwapMessage(e.target.value)}
+                          />
                         </div>
                       </div>
-                      <Button>Send Proposal</Button>
+                      <Button onClick={() => handleProposeSwap(user)} disabled={isProposing}>
+                        {isProposing ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Sending...</> : 'Send Proposal'}
+                      </Button>
                     </DialogContent>
                   </Dialog>
                   <Button variant="outline" size="icon" asChild>

@@ -22,17 +22,17 @@ export type User = {
 };
 
 export type UserProfile = {
-    uid: string;
-    name: string;
-    email: string;
-    phone?: string | null;
-    avatarUrl?: string;
-    bio?: string;
-    location?: string;
-    skillsOffered?: string[];
-    skillsNeeded?: string[];
-    isVerified?: boolean;
-    status?: 'online' | 'offline';
+  uid: string;
+  name: string;
+  email: string;
+  phone?: string | null;
+  avatarUrl?: string;
+  bio?: string;
+  location?: string;
+  skillsOffered?: string[];
+  skillsNeeded?: string[];
+  isVerified?: boolean;
+  status?: 'online' | 'offline';
 }
 
 export type Message = {
@@ -50,7 +50,7 @@ export type Conversation = {
 };
 
 export type Notification = {
-  id:string;
+  id: string;
   type: 'message' | 'swap' | 'ai';
   title: string;
   description: string;
@@ -78,10 +78,12 @@ export type MarketplaceItem = {
 
 export type SwapRequest = {
   id: string;
-  user: User;
+  senderId: string;
+  receiverId: string;
   offeredSkill: string;
   requestedSkill: string;
   status: 'pending' | 'accepted' | 'declined' | 'completed';
-  date: string;
   message: string;
+  createdAt: string | Date | any; // allow firestore timestamp
+  updatedAt?: string | Date | any;
 };
