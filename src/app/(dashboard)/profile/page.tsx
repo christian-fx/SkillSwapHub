@@ -362,6 +362,8 @@ export default function ProfilePage() {
         name: profile.name || '',
         location: profile.location || '',
         bio: profile.bio || '',
+        phone: profile.phone || '',
+        gender: profile.gender || 'Prefer not to say',
       });
     }
     setIsEditingProfile(false);
