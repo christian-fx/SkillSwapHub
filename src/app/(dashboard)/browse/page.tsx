@@ -585,9 +585,6 @@ export default function BrowsePage() {
                       </Button>
                     </DialogContent>
                   </Dialog>
-                  <Button variant="outline" size="icon" asChild>
-                    <Link href="/messages"><MessageCircle className="h-4 w-4" /></Link>
-                  </Button>
                 </CardFooter>
               </Card>
             ))}

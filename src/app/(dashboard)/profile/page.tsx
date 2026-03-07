@@ -20,7 +20,7 @@ import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Textarea } from '@/components/ui/textarea';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2, BadgeCheck, ShieldCheck, TrendingUp, Star, Upload } from 'lucide-react';
+import { Plus, Trash2, Zap, ArrowRight, Edit, Save, X, Loader2, BadgeCheck, ShieldCheck, TrendingUp, Star, Upload, Search } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { ALL_SKILLS } from '@/lib/skills';
 import { ScrollArea } from '@/components/ui/scroll-area';
@@ -68,6 +68,8 @@ const SkillManager = ({
   isEditing: boolean;
   setIsEditing: (isEditing: boolean) => void;
 }) => {
+  const [searchQuery, setSearchQuery] = useState('');
+
   return (
     <Card>
       <CardHeader className="flex-row items-center justify-between">
@@ -99,10 +101,20 @@ const SkillManager = ({
                 <p className="text-sm text-muted-foreground p-2">No skills added yet.</p>
               )}
             </div>
-            <p className="text-sm font-medium">Available Skills</p>
+            <p className="text-sm font-medium mt-4">Available Skills</p>
+            <div className="relative mt-2 mb-2">
+              <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
+              <Input
+                type="search"
+                placeholder="Search skills..."
+                className="pl-8 bg-background"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+            </div>
             <ScrollArea className="h-64 rounded-md border">
               <div className="p-4 space-y-2">
-                {ALL_SKILLS.map((skill) => {
+                {ALL_SKILLS.filter(skill => skill.toLowerCase().includes(searchQuery.toLowerCase())).map((skill) => {
                   const isAdded = userSkills.includes(skill);
                   if (isAdded) return null;
                   return (

@@ -48,8 +48,9 @@ export default function MessagesPage() {
     if (!authUser || !firestore) return;
 
     const chatsCol = collection(firestore, 'chats');
-    // Firestore allows 'array-contains' for querying an array field
-    const q = query(chatsCol, where('participants', 'array-contains', authUser.uid), orderBy('updatedAt', 'desc'));
+    // Firestore allows 'array-contains' for querying an array field.
+    // We remove orderBy to avoid requiring a custom composite index in Firestore. We sort locally instead.
+    const q = query(chatsCol, where('participants', 'array-contains', authUser.uid));
 
     const unsubscribe = onSnapshot(q, async (snapshot) => {
       const conversationsPromises = snapshot.docs.map(async (chatDoc) => {
@@ -75,6 +76,14 @@ export default function MessagesPage() {
       });
 
       const resolvedConversations = await Promise.all(conversationsPromises);
+
+      // Sort locally by updatedAt descending
+      resolvedConversations.sort((a, b) => {
+        const timeA = a.updatedAt?.toMillis ? a.updatedAt.toMillis() : (a.updatedAt?.getTime ? a.updatedAt.getTime() : 0);
+        const timeB = b.updatedAt?.toMillis ? b.updatedAt.toMillis() : (b.updatedAt?.getTime ? b.updatedAt.getTime() : 0);
+        return timeB - timeA;
+      });
+
       setConversations(resolvedConversations);
 
       // Update selected conversation with fresh data if it's currently selected
