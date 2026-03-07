@@ -4,29 +4,51 @@ import { formatDistanceToNow } from 'date-fns';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import type { Conversation, User } from '@/lib/types';
+import type { User } from '@/lib/types';
+import type { EnrichedConversation } from './chat-list';
 import { cn } from '@/lib/utils';
-import { useEffect, useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
+import { useFirestore } from '@/firebase';
+import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
 
 interface ChatMessagesProps {
-  conversation: Conversation;
+  conversation: EnrichedConversation;
   currentUser: User;
 }
 
 export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
   const viewportRef = useRef<HTMLDivElement>(null);
+  const firestore = useFirestore();
+  const [messages, setMessages] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (!firestore || !conversation.id) return;
+
+    const messagesRef = collection(firestore, `chats/${conversation.id}/messages`);
+    const q = query(messagesRef, orderBy('createdAt', 'asc'));
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedMessages = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
+      setMessages(fetchedMessages);
+    });
+
+    return () => unsubscribe();
+  }, [conversation.id, firestore]);
 
   useEffect(() => {
     if (viewportRef.current) {
-        viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
+      viewportRef.current.scrollTop = viewportRef.current.scrollHeight;
     }
-  }, [conversation.messages]);
+  }, [messages]);
 
 
   return (
     <ScrollArea className="flex-1" viewportRef={viewportRef}>
       <div className="space-y-4 p-4">
-        {conversation.messages.map((message) => (
+        {messages.map((message) => (
           <div
             key={message.id}
             className={cn(
@@ -37,12 +59,11 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
             {message.senderId !== currentUser.id && (
               <Avatar className="h-8 w-8 border">
                 <AvatarImage
-                  src={conversation.participant.avatarUrl}
-                  alt={conversation.participant.name}
-                  data-ai-hint={conversation.participant.avatarHint}
+                  src={conversation.otherUser?.avatarUrl}
+                  alt={conversation.otherUser?.name || 'User'}
                 />
                 <AvatarFallback>
-                  {conversation.participant.name.charAt(0)}
+                  {(conversation.otherUser?.name || 'U').charAt(0)}
                 </AvatarFallback>
               </Avatar>
             )}
@@ -63,7 +84,7 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
                     : 'text-muted-foreground'
                 )}
               >
-                {formatDistanceToNow(new Date(message.timestamp), {
+                {message.createdAt && formatDistanceToNow(new Date(message.createdAt?.toDate ? message.createdAt.toDate() : message.createdAt), {
                   addSuffix: true,
                 })}
               </p>

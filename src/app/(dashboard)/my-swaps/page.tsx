@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils';
 import { ArrowRightLeft, Calendar, Check, Clock, X, Loader2 } from 'lucide-react';
 import { format } from 'date-fns';
 import { useUser, useFirestore } from '@/firebase';
-import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc, addDoc } from 'firebase/firestore';
 
 export type EnrichedSwapRequest = SwapRequest & {
   otherUser?: UserProfile;
@@ -135,6 +135,16 @@ export default function MySwapsPage() {
 
   const handleUpdateStatus = async (swapId: string, newStatus: string) => {
     try {
+      const swap = swapRequests.find(s => s.id === swapId);
+      if (newStatus === 'accepted' && swap) {
+        // Create a chat automatically based on the accepted swap
+        const chatsCol = collection(firestore, 'chats');
+        await addDoc(chatsCol, {
+          participants: [swap.senderId, swap.receiverId],
+          updatedAt: new Date()
+        });
+      }
+
       const swapRef = doc(firestore, 'swaps', swapId);
       await updateDoc(swapRef, { status: newStatus, updatedAt: new Date() });
     } catch (err) {

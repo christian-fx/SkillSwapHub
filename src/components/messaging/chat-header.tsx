@@ -4,16 +4,16 @@ import { ArrowLeft, Phone, Video } from 'lucide-react';
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import type { Conversation } from '@/lib/types';
+import type { EnrichedConversation } from './chat-list';
 import { ChatActions } from './chat-actions';
 
 interface ChatHeaderProps {
-  conversation: Conversation;
+  conversation: EnrichedConversation;
   onBack: () => void;
 }
 
 export function ChatHeader({ conversation, onBack }: ChatHeaderProps) {
-  const { participant } = conversation;
+  const participant = conversation.otherUser || { name: 'User', avatarUrl: '', avatarHint: '' };
 
   return (
     <div className="p-4 border-b flex items-center justify-between gap-4 bg-card">
@@ -23,7 +23,7 @@ export function ChatHeader({ conversation, onBack }: ChatHeaderProps) {
           <span className="sr-only">Back</span>
         </Button>
         <Avatar>
-          <AvatarImage src={participant.avatarUrl} alt={participant.name} data-ai-hint={participant.avatarHint}/>
+          <AvatarImage src={participant.avatarUrl} alt={participant.name} />
           <AvatarFallback>{participant.name.charAt(0)}</AvatarFallback>
         </Avatar>
         <h2 className="text-lg font-semibold">{participant.name}</h2>

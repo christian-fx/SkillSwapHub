@@ -39,14 +39,15 @@ export type Message = {
   id: string;
   senderId: string;
   text: string;
-  timestamp: string;
+  createdAt: string | Date | any;
+  read?: boolean;
 };
 
 export type Conversation = {
   id: string;
-  participant: User;
-  messages: Message[];
-  lastMessage: Message;
+  participants: string[];
+  lastMessage?: Message;
+  updatedAt?: string | Date | any;
 };
 
 export type Notification = {

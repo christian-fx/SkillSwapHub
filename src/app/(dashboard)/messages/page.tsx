@@ -8,22 +8,34 @@ import { ChatWindow } from '@/components/messaging/chat-window';
 import { WelcomeMessage } from '@/components/messaging/welcome-message';
 import { cn } from '@/lib/utils';
 import { useChatLayout } from '@/context/chat-layout-context';
-import { useUser } from '@/firebase';
+import { useUser, useFirestore } from '@/firebase';
+import { collection, query, where, onSnapshot, doc, getDoc, orderBy } from 'firebase/firestore';
 import { Loader2 } from 'lucide-react';
+import type { UserProfile } from '@/lib/types';
+import type { EnrichedConversation } from '@/components/messaging/chat-list';
 
 export default function MessagesPage() {
-  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [conversations, setConversations] = useState<EnrichedConversation[]>([]);
   const [selectedConversation, setSelectedConversation] =
-    useState<Conversation | null>(null);
+    useState<EnrichedConversation | null>(null);
 
   const { setIsChatOpen } = useChatLayout();
   const { user: authUser, loading: userLoading } = useUser();
+  const firestore = useFirestore();
 
   // Create a compatible user object for the chat UI
   const currentUser = authUser ? {
     id: authUser.uid,
     name: authUser.displayName || 'You',
+    email: authUser.email || '',
     avatarUrl: authUser.photoURL || `https://avatar.vercel.sh/${authUser.uid}.png`,
+    avatarHint: '',
+    bio: '',
+    location: '',
+    skillsOffered: [],
+    skillsNeeded: [],
+    rating: 0,
+    lastActive: 'Now',
     status: 'online' as const,
   } : null;
 
@@ -31,6 +43,51 @@ export default function MessagesPage() {
     setIsChatOpen(!!selectedConversation);
     return () => setIsChatOpen(false); // Cleanup on unmount
   }, [selectedConversation, setIsChatOpen]);
+
+  useEffect(() => {
+    if (!authUser || !firestore) return;
+
+    const chatsCol = collection(firestore, 'chats');
+    // Firestore allows 'array-contains' for querying an array field
+    const q = query(chatsCol, where('participants', 'array-contains', authUser.uid), orderBy('updatedAt', 'desc'));
+
+    const unsubscribe = onSnapshot(q, async (snapshot) => {
+      const conversationsPromises = snapshot.docs.map(async (chatDoc) => {
+        const data = chatDoc.data();
+        const otherUserId = data.participants.find((id: string) => id !== authUser.uid) || data.participants[0];
+
+        let otherUser = undefined;
+        if (otherUserId) {
+          try {
+            const userRef = doc(firestore, 'users', otherUserId);
+            const userSnap = await getDoc(userRef);
+            if (userSnap.exists()) {
+              otherUser = userSnap.data() as UserProfile;
+            }
+          } catch (e) { console.error('Error fetching chat user profile', e) }
+        }
+
+        return {
+          id: chatDoc.id,
+          ...data,
+          otherUser
+        } as EnrichedConversation;
+      });
+
+      const resolvedConversations = await Promise.all(conversationsPromises);
+      setConversations(resolvedConversations);
+
+      // Update selected conversation with fresh data if it's currently selected
+      if (selectedConversation) {
+        const updatedSelected = resolvedConversations.find(c => c.id === selectedConversation.id);
+        if (updatedSelected) {
+          setSelectedConversation(updatedSelected);
+        }
+      }
+    });
+
+    return () => unsubscribe();
+  }, [authUser, firestore, selectedConversation?.id]);
 
   if (userLoading) {
     return <div className="flex h-full items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>;
@@ -47,7 +104,7 @@ export default function MessagesPage() {
     );
   }
 
-  const handleSelectConversation = (conversation: Conversation) => {
+  const handleSelectConversation = (conversation: EnrichedConversation) => {
     setSelectedConversation(conversation);
   };
 
