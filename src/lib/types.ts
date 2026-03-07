@@ -41,6 +41,7 @@ export type Message = {
   text: string;
   createdAt: string | Date | any;
   read?: boolean;
+  imageUrl?: string;
 };
 
 export type Conversation = {
@@ -48,6 +49,7 @@ export type Conversation = {
   participants: string[];
   lastMessage?: Message;
   updatedAt?: string | Date | any;
+  typingUsers?: string[];
 };
 
 export type Notification = {

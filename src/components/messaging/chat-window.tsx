@@ -15,7 +15,7 @@ interface ChatWindowProps {
 export function ChatWindow({ conversation, currentUser, onBack }: ChatWindowProps) {
   return (
     <div className="flex flex-col border rounded-lg h-full bg-card">
-      <ChatHeader conversation={conversation} onBack={onBack} />
+      <ChatHeader conversation={conversation} currentUser={currentUser} onBack={onBack} />
       <ChatMessages conversation={conversation} currentUser={currentUser} />
       <ChatInput conversationId={conversation.id} />
     </div>
