@@ -34,6 +34,7 @@ import { Button } from "@/components/ui/button";
 import { Notifications } from "@/components/notifications";
 import { useChatLayout } from "@/context/chat-layout-context";
 import { EmailVerificationModal } from "@/components/auth/email-verification-modal";
+import { UserOnboardingModal } from "@/components/auth/user-onboarding-modal";
 import { useNotifications } from "@/context/notification-context";
 import { Badge } from "@/components/ui/badge";
 
@@ -128,6 +129,7 @@ function DashboardLayoutContent({ children }: { children: React.ReactNode }) {
       )}>
         {children}
         <EmailVerificationModal />
+        <UserOnboardingModal />
       </main>
       <footer className={cn(
         "bg-card border-t",
