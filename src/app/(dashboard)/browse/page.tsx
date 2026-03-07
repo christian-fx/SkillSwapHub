@@ -44,7 +44,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Separator } from '@/components/ui/separator';
 import { useUser, useFirestore } from '@/firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { doc, getDoc, collection, getDocs } from 'firebase/firestore';
 import { recommendUsers } from '@/ai/flows/recommend-users';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -98,6 +98,8 @@ export default function BrowsePage() {
   const firestore = useFirestore();
   const { toast } = useToast();
 
+  const [realUsers, setRealUsers] = useState<User[] | null>(null);
+  const [fetchingUsers, setFetchingUsers] = useState(true);
 
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,6 +118,46 @@ export default function BrowsePage() {
   const [drawerAiRecommendation, setDrawerAiRecommendation] = useState<RecommendationType>('none');
   const [drawerShowVerified, setDrawerShowVerified] = useState(false);
 
+  useEffect(() => {
+    const fetchRealUsers = async () => {
+      setFetchingUsers(true);
+      try {
+        const usersCol = collection(firestore, 'users');
+        const userSnapshot = await getDocs(usersCol);
+
+        if (!userSnapshot.empty) {
+          const usersData = userSnapshot.docs.map(doc => {
+            const data = doc.data();
+            return {
+              id: doc.id,
+              name: data.name || 'Anonymous',
+              location: data.location || 'Unknown',
+              avatarUrl: data.avatarUrl || `https://avatar.vercel.sh/${doc.id}.png`,
+              bio: data.bio || '',
+              skillsOffered: data.skillsOffered || [],
+              skillsNeeded: data.skillsNeeded || [],
+              isVerified: data.isVerified || false,
+              rating: data.rating || 0,
+              lastActive: data.lastActive || 'Recently',
+              status: data.status || 'offline',
+            } as User;
+          });
+          // Also filter out current user if logged in to prevent swapping with self
+          const filteredData = authUser ? usersData.filter(u => u.id !== authUser.uid) : usersData;
+          setRealUsers(filteredData);
+        } else {
+          setRealUsers(null); // Force fallback to demo
+        }
+      } catch (error) {
+        console.error("Failed to fetch real users:", error);
+        setRealUsers(null);
+      } finally {
+        setFetchingUsers(false);
+      }
+    };
+
+    fetchRealUsers();
+  }, [firestore, authUser]);
 
   useEffect(() => {
     if (authUser && firestore) {
@@ -130,18 +172,22 @@ export default function BrowsePage() {
     }
   }, [authUser, firestore]);
 
+  const activeDataset = useMemo(() => {
+    return realUsers && realUsers.length > 0 ? realUsers : allUsers;
+  }, [realUsers]);
+
   const shuffledUsers = useMemo(() => {
-    return [...allUsers].sort(() => Math.random() - 0.5);
-  }, []);
+    return [...activeDataset].sort(() => Math.random() - 0.5);
+  }, [activeDataset]);
 
   const sortedAndFilteredUsers = useMemo(() => {
     let users: User[] = [];
 
     if (aiRecommendation !== 'none' && recommendedUserIds) {
-      const userMap = new Map(allUsers.map(u => [u.id, u]));
+      const userMap = new Map(activeDataset.map(u => [u.id, u]));
       users = recommendedUserIds.map(id => userMap.get(id)).filter((u): u is User => !!u);
     } else {
-      users = sortOrder === 'random' ? shuffledUsers : [...allUsers];
+      users = sortOrder === 'random' ? shuffledUsers : [...activeDataset];
     }
 
     if (sortOrder === 'asc') {
@@ -164,7 +210,7 @@ export default function BrowsePage() {
     }
 
     return users;
-  }, [searchQuery, sortOrder, shuffledUsers, aiRecommendation, recommendedUserIds, showVerifiedOnly]);
+  }, [searchQuery, sortOrder, shuffledUsers, aiRecommendation, recommendedUserIds, showVerifiedOnly, activeDataset]);
 
 
   const totalPages = Math.ceil(sortedAndFilteredUsers.length / USERS_PER_PAGE);
