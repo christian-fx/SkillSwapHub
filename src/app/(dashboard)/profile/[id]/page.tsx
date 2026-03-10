@@ -42,6 +42,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
   const [loading, setLoading] = useState(true);
   const [swapMessage, setSwapMessage] = useState('');
   const [isProposing, setIsProposing] = useState(false);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [resolvedParams, setResolvedParams] = useState<{ id: string } | null>(null);
 
   useEffect(() => {
@@ -117,6 +118,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
       });
       toast({ title: "Swap Proposed", description: `Your proposal to ${profile.name} was sent!` });
       setSwapMessage('');
+      setIsDialogOpen(false);
     } catch (error) {
       console.error("Error proposing swap:", error);
       toast({ title: "Error", description: "Could not send proposal.", variant: "destructive" });
@@ -175,7 +177,7 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
               )}
             </CardHeader>
             <CardContent>
-              <Dialog>
+              <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
                 <DialogTrigger asChild>
                   <Button className="w-full mt-4" size="lg">Propose Swap</Button>
                 </DialogTrigger>

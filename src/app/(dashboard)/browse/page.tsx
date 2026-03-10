@@ -120,6 +120,7 @@ export default function BrowsePage() {
 
   const [swapMessage, setSwapMessage] = useState('');
   const [isProposing, setIsProposing] = useState(false);
+  const [proposingUserId, setProposingUserId] = useState<string | null>(null);
 
   const handleProposeSwap = async (receiver: User) => {
     if (!authUser) {
@@ -146,6 +147,7 @@ export default function BrowsePage() {
       });
       toast({ title: "Swap Proposed", description: `Your proposal to ${receiver.name} was sent!` });
       setSwapMessage('');
+      setProposingUserId(null); // Auto-close modal
     } catch (error) {
       console.error("Error proposing swap:", error);
       toast({ title: "Error", description: "Could not send proposal.", variant: "destructive" });
@@ -566,7 +568,7 @@ export default function BrowsePage() {
                   </div>
                 </CardContent>
                 <CardFooter className="p-4 pt-0 gap-2">
-                  <Dialog>
+                  <Dialog open={proposingUserId === user.id} onOpenChange={(open) => setProposingUserId(open ? user.id : null)}>
                     <DialogTrigger asChild>
                       <Button className="w-full">
                         Propose Swap <ArrowRight className="ml-2 h-4 w-4" />
