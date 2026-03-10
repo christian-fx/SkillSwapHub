@@ -25,14 +25,14 @@ const NOTIFICATION_ICONS = {
   ai: <Zap className="h-5 w-5 text-purple-500" />,
 };
 
-function NotificationItem({ notification }: { notification: Notification }) {
+function NotificationItem({ notification, onClose }: { notification: Notification, onClose: () => void }) {
   const Icon = NOTIFICATION_ICONS[notification.type];
   const avatar = notification.user?.avatarUrl;
   const { markAsRead, deleteNotification } = useNotifications();
 
   return (
     <div className="relative group block hover:bg-accent -mx-2 px-2 rounded-lg">
-      <Link href={notification.link || "#"} className="flex items-start gap-3 py-3 relative pr-16">
+      <Link href={notification.link || "#"} onClick={onClose} className="flex items-start gap-3 py-3 relative pr-16">
         <div className="flex-shrink-0">
           {avatar ? (
             <Avatar className="h-8 w-8">
@@ -79,6 +79,7 @@ function NotificationItem({ notification }: { notification: Notification }) {
 }
 
 export function Notifications() {
+  const [isOpen, setIsOpen] = useState(false);
   const { notifications, markAsRead } = useNotifications();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
@@ -94,7 +95,7 @@ export function Notifications() {
   const unreadNotifications = notifications.filter(n => !n.read);
 
   return (
-    <Popover>
+    <Popover open={isOpen} onOpenChange={setIsOpen}>
       <PopoverTrigger asChild>
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="h-5 w-5" />
@@ -128,7 +129,7 @@ export function Notifications() {
           <TabsContent value="all" className="max-h-96 overflow-y-auto space-y-2">
             {allNotifications.length > 0 ? (
               allNotifications.map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
+                <NotificationItem key={notification.id} notification={notification} onClose={() => setIsOpen(false)} />
               ))
             ) : (
               <p className="text-sm text-center text-muted-foreground py-8">No notifications yet.</p>
@@ -137,7 +138,7 @@ export function Notifications() {
           <TabsContent value="unread" className="max-h-96 overflow-y-auto space-y-2">
             {unreadNotifications.length > 0 ? (
               unreadNotifications.map((notification) => (
-                <NotificationItem key={notification.id} notification={notification} />
+                <NotificationItem key={notification.id} notification={notification} onClose={() => setIsOpen(false)} />
               ))
             ) : (
               <p className="text-sm text-center text-muted-foreground py-8">No unread notifications.</p>
