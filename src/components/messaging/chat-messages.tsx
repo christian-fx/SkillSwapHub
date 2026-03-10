@@ -84,7 +84,11 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
       (m) => m.senderId !== currentUser.id && m.read === false
     );
 
-    if (unreadMessagesFromOther.length > 0) {
+    const isLastMessageUnread = conversation.lastMessage &&
+      conversation.lastMessage.senderId !== currentUser.id &&
+      conversation.lastMessage.read === false;
+
+    if (unreadMessagesFromOther.length > 0 || isLastMessageUnread) {
       const batch = writeBatch(firestore);
 
       // 1. Mark individual messages inside the subcollection as read
@@ -94,18 +98,15 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
       });
 
       // 2. If the last message of the conversation is unread and from the other user, update it
-      if (
-        conversation.lastMessage &&
-        conversation.lastMessage.senderId !== currentUser.id &&
-        conversation.lastMessage.read === false
-      ) {
+      if (isLastMessageUnread) {
         const chatRef = doc(firestore, 'chats', conversation.id);
         batch.update(chatRef, { 'lastMessage.read': true });
       }
 
       batch.commit().catch((err) => console.error("Error updating read receipts:", err));
     }
-  }, [messages, firestore, conversation.id, conversation.lastMessage, currentUser.id]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [messages.length, firestore, conversation.id, conversation.lastMessage?.read, currentUser.id]);
 
 
   return (

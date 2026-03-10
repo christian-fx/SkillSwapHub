@@ -1,8 +1,8 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { collection, query, where, onSnapshot, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { useUser, useFirestore } from '@/firebase';
+import { useChatLayout } from '@/context/chat-layout-context';
 import type { Notification, UserProfile } from '@/lib/types';
 
 interface NotificationContextType {
@@ -32,6 +32,7 @@ export const useNotifications = () => {
 export function NotificationProvider({ children }: { children: ReactNode }) {
     const { user: authUser } = useUser();
     const firestore = useFirestore();
+    const { activeChatId } = useChatLayout();
 
     const [unreadChatCount, setUnreadChatCount] = useState(0);
     const [pendingSwapCount, setPendingSwapCount] = useState(0);
@@ -112,7 +113,10 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             for (const chatDoc of snapshot.docs) {
                 const data = chatDoc.data();
                 if (data.lastMessage) {
-                    if (data.lastMessage.senderId !== authUser.uid && data.lastMessage.read === false) {
+                    const isMessageUnread = data.lastMessage.senderId !== authUser.uid && data.lastMessage.read === false;
+                    const isCurrentActiveChat = chatDoc.id === activeChatId;
+
+                    if (isMessageUnread && !isCurrentActiveChat) {
                         unreadCount++;
                         let userProfile: UserProfile | undefined;
                         try {
@@ -191,7 +195,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             unsubscribeChats();
             unsubscribeDeclinedSwaps();
         };
-    }, [authUser, firestore]);
+    }, [authUser, firestore, activeChatId]);
 
     const markAsRead = async (id: string, type: 'message' | 'swap' | 'ai') => {
         if (!firestore) return;

@@ -19,7 +19,7 @@ export default function MessagesPage() {
   const [selectedConversation, setSelectedConversation] =
     useState<EnrichedConversation | null>(null);
 
-  const { setIsChatOpen } = useChatLayout();
+  const { setIsChatOpen, setActiveChatId } = useChatLayout();
   const { user: authUser, loading: userLoading } = useUser();
   const firestore = useFirestore();
 
@@ -41,8 +41,13 @@ export default function MessagesPage() {
 
   useEffect(() => {
     setIsChatOpen(!!selectedConversation);
-    return () => setIsChatOpen(false); // Cleanup on unmount
-  }, [selectedConversation, setIsChatOpen]);
+    setActiveChatId(selectedConversation?.id || null);
+
+    return () => {
+      setIsChatOpen(false);
+      setActiveChatId(null);
+    }; // Cleanup on unmount
+  }, [selectedConversation, setIsChatOpen, setActiveChatId]);
 
   useEffect(() => {
     if (!authUser || !firestore) return;
