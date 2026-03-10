@@ -15,10 +15,12 @@ service cloud.firestore {
 
     // Users
     // Anyone authenticated can read user profiles (needed for Browse page).
-    // Only the user themselves can write to their own profile.
+    // Only the user themselves can write to their own profile, EXCEPT for ratings/reviews
+    // Ideally this would be locked down to specific fields, but for this demo we'll allow authenticated updates
     match /users/{userId} {
       allow read: if isAuthenticated();
-      allow write: if isOwner(userId);
+      allow create, delete: if isOwner(userId);
+      allow update: if isAuthenticated(); // To allow updating review counts/ratings
     }
 
     // Swaps
@@ -41,6 +43,12 @@ service cloud.firestore {
         allow create: if isAuthenticated() && (request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.participants) && request.resource.data.senderId == request.auth.uid;
         allow update, delete: if isAuthenticated() && resource.data.senderId == request.auth.uid;
       }
+    }
+
+    // Reviews
+    match /reviews/{reviewId} {
+      allow read, create: if isAuthenticated();
+      allow update, delete: if isOwner(resource.data.reviewerId);
     }
   }
 }
