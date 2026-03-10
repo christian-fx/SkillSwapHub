@@ -517,16 +517,20 @@ export default function BrowsePage() {
               <Card key={user.id} className="flex flex-col">
                 <CardHeader className="p-4">
                   <div className="flex items-start gap-4">
-                    <div className="relative">
-                      <Avatar className="h-16 w-16 border-2 border-background shadow">
-                        <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={user.avatarHint} />
-                        <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
-                      </Avatar>
+                    <div className="relative cursor-pointer transition-transform hover:scale-105">
+                      <Link href={`/profile/${user.id}`}>
+                        <Avatar className="h-16 w-16 border-2 border-background shadow">
+                          <AvatarImage src={user.avatarUrl} alt={user.name} data-ai-hint={user.avatarHint} />
+                          <AvatarFallback>{user.name.split(' ').map(n => n[0]).join('')}</AvatarFallback>
+                        </Avatar>
+                      </Link>
                       <div className={cn("absolute bottom-1 right-1 h-3 w-3 rounded-full border-2 border-background", user.status === 'online' ? 'bg-green-500' : 'bg-gray-400')} />
                     </div>
                     <div className="flex-1">
                       <div className="flex items-center gap-2">
-                        <CardTitle className="text-lg">{user.name}</CardTitle>
+                        <Link href={`/profile/${user.id}`} className="hover:underline">
+                          <CardTitle className="text-lg">{user.name}</CardTitle>
+                        </Link>
                         {user.isVerified && <BadgeCheck className="h-5 w-5 text-primary" />}
                       </div>
                       <CardDescription className="text-xs">{user.lastActive}</CardDescription>
