@@ -42,6 +42,7 @@ export type Message = {
   createdAt: string | Date | any;
   read?: boolean;
   imageUrl?: string;
+  isDeleted?: boolean;
 };
 
 export type Conversation = {
