@@ -8,11 +8,22 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import type { SwapRequest, UserProfile } from '@/lib/types';
 import { cn } from '@/lib/utils';
-import { ArrowRightLeft, Calendar, Check, Clock, X, Loader2 } from 'lucide-react';
+import { ArrowRightLeft, Calendar, Check, Clock, X, Loader2, Star } from 'lucide-react';
 import { format } from 'date-fns';
 import { useUser, useFirestore } from '@/firebase';
-import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc, addDoc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, or, doc, getDoc, updateDoc, addDoc, arrayUnion } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+  DialogFooter
+} from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "@/components/ui/textarea";
 
 export type EnrichedSwapRequest = SwapRequest & {
   otherUser?: UserProfile;
@@ -71,9 +82,138 @@ const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapR
           <p className="text-sm text-muted-foreground italic w-full text-center">Waiting for {otherUserName} to respond...</p>
         </CardFooter>
       )}
+      {isUpcoming && (
+        <CardFooter>
+          {swap.completedBy?.includes(currentUserId) ? (
+            <p className="text-sm text-muted-foreground italic w-full text-center">Waiting for {otherUserName} to confirm completion...</p>
+          ) : (
+            <Button className="w-full bg-green-600 hover:bg-green-700 text-white" onClick={() => onUpdateStatus(swap.id, 'mark_completed')}>
+              <Check className="h-4 w-4 mr-2" />
+              Mark as Completed
+            </Button>
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 };
+
+// REVIEW DIALOG COMPONENT
+const ReviewDialog = ({ swap, currentUserId }: { swap: EnrichedSwapRequest, currentUserId: string }) => {
+  const { toast } = useToast();
+  const firestore = useFirestore();
+  const [isOpen, setIsOpen] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const targetUserId = swap.senderId === currentUserId ? swap.receiverId : swap.senderId;
+  const targetUserName = swap.otherUser?.name || 'User';
+
+  const handleSubmit = async () => {
+    if (rating === 0) {
+      toast({ title: "Rating Required", description: "Please provide a star rating.", variant: "destructive" });
+      return;
+    }
+    if (!firestore || !currentUserId) return;
+    setIsSubmitting(true);
+
+    try {
+      // 1. Save the review
+      const reviewsCol = collection(firestore, 'reviews');
+      await addDoc(reviewsCol, {
+        swapId: swap.id,
+        reviewerId: currentUserId,
+        targetUserId: targetUserId,
+        rating: rating,
+        comment: comment,
+        createdAt: new Date()
+      });
+
+      // 2. Update the swap so we don't prompt again
+      const swapRef = doc(firestore, 'swaps', swap.id);
+      await updateDoc(swapRef, {
+        reviewedBy: arrayUnion(currentUserId)
+      });
+
+      // 3. Update the target user's average rating 
+      // Note: In production, cloud functions should recalc this defensively to prevent client-side spoofing, 
+      // but we do a simple client read+average here for the demo flow.
+      const targetUserRef = doc(firestore, 'users', targetUserId);
+      const targetUserSnap = await getDoc(targetUserRef);
+      if (targetUserSnap.exists()) {
+        const userData = targetUserSnap.data();
+        const currentAvg = userData.rating || 0;
+        const currentCount = userData.reviewCount || 0;
+
+        const newCount = currentCount + 1;
+        const newAvg = ((currentAvg * currentCount) + rating) / newCount;
+
+        await updateDoc(targetUserRef, {
+          rating: newAvg,
+          reviewCount: newCount
+        });
+      }
+
+      toast({ title: "Review Submitted", description: `Thank you for reviewing ${targetUserName}!` });
+      setIsOpen(false);
+    } catch (err) {
+      console.error(err);
+      toast({ title: "Error", description: "Failed to submit review.", variant: "destructive" });
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="w-full mt-2 border-primary text-primary hover:bg-primary/10">
+          <Star className="h-4 w-4 mr-2" />
+          Leave a Review
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Review your Swap</DialogTitle>
+          <DialogDescription>
+            How was your skill exchange with {targetUserName}?
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="flex justify-center space-x-2">
+            {[1, 2, 3, 4, 5].map((star) => (
+              <Star
+                key={star}
+                className={cn(
+                  "h-8 w-8 cursor-pointer transition-colors",
+                  rating >= star ? "fill-yellow-400 text-yellow-400" : "text-muted-foreground hover:text-yellow-200"
+                )}
+                onClick={() => setRating(star)}
+              />
+            ))}
+          </div>
+          <div className="grid gap-2">
+            <Label>Comments (Optional)</Label>
+            <Textarea
+              placeholder="What did you learn? How was their communication?"
+              value={comment}
+              onChange={(e) => setComment(e.target.value)}
+            />
+          </div>
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            Submit
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
 
 export default function MySwapsPage() {
   const { user: authUser, loading: userLoading } = useUser();
@@ -137,7 +277,9 @@ export default function MySwapsPage() {
 
   const handleUpdateStatus = async (swapId: string, newStatus: string) => {
     try {
-      if (newStatus === 'accepted' && authUser) {
+      if (!authUser) return;
+
+      if (newStatus === 'accepted') {
         const isEmailAuth = authUser.providerData.some((p) => p.providerId === 'password');
         if (isEmailAuth && !authUser.emailVerified) {
           toast({ title: "Email Not Verified", description: "You must verify your email address to accept swaps.", variant: "destructive" });
@@ -146,19 +288,46 @@ export default function MySwapsPage() {
       }
 
       const swap = swapRequests.find(s => s.id === swapId);
-      if (newStatus === 'accepted' && swap) {
-        // Create a chat automatically based on the accepted swap
-        const chatsCol = collection(firestore, 'chats');
-        await addDoc(chatsCol, {
-          participants: [swap.senderId, swap.receiverId],
-          updatedAt: new Date()
-        });
-      }
+      if (!swap) return;
 
       const swapRef = doc(firestore, 'swaps', swapId);
-      await updateDoc(swapRef, { status: newStatus, updatedAt: new Date() });
+
+      if (newStatus === 'mark_completed') {
+        // Mutual Confirmation Logic
+        const updatedCompletedBy = [...(swap.completedBy || []), authUser.uid];
+
+        if (updatedCompletedBy.length >= 2) {
+          // Both have confirmed -> actually mark status completed
+          await updateDoc(swapRef, {
+            completedBy: arrayUnion(authUser.uid),
+            status: 'completed',
+            updatedAt: new Date()
+          });
+          toast({ title: "Swap Completed!", description: "Both parties have confirmed the swap." });
+        } else {
+          // Only one has confirmed
+          await updateDoc(swapRef, {
+            completedBy: arrayUnion(authUser.uid),
+            updatedAt: new Date()
+          });
+          toast({ title: "Confirmation Sent", description: "Waiting for the other user to confirm." });
+        }
+      } else {
+        // Standard Accept/Decline
+        if (newStatus === 'accepted') {
+          // Create a chat automatically based on the accepted swap
+          const chatsCol = collection(firestore, 'chats');
+          await addDoc(chatsCol, {
+            participants: [swap.senderId, swap.receiverId],
+            updatedAt: new Date()
+          });
+          toast({ title: "Swap Accepted!", description: "A new chat has been created." });
+        }
+        await updateDoc(swapRef, { status: newStatus, updatedAt: new Date() });
+      }
     } catch (err) {
       console.error("Error updating swap status:", err);
+      toast({ title: "Error", description: "Failed to update swap status.", variant: "destructive" });
     }
   };
 
@@ -230,7 +399,14 @@ export default function MySwapsPage() {
             <div className="flex justify-center py-16"><Loader2 className="h-8 w-8 animate-spin text-muted-foreground" /></div>
           ) : pastSwaps.length > 0 ? (
             <div className="space-y-4">
-              {pastSwaps.map(swap => <SwapCard key={swap.id} swap={swap} currentUserId={authUser?.uid || ''} onUpdateStatus={handleUpdateStatus} />)}
+              {pastSwaps.map(swap => (
+                <div key={swap.id}>
+                  <SwapCard swap={swap} currentUserId={authUser?.uid || ''} onUpdateStatus={handleUpdateStatus} />
+                  {swap.status === 'completed' && !swap.reviewedBy?.includes(authUser?.uid || '') && (
+                    <ReviewDialog swap={swap} currentUserId={authUser?.uid || ''} />
+                  )}
+                </div>
+              ))}
             </div>
           ) : (
             <div className="text-center py-16 border rounded-lg bg-card">

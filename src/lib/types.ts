@@ -91,4 +91,6 @@ export type SwapRequest = {
   message: string;
   createdAt: string | Date | any; // allow firestore timestamp
   updatedAt?: string | Date | any;
+  completedBy?: string[];
+  reviewedBy?: string[];
 };
