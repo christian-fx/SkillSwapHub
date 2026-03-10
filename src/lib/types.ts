@@ -95,4 +95,5 @@ export type SwapRequest = {
   completedBy?: string[];
   reviewedBy?: string[];
   read?: boolean;
+  declineReason?: string;
 };

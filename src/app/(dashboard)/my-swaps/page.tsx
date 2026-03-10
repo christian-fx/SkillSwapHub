@@ -24,14 +24,89 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { AlertCircle } from 'lucide-react';
 
 export type EnrichedSwapRequest = SwapRequest & {
   otherUser?: UserProfile;
 };
 
-const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapRequest, currentUserId: string, onUpdateStatus: (id: string, status: string) => void }) => {
+// DECLINE DIALOG COMPONENT
+const DeclineDialog = ({ swapId, onDecline }: { swapId: string, onDecline: (id: string, reason: string) => void }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const [reasonCategory, setReasonCategory] = useState("User does not offer what I need");
+  const [customReason, setCustomReason] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const handleConfirmDecline = async () => {
+    setIsSubmitting(true);
+    let finalReason = reasonCategory;
+    if (reasonCategory === "Other" && customReason.trim()) {
+      finalReason = customReason.trim();
+    }
+    await onDecline(swapId, finalReason);
+    setIsSubmitting(false);
+    setIsOpen(false);
+  };
+
+  return (
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <Button variant="outline" className="w-full text-destructive hover:bg-destructive/10">
+          <X className="h-4 w-4 mr-2" />
+          Decline
+        </Button>
+      </DialogTrigger>
+      <DialogContent>
+        <DialogHeader>
+          <DialogTitle>Decline Swap Request</DialogTitle>
+          <DialogDescription>
+            Please let the other person know why you are declining this request.
+          </DialogDescription>
+        </DialogHeader>
+        <div className="grid gap-4 py-4">
+          <div className="grid gap-2">
+            <Label>Reason</Label>
+            <Select value={reasonCategory} onValueChange={setReasonCategory}>
+              <SelectTrigger>
+                <SelectValue placeholder="Select a reason" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="User does not offer what I need">User does not offer what I need</SelectItem>
+                <SelectItem value="Feels suspicious/Spam">Feels suspicious/Spam</SelectItem>
+                <SelectItem value="Found a swap already">Found a swap already</SelectItem>
+                <SelectItem value="Schedule doesn't align">Schedule doesn't align</SelectItem>
+                <SelectItem value="Other">Other</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          {reasonCategory === "Other" && (
+            <div className="grid gap-2">
+              <Label>Specify Details</Label>
+              <Textarea
+                placeholder="Briefly explain..."
+                value={customReason}
+                onChange={(e) => setCustomReason(e.target.value)}
+              />
+            </div>
+          )}
+        </div>
+        <DialogFooter>
+          <Button variant="ghost" onClick={() => setIsOpen(false)}>Cancel</Button>
+          <Button variant="destructive" onClick={handleConfirmDecline} disabled={isSubmitting}>
+            {isSubmitting && <Loader2 className="h-4 w-4 mr-2 animate-spin" />}
+            Confirm Decline
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+};
+
+const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapRequest, currentUserId: string, onUpdateStatus: (id: string, status: string, reason?: string) => void }) => {
   const isPending = swap.status === 'pending';
   const isCompleted = swap.status === 'completed';
+  const isDeclined = swap.status === 'declined';
   const isUpcoming = swap.status === 'accepted';
   const isReceiver = swap.receiverId === currentUserId; // True if someone proposed TO the current user
 
@@ -47,7 +122,10 @@ const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapR
             <AvatarFallback>{otherUserName.charAt(0)}</AvatarFallback>
           </Avatar>
           <div>
-            <CardTitle className="text-lg">Swap with {otherUserName}</CardTitle>
+            <CardTitle className="text-lg flex items-center justify-between">
+              <span>Swap with {otherUserName}</span>
+              {isDeclined && <Badge variant="destructive" className="ml-2">Declined</Badge>}
+            </CardTitle>
             <CardDescription className="flex items-center gap-2 text-sm mt-1">
               {isUpcoming || isCompleted ? <Calendar className="h-4 w-4" /> : <Clock className="h-4 w-4" />}
               {swap.createdAt ? format(new Date(swap.createdAt?.toDate ? swap.createdAt.toDate() : swap.createdAt), isCompleted ? 'PPP' : 'PPP p') : 'Unknown Date'}
@@ -64,17 +142,26 @@ const SwapCard = ({ swap, currentUserId, onUpdateStatus }: { swap: EnrichedSwapR
             but rely on the message. 
         */}
         <p className="text-sm text-muted-foreground mt-4 p-3 bg-secondary/30 rounded-md border">"{swap.message || 'I would like to swap skills!'}"</p>
+
+        {isDeclined && swap.declineReason && !isReceiver && (
+          <div className="mt-4 p-3 bg-destructive/10 border border-destructive/20 rounded-md flex items-start gap-2">
+            <AlertCircle className="h-4 w-4 text-destructive mt-0.5" />
+            <div className="text-sm text-destructive font-medium">
+              <span className="opacity-80">Reason: </span>
+              {swap.declineReason}
+            </div>
+          </div>
+        )}
       </CardContent>
       {isPending && isReceiver && (
         <CardFooter className="gap-2">
-          <Button className="w-full" onClick={() => onUpdateStatus(swap.id, 'accepted')}>
+          <Button className="w-full flex-1" onClick={() => onUpdateStatus(swap.id, 'accepted')}>
             <Check className="h-4 w-4 mr-2" />
             Accept
           </Button>
-          <Button variant="outline" className="w-full" onClick={() => onUpdateStatus(swap.id, 'declined')}>
-            <X className="h-4 w-4 mr-2" />
-            Decline
-          </Button>
+          <div className="flex-1">
+            <DeclineDialog swapId={swap.id} onDecline={(id, reason) => onUpdateStatus(id, 'declined', reason)} />
+          </div>
         </CardFooter>
       )}
       {isPending && !isReceiver && (
@@ -275,7 +362,7 @@ export default function MySwapsPage() {
     return () => unsubscribe();
   }, [authUser, firestore]);
 
-  const handleUpdateStatus = async (swapId: string, newStatus: string) => {
+  const handleUpdateStatus = async (swapId: string, newStatus: string, declineReason?: string) => {
     try {
       if (!authUser) return;
 
@@ -314,6 +401,16 @@ export default function MySwapsPage() {
         }
       } else {
         // Standard Accept/Decline
+        const updates: any = {
+          status: newStatus,
+          updatedAt: new Date(),
+          read: false // Mark unread for the notification system to trigger for sender
+        };
+
+        if (newStatus === 'declined' && declineReason) {
+          updates.declineReason = declineReason;
+        }
+
         if (newStatus === 'accepted') {
           // Create a chat automatically based on the accepted swap
           const chatsCol = collection(firestore, 'chats');
@@ -323,7 +420,7 @@ export default function MySwapsPage() {
           });
           toast({ title: "Swap Accepted!", description: "A new chat has been created." });
         }
-        await updateDoc(swapRef, { status: newStatus, updatedAt: new Date() });
+        await updateDoc(swapRef, updates);
       }
     } catch (err) {
       console.error("Error updating swap status:", err);

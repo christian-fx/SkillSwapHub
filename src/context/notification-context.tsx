@@ -144,9 +144,59 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
             console.error("Error listening to chats for badges:", error);
         });
 
+        // 3. Listen for Declined Swap Requests (where current user was the sender)
+        const declinedSwapsCol = collection(firestore, 'swaps');
+        const declinedSwapsQuery = query(
+            declinedSwapsCol,
+            where('senderId', '==', authUser.uid),
+            where('status', '==', 'declined')
+        );
+
+        const unsubscribeDeclinedSwaps = onSnapshot(declinedSwapsQuery, async (snapshot) => {
+            const declinedNotifications: Notification[] = [];
+            for (const swapDoc of snapshot.docs) {
+                const data = swapDoc.data();
+
+                let userProfile: UserProfile | undefined;
+                try {
+                    const uSnap = await getDoc(doc(firestore, 'users', data.receiverId));
+                    if (uSnap.exists()) userProfile = uSnap.data() as UserProfile;
+                } catch (e) { }
+
+                declinedNotifications.push({
+                    id: swapDoc.id,
+                    type: 'swap',
+                    title: 'Swap Declined',
+                    description: userProfile ? `${userProfile.name} declined your swap request.` : 'Your swap request was declined.',
+                    timestamp: data.updatedAt?.toDate ? data.updatedAt.toDate().toISOString() : new Date().toISOString(),
+                    read: data.read || false,
+                    user: userProfile ? { ...userProfile, id: data.receiverId } as any : undefined,
+                    link: '/my-swaps'
+                });
+            }
+
+            setNotifications(prev => {
+                // Filter out existing "declined swap" notifications (identified securely by ID if needed, 
+                // but since IDs match swap.id, we just filter out matching IDs if we were to merge across queries.
+                // Since this query yields the same IDs as potential other queries, we need to be careful.
+                const filtered = prev.filter(n => !(n.type === 'swap' && n.id === swapDoc?.id)); // Simplified merge block below
+            });
+
+            // A safer merge is to just overwrite the relevant elements in state, 
+            // but since React state updates can batch, let's just use functional updates safely:
+            setNotifications(prev => {
+                const otherNotifs = prev.filter(n => !declinedNotifications.find(dn => dn.id === n.id));
+                return [...otherNotifs, ...declinedNotifications].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
+            });
+
+        }, (error) => {
+            console.error("Error listening to declined swaps:", error);
+        });
+
         return () => {
             unsubscribeSwaps();
             unsubscribeChats();
+            unsubscribeDeclinedSwaps();
         };
     }, [authUser, firestore]);
 
