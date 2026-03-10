@@ -1,6 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { collection, query, where, onSnapshot, getDoc, doc, updateDoc, arrayUnion } from 'firebase/firestore';
 import { useUser, useFirestore } from '@/firebase';
 import { useChatLayout } from '@/context/chat-layout-context';
 import type { Notification, UserProfile } from '@/lib/types';
