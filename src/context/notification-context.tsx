@@ -175,13 +175,6 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                 });
             }
 
-            setNotifications(prev => {
-                // Filter out existing "declined swap" notifications (identified securely by ID if needed, 
-                // but since IDs match swap.id, we just filter out matching IDs if we were to merge across queries.
-                // Since this query yields the same IDs as potential other queries, we need to be careful.
-                const filtered = prev.filter(n => !(n.type === 'swap' && n.id === swapDoc?.id)); // Simplified merge block below
-            });
-
             // A safer merge is to just overwrite the relevant elements in state, 
             // but since React state updates can batch, let's just use functional updates safely:
             setNotifications(prev => {
