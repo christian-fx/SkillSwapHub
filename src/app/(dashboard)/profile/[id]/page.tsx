@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import {ArrowLeft, BadgeCheck, Loader2, Star } from 'lucide-react';
+import { ArrowLeft, BadgeCheck, Loader2, Star } from 'lucide-react';
 
 import { useUser, useFirestore } from '@/firebase';
 import { doc, getDoc, collection, addDoc } from 'firebase/firestore';
@@ -56,8 +56,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
       try {
         // If they click on their own profile, maybe redirect them to the editable profile page
         if (authUser && authUser.uid === resolvedParams.id) {
-            router.push('/profile');
-            return;
+          router.push('/profile');
+          return;
         }
 
         const docRef = doc(firestore, 'users', resolvedParams.id);
@@ -112,7 +112,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         status: 'pending',
         message: swapMessage,
         createdAt: new Date(),
-        updatedAt: new Date()
+        updatedAt: new Date(),
+        read: false
       });
       toast({ title: "Swap Proposed", description: `Your proposal to ${profile.name} was sent!` });
       setSwapMessage('');
@@ -207,42 +208,42 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
         </div>
 
         <div className="md:col-span-2 space-y-6 mt-6 md:mt-0">
-            <Card className="h-full">
-               <CardHeader>
-                  <CardTitle>About</CardTitle>
-               </CardHeader>
-               <CardContent className="space-y-6">
-                 <div>
-                     <p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{profile.bio || "This user hasn't written a bio yet."}</p>
-                 </div>
+          <Card className="h-full">
+            <CardHeader>
+              <CardTitle>About</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div>
+                <p className="whitespace-pre-wrap leading-relaxed text-muted-foreground">{profile.bio || "This user hasn't written a bio yet."}</p>
+              </div>
 
-                 <div className="pt-4 border-t">
-                    <h3 className="font-semibold mb-3">Skills Offered</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {profile.skillsOffered.length > 0 ? (
-                          profile.skillsOffered.map(skill => (
-                              <Badge key={skill} variant="secondary" className="px-3 py-1 text-sm">{skill}</Badge>
-                          ))
-                      ) : (
-                          <p className="text-sm text-muted-foreground">None listed.</p>
-                      )}
-                    </div>
-                 </div>
+              <div className="pt-4 border-t">
+                <h3 className="font-semibold mb-3">Skills Offered</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.skillsOffered.length > 0 ? (
+                    profile.skillsOffered.map(skill => (
+                      <Badge key={skill} variant="secondary" className="px-3 py-1 text-sm">{skill}</Badge>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">None listed.</p>
+                  )}
+                </div>
+              </div>
 
-                 <div className="pt-4 border-t">
-                    <h3 className="font-semibold mb-3">Skills Needed</h3>
-                    <div className="flex flex-wrap gap-2">
-                      {profile.skillsNeeded.length > 0 ? (
-                          profile.skillsNeeded.map(skill => (
-                              <Badge key={skill} variant="outline" className="px-3 py-1 text-sm">{skill}</Badge>
-                          ))
-                      ) : (
-                          <p className="text-sm text-muted-foreground">None listed.</p>
-                      )}
-                    </div>
-                 </div>
-               </CardContent>
-            </Card>
+              <div className="pt-4 border-t">
+                <h3 className="font-semibold mb-3">Skills Needed</h3>
+                <div className="flex flex-wrap gap-2">
+                  {profile.skillsNeeded.length > 0 ? (
+                    profile.skillsNeeded.map(skill => (
+                      <Badge key={skill} variant="outline" className="px-3 py-1 text-sm">{skill}</Badge>
+                    ))
+                  ) : (
+                    <p className="text-sm text-muted-foreground">None listed.</p>
+                  )}
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </div>
     </div>

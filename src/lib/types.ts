@@ -16,9 +16,9 @@ export type User = {
   skillsOffered: string[];
   skillsNeeded: string[];
   isVerified?: boolean;
-  rating: number;
   lastActive: string;
   status: 'online' | 'offline';
+  dismissedNotifications?: string[];
 };
 
 export type UserProfile = {
@@ -33,6 +33,7 @@ export type UserProfile = {
   skillsNeeded?: string[];
   isVerified?: boolean;
   status?: 'online' | 'offline';
+  dismissedNotifications?: string[];
 }
 
 export type Message = {
@@ -93,4 +94,5 @@ export type SwapRequest = {
   updatedAt?: string | Date | any;
   completedBy?: string[];
   reviewedBy?: string[];
+  read?: boolean;
 };

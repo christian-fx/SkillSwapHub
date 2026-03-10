@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Bell, MessageCircle, RefreshCw, Zap, CheckCheck } from 'lucide-react';
+import { Bell, MessageCircle, RefreshCw, Zap, CheckCheck, Check, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 
 import { Button } from '@/components/ui/button';
@@ -28,10 +28,11 @@ const NOTIFICATION_ICONS = {
 function NotificationItem({ notification }: { notification: Notification }) {
   const Icon = NOTIFICATION_ICONS[notification.type];
   const avatar = notification.user?.avatarUrl;
+  const { markAsRead, deleteNotification } = useNotifications();
 
   return (
-    <Link href={notification.link || "#"} className="block hover:bg-accent -mx-2 px-2 rounded-lg">
-      <div className="flex items-start gap-3 py-3">
+    <div className="relative group block hover:bg-accent -mx-2 px-2 rounded-lg">
+      <Link href={notification.link || "#"} className="flex items-start gap-3 py-3 relative pr-16">
         <div className="flex-shrink-0">
           {avatar ? (
             <Avatar className="h-8 w-8">
@@ -45,8 +46,8 @@ function NotificationItem({ notification }: { notification: Notification }) {
           )}
         </div>
         <div className="flex-1">
-          <p className="text-sm font-medium">{notification.title}</p>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm font-medium pr-2">{notification.title}</p>
+          <p className="text-sm text-muted-foreground line-clamp-2">
             {notification.description}
           </p>
           <p className="text-xs text-muted-foreground mt-1">
@@ -56,26 +57,37 @@ function NotificationItem({ notification }: { notification: Notification }) {
           </p>
         </div>
         {!notification.read && (
-          <div className="h-2.5 w-2.5 rounded-full bg-primary mt-1" />
+          <div className="h-2.5 w-2.5 rounded-full bg-primary mt-1 absolute right-2 top-4" />
         )}
+      </Link>
+
+      {/* Action Buttons on Hover */}
+      <div className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 flex items-center gap-1 bg-background/95 backdrop-blur-sm p-1 rounded-md shadow-sm border transition-opacity z-10">
+        {!notification.read && (
+          <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-green-500/10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); markAsRead(notification.id, notification.type); }}>
+            <Check className="h-4 w-4 text-green-600" />
+            <span className="sr-only">Mark as read</span>
+          </Button>
+        )}
+        <Button variant="ghost" size="icon" className="h-7 w-7 hover:bg-destructive/10" onClick={(e) => { e.preventDefault(); e.stopPropagation(); deleteNotification(notification.id, notification.type); }}>
+          <Trash2 className="h-4 w-4 text-destructive" />
+          <span className="sr-only">Dismiss</span>
+        </Button>
       </div>
-    </Link>
+    </div>
   );
 }
 
 export function Notifications() {
-  const { notifications } = useNotifications();
-
-  // The local `read` mocking can be simplified, but for a real app you'd want a 
-  // function exposed from the provider to actually update Firestore documents `read: true`.
-  // Since we derive notifications dynamically, "Mark all as read" would ideally mark chats 
-  // and swaps. For UI purposes, we'll keep deriving unreadCount from the context source array.
+  const { notifications, markAsRead } = useNotifications();
 
   const unreadCount = notifications.filter((n) => !n.read).length;
 
-  // Function is currently a stub because modifying real data requires updating the underlying swaps/chats docs.
-  const markAllAsRead = () => {
-    console.log("Mark all as read triggered (Requires updating source tables)");
+  const markAllAsRead = async () => {
+    const unread = notifications.filter(n => !n.read);
+    for (const n of unread) {
+      await markAsRead(n.id, n.type);
+    }
   };
 
   const allNotifications = notifications;

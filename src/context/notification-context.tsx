@@ -1,7 +1,7 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { collection, query, where, onSnapshot, getDoc, doc } from 'firebase/firestore';
+import { collection, query, where, onSnapshot, getDoc, doc, updateDoc } from 'firebase/firestore';
 import { useUser, useFirestore } from '@/firebase';
 import type { Notification, UserProfile } from '@/lib/types';
 
@@ -9,12 +9,16 @@ interface NotificationContextType {
     unreadChatCount: number;
     pendingSwapCount: number;
     notifications: Notification[];
+    markAsRead: (id: string, type: 'message' | 'swap' | 'ai') => Promise<void>;
+    deleteNotification: (id: string, type: 'message' | 'swap' | 'ai') => Promise<void>;
 }
 
 const NotificationContext = createContext<NotificationContextType>({
     unreadChatCount: 0,
     pendingSwapCount: 0,
     notifications: [],
+    markAsRead: async () => { },
+    deleteNotification: async () => { }
 });
 
 export const useNotifications = () => {
@@ -32,6 +36,18 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
     const [unreadChatCount, setUnreadChatCount] = useState(0);
     const [pendingSwapCount, setPendingSwapCount] = useState(0);
     const [notifications, setNotifications] = useState<Notification[]>([]);
+    const [dismissedNotifs, setDismissedNotifs] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (authUser?.uid && firestore) {
+            const unsubUser = onSnapshot(doc(firestore, 'users', authUser.uid), (docSnap) => {
+                if (docSnap.exists()) {
+                    setDismissedNotifs(docSnap.data().dismissedNotifications || []);
+                }
+            });
+            return () => unsubUser();
+        }
+    }, [authUser, firestore]);
 
     useEffect(() => {
         if (!authUser || !firestore) {
@@ -67,13 +83,12 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
                     title: 'New Swap Request',
                     description: userProfile ? `${userProfile.name} wants to swap with you.` : 'Someone wants to swap with you.',
                     timestamp: data.createdAt?.toDate ? data.createdAt.toDate().toISOString() : new Date().toISOString(),
-                    read: false,
+                    read: data.read || false,
                     user: userProfile ? { ...userProfile, id: data.senderId } as any : undefined,
                     link: '/my-swaps'
                 });
             }
-            // Store them in a ref or global variable or local state, we'll merge them in the render or a combined effect.
-            // For simplicity, we manage notifications arrays per source and merge them visually or in state.
+
             setNotifications(prev => {
                 const filtered = prev.filter(n => n.type !== 'swap');
                 return [...filtered, ...newNotifications].sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
@@ -135,8 +150,37 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
         };
     }, [authUser, firestore]);
 
+    const markAsRead = async (id: string, type: 'message' | 'swap' | 'ai') => {
+        if (!firestore) return;
+        try {
+            if (type === 'swap') {
+                await updateDoc(doc(firestore, 'swaps', id), { read: true });
+            } else if (type === 'message') {
+                await updateDoc(doc(firestore, 'chats', id), { 'lastMessage.read': true });
+            }
+        } catch (e) { console.error("Error marking read:", e); }
+    }
+
+    const deleteNotification = async (id: string, type: 'message' | 'swap' | 'ai') => {
+        if (!firestore || !authUser) return;
+        try {
+            // Import arrayUnion at the top, or just use it here inline for simplicity if not imported 
+            const { arrayUnion } = await import('firebase/firestore');
+            await updateDoc(doc(firestore, 'users', authUser.uid), {
+                dismissedNotifications: arrayUnion(id)
+            });
+        } catch (e) { console.error("Error dismissing notification:", e); }
+    }
+
+    // Filter out dismissed notifications
+    const visibleNotifications = notifications.filter(n => !dismissedNotifs.includes(n.id));
+
+    // Also recalculate counts based on exactly what is visible
+    const visibleUnreadChatCount = visibleNotifications.filter(n => n.type === 'message' && !n.read).length;
+    const visiblePendingSwapCount = visibleNotifications.filter(n => n.type === 'swap' && !n.read).length;
+
     return (
-        <NotificationContext.Provider value={{ unreadChatCount, pendingSwapCount, notifications }}>
+        <NotificationContext.Provider value={{ unreadChatCount: visibleUnreadChatCount, pendingSwapCount: visiblePendingSwapCount, notifications: visibleNotifications, markAsRead, deleteNotification }}>
             {children}
         </NotificationContext.Provider>
     );
