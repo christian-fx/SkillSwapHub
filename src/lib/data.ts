@@ -1218,7 +1218,7 @@ export const users: User[] = [
 ];
 
 
-export const conversations: Conversation[] = [
+export const conversations: any[] = [
   {
     id: "conv-1",
     participant: users.find(u => u.id === 'user-2')!,
@@ -1272,7 +1272,7 @@ export const conversations: Conversation[] = [
   },
 ];
 
-export const notifications: Notification[] = [
+export const notifications: any[] = [
     {
         id: "notif-1",
         type: 'message',
@@ -1501,7 +1501,7 @@ export const marketplaceItems: MarketplaceItem[] = [
     },
 ];
 
-export const swapRequests: SwapRequest[] = [
+export const swapRequests: any[] = [
   {
     id: 'swap-1',
     user: users.find(u => u.id === 'user-2')!,
