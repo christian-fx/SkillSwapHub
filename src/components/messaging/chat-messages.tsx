@@ -15,6 +15,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import type { User } from '@/lib/types';
 import type { EnrichedConversation } from './chat-list';
@@ -111,25 +112,56 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
 
   return (
     <ScrollArea className="flex-1" viewportRef={viewportRef}>
-      <div className="space-y-4 p-4">
-        {messages.map((message) => (
+      <div className="space-y-2 p-4">
+        {messages.map((message, index) => {
+          const previousMessage = messages[index - 1];
+          const isSameSender = previousMessage?.senderId === message.senderId;
+          
+          const currentTimestamp = message.createdAt?.toDate ? message.createdAt.toDate().getTime() : new Date(message.createdAt).getTime();
+          const previousTimestamp = previousMessage?.createdAt?.toDate ? previousMessage.createdAt.toDate().getTime() : (previousMessage?.createdAt ? new Date(previousMessage.createdAt).getTime() : 0);
+          
+          const timeDiff = previousMessage ? currentTimestamp - previousTimestamp : Infinity;
+          const isGrouped = isSameSender && timeDiff < 5 * 60 * 1000; // 5 minutes threshold
+          
+          const prevDate = new Date(previousTimestamp);
+          const currDate = new Date(currentTimestamp);
+          const showDateSeparator = !previousMessage || 
+            prevDate.getDate() !== currDate.getDate() || 
+            prevDate.getMonth() !== currDate.getMonth() || 
+            prevDate.getFullYear() !== currDate.getFullYear();
+
+          const dateLabel = formatDistanceToNow(currDate, { addSuffix: true }).replace('about ', '');
+
+          return (
+          <div key={message.id}>
+          {showDateSeparator && (
+            <div className="flex justify-center my-4">
+              <Badge variant="outline" className="text-xs font-normal text-muted-foreground bg-background shadow-sm">
+                {currDate.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
+              </Badge>
+            </div>
+          )}
           <div
-            key={message.id}
             className={cn(
               'flex items-end gap-2',
-              message.senderId === currentUser.id ? 'justify-end' : ''
+              message.senderId === currentUser.id ? 'justify-end' : '',
+              isGrouped ? 'mt-1' : 'mt-4'
             )}
           >
             {message.senderId !== currentUser.id && (
-              <Avatar className="h-8 w-8 border">
-                <AvatarImage
-                  src={conversation.otherUser?.avatarUrl}
-                  alt={conversation.otherUser?.name || 'User'}
-                />
-                <AvatarFallback>
-                  {(conversation.otherUser?.name || 'U').charAt(0)}
-                </AvatarFallback>
-              </Avatar>
+              <div className="w-8 shrink-0">
+                {!isGrouped && (
+                  <Avatar className="h-8 w-8 border">
+                    <AvatarImage
+                      src={conversation.otherUser?.avatarUrl}
+                      alt={conversation.otherUser?.name || 'User'}
+                    />
+                    <AvatarFallback>
+                      {(conversation.otherUser?.name || 'U').charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                )}
+              </div>
             )}
 
             <div className="relative group flex items-center gap-2">
@@ -165,12 +197,12 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
 
               <div
                 className={cn(
-                  'max-w-xs md:max-w-md lg:max-w-lg p-3 rounded-lg shadow-sm',
+                  'max-w-xs md:max-w-md lg:max-w-lg p-3 shadow-sm',
                   message.isDeleted
-                    ? 'bg-muted text-muted-foreground border border-dashed'
+                    ? 'bg-muted text-muted-foreground border border-dashed rounded-lg'
                     : message.senderId === currentUser.id
-                      ? 'bg-primary text-primary-foreground'
-                      : 'bg-card'
+                      ? cn('bg-primary text-primary-foreground', isGrouped ? 'rounded-l-lg rounded-tr-lg rounded-br-sm' : 'rounded-l-lg rounded-tr-lg rounded-br-none')
+                      : cn('bg-card', isGrouped ? 'rounded-r-lg rounded-tl-lg rounded-bl-sm' : 'rounded-r-lg rounded-tl-lg rounded-bl-none')
                 )}
               >
                 {message.isDeleted ? (
@@ -206,13 +238,15 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
                   })}
                   {!message.isDeleted && message.senderId === currentUser.id && (
                     message.read ? <CheckCheck className="h-3 w-3 text-blue-300" /> : <Check className="h-3 w-3" />
-                  )}
-                </div>
-              </div>
-            </div>
+                   )}
+                 </div>
+               </div>
+             </div>
+           </div>
           </div>
-        ))}
-      </div>
-    </ScrollArea>
-  );
-}
+          );
+        })}
+       </div>
+     </ScrollArea>
+   );
+ }
