@@ -54,7 +54,7 @@ export function ChatHeader({ conversation, currentUser, onBack }: ChatHeaderProp
           <Video className="h-5 w-5" />
           <span className="sr-only">Video Call</span>
         </Button>
-        <ChatActions />
+        <ChatActions otherUserId={otherUserId || ''} />
       </div>
     </div>
   );
