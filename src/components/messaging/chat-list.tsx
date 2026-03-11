@@ -88,15 +88,20 @@ export function ChatList({
                     isActive ? 'bg-muted' : ''
                   )}
                 >
-                  <Avatar className="h-12 w-12 border">
-                    <AvatarImage
-                      src={otherUser?.avatarUrl || `https://avatar.vercel.sh/${conversation.participants.find(id => id !== currentUser.id)}.png`}
-                      alt={otherUser?.name || 'User'}
-                    />
-                    <AvatarFallback>
-                      {(otherUser?.name || 'U').charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
+                  <div className="relative shrink-0">
+                    <Avatar className="h-12 w-12 border">
+                      <AvatarImage
+                        src={otherUser?.avatarUrl || `https://avatar.vercel.sh/${conversation.participants.find(id => id !== currentUser.id)}.png`}
+                        alt={otherUser?.name || 'User'}
+                      />
+                      <AvatarFallback>
+                        {(otherUser?.name || 'U').charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    {otherUser?.status === 'online' && (
+                      <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-green-500" />
+                    )}
+                  </div>
                   <div className="flex-1 overflow-hidden">
                     <div className="flex items-center justify-between gap-1">
                       <h3 className="font-semibold truncate">

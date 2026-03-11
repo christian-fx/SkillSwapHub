@@ -27,10 +27,15 @@ export function ChatHeader({ conversation, currentUser, onBack }: ChatHeaderProp
           <ArrowLeft className="h-5 w-5" />
           <span className="sr-only">Back</span>
         </Button>
-        <Avatar>
-          <AvatarImage src={participant.avatarUrl} alt={participant.name} />
-          <AvatarFallback>{participant.name.charAt(0)}</AvatarFallback>
-        </Avatar>
+        <div className="relative shrink-0">
+          <Avatar>
+            <AvatarImage src={participant.avatarUrl} alt={participant.name} />
+            <AvatarFallback>{participant.name.charAt(0)}</AvatarFallback>
+          </Avatar>
+          {(participant as any).status === 'online' && (
+            <div className="absolute bottom-0 right-0 h-3 w-3 rounded-full border-2 border-background bg-green-500" />
+          )}
+        </div>
         <div className="flex flex-col">
           <h2 className="text-lg font-semibold leading-tight">{participant.name}</h2>
           {isTyping && (
