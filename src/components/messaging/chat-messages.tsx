@@ -279,4 +279,3 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
      </ScrollArea>
    );
  }
- }
