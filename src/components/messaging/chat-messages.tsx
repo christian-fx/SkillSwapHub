@@ -219,6 +219,14 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
                         className="max-w-[200px] sm:max-w-xs md:max-w-sm rounded-md mb-2 object-cover"
                       />
                     )}
+                    {message.audioUrl && (
+                      <audio
+                        controls
+                        src={message.audioUrl}
+                        className="max-w-[200px] sm:max-w-xs"
+                        style={{ height: '36px' }}
+                      />
+                    )}
                     {message.text && <p className="text-sm">{message.text}</p>}
                   </>
                 )}
