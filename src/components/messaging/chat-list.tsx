@@ -31,6 +31,7 @@ interface ChatListProps {
   selectedConversation: EnrichedConversation | null;
   onSelectConversation: (conversation: EnrichedConversation) => void;
   currentUser: User;
+  loading?: boolean;
 }
 
 export function ChatList({
@@ -38,6 +39,7 @@ export function ChatList({
   selectedConversation,
   onSelectConversation,
   currentUser,
+  loading = false,
 }: ChatListProps) {
   const [searchQuery, setSearchQuery] = useState('');
   const [newChatOpen, setNewChatOpen] = useState(false);
@@ -153,7 +155,18 @@ export function ChatList({
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2 space-y-2">
-          {filteredConversations.length === 0 ? (
+          {loading ? (
+            // Skeleton loading state
+            Array.from({ length: 5 }).map((_, i) => (
+              <div key={i} className="flex items-center gap-3 p-3 rounded-lg">
+                <div className="h-12 w-12 rounded-full bg-muted animate-pulse shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-4 w-1/2 rounded bg-muted animate-pulse" />
+                  <div className="h-3 w-3/4 rounded bg-muted animate-pulse" />
+                </div>
+              </div>
+            ))
+          ) : filteredConversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full pt-16 text-center">
               <PlusCircle className="h-12 w-12 text-muted-foreground/50" />
               <h3 className="mt-4 text-lg font-semibold">{searchQuery ? "No matches found" : "Start a Conversation"}</h3>

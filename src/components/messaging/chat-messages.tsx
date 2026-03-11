@@ -34,6 +34,7 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
   const firestore = useFirestore();
   const [messages, setMessages] = useState<any[]>([]);
   const [messageToDelete, setMessageToDelete] = useState<string | null>(null);
+  const [messagesLoading, setMessagesLoading] = useState(true);
 
   const handleDeleteMessage = async () => {
     if (!firestore || !conversation.id || !messageToDelete) return;
@@ -45,8 +46,16 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
         text: '',
         imageUrl: null
       });
-      // Optionally update the lastMessage if it was the last one, 
-      // but firestore triggers will handle the UI for the messages list.
+
+      // If this was the last message, update the parent chat doc so the list shows correctly
+      if (conversation.lastMessage?.id === messageToDelete ||
+          messages[messages.length - 1]?.id === messageToDelete) {
+        const chatRef = doc(firestore, 'chats', conversation.id);
+        await updateDoc(chatRef, {
+          'lastMessage.isDeleted': true,
+          'lastMessage.text': '',
+        });
+      }
     } catch (error) {
       console.error("Error deleting message:", error);
     } finally {
@@ -66,6 +75,7 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
         ...doc.data()
       }));
       setMessages(fetchedMessages);
+      setMessagesLoading(false);
     });
 
     return () => unsubscribe();
@@ -112,6 +122,16 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
 
   return (
     <ScrollArea className="flex-1" viewportRef={viewportRef}>
+      {messagesLoading ? (
+        <div className="p-4 space-y-4">
+          {[false, true, false, true, false].map((isRight, i) => (
+            <div key={i} className={cn('flex items-end gap-2', isRight && 'justify-end')}>
+              {!isRight && <div className="h-8 w-8 rounded-full bg-muted animate-pulse shrink-0" />}
+              <div className={cn('h-10 rounded-lg bg-muted animate-pulse', isRight ? 'w-40' : 'w-52')} />
+            </div>
+          ))}
+        </div>
+      ) : (
       <div className="space-y-2 p-4">
         {messages.map((message, index) => {
           const previousMessage = messages[index - 1];
@@ -255,6 +275,8 @@ export function ChatMessages({ conversation, currentUser }: ChatMessagesProps) {
           );
         })}
        </div>
+      )}
      </ScrollArea>
    );
+ }
  }

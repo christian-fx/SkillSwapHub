@@ -12,9 +12,10 @@ interface ChatHeaderProps {
   conversation: EnrichedConversation;
   currentUser: User;
   onBack: () => void;
+  onChatDeleted?: () => void;
 }
 
-export function ChatHeader({ conversation, currentUser, onBack }: ChatHeaderProps) {
+export function ChatHeader({ conversation, currentUser, onBack, onChatDeleted }: ChatHeaderProps) {
   const participant = conversation.otherUser || { name: 'User', avatarUrl: '', avatarHint: '' };
 
   const otherUserId = conversation.participants.find(id => id !== currentUser.id);
@@ -29,7 +30,7 @@ export function ChatHeader({ conversation, currentUser, onBack }: ChatHeaderProp
         </Button>
         <div className="relative shrink-0">
           <Avatar>
-            <AvatarImage src={participant.avatarUrl} alt={participant.name} />
+          <AvatarImage src={participant.avatarUrl || undefined} alt={participant.name} />
             <AvatarFallback>{participant.name.charAt(0)}</AvatarFallback>
           </Avatar>
           {(participant as any).status === 'online' && (
@@ -54,7 +55,7 @@ export function ChatHeader({ conversation, currentUser, onBack }: ChatHeaderProp
           <Video className="h-5 w-5" />
           <span className="sr-only">Video Call</span>
         </Button>
-        <ChatActions otherUserId={otherUserId || ''} />
+        <ChatActions otherUserId={otherUserId || ''} conversationId={conversation.id} onChatDeleted={onChatDeleted} />
       </div>
     </div>
   );
