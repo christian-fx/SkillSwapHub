@@ -11,6 +11,7 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import type { Conversation, User, UserProfile } from '@/lib/types';
 import { cn } from '@/lib/utils';
 import Link from 'next/link';
+import { useState } from 'react';
 
 export type EnrichedConversation = Conversation & {
   otherUser?: UserProfile;
@@ -29,6 +30,14 @@ export function ChatList({
   onSelectConversation,
   currentUser,
 }: ChatListProps) {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const filteredConversations = conversations.filter(conversation => {
+    if (!searchQuery.trim()) return true;
+    const otherName = conversation.otherUser?.name || 'Unknown User';
+    return otherName.toLowerCase().includes(searchQuery.toLowerCase());
+  });
+
   return (
     <div className="flex flex-col border-r h-full bg-background">
       <div className="p-4 border-b flex items-center justify-between gap-4 sticky top-0 bg-background z-10">
@@ -51,20 +60,22 @@ export function ChatList({
           <Input
             type="search"
             placeholder="Search..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-9 h-9 rounded-full bg-muted border-none focus-visible:ring-1 focus-visible:ring-primary"
           />
         </div>
       </div>
       <ScrollArea className="flex-1">
         <div className="p-2 space-y-2">
-          {conversations.length === 0 ? (
+          {filteredConversations.length === 0 ? (
             <div className="flex flex-col items-center justify-center h-full pt-16 text-center">
               <PlusCircle className="h-12 w-12 text-muted-foreground/50" />
-              <h3 className="mt-4 text-lg font-semibold">Start a Conversation</h3>
-              <p className="text-muted-foreground mt-1 text-sm">Accept a swap request to start chatting.</p>
+              <h3 className="mt-4 text-lg font-semibold">{searchQuery ? "No matches found" : "Start a Conversation"}</h3>
+              <p className="text-muted-foreground mt-1 text-sm">{searchQuery ? "Try a different search term." : "Accept a swap request to start chatting."}</p>
             </div>
           ) : (
-            conversations.map((conversation) => {
+            filteredConversations.map((conversation) => {
               const isActive = selectedConversation?.id === conversation.id;
               const otherUser = conversation.otherUser;
 

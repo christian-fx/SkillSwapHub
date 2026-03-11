@@ -222,8 +222,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
               <div className="pt-4 border-t">
                 <h3 className="font-semibold mb-3">Skills Offered</h3>
                 <div className="flex flex-wrap gap-2">
-                  {profile.skillsOffered.length > 0 ? (
-                    profile.skillsOffered.map(skill => (
+                  {(profile.skillsOffered || []).length > 0 ? (
+                    (profile.skillsOffered || []).map(skill => (
                       <Badge key={skill} variant="secondary" className="px-3 py-1 text-sm">{skill}</Badge>
                     ))
                   ) : (
@@ -235,8 +235,8 @@ export default function PublicProfilePage({ params }: { params: Promise<{ id: st
               <div className="pt-4 border-t">
                 <h3 className="font-semibold mb-3">Skills Needed</h3>
                 <div className="flex flex-wrap gap-2">
-                  {profile.skillsNeeded.length > 0 ? (
-                    profile.skillsNeeded.map(skill => (
+                  {(profile.skillsNeeded || []).length > 0 ? (
+                    (profile.skillsNeeded || []).map(skill => (
                       <Badge key={skill} variant="outline" className="px-3 py-1 text-sm">{skill}</Badge>
                     ))
                   ) : (

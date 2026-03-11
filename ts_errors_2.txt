@@ -1,0 +1,9 @@
+
+> nextn@0.1.0 typecheck
+> tsc --noEmit
+
+src/app/(dashboard)/browse/page.tsx(541,66): error TS18048: 'user.rating' is possibly 'undefined'.
+src/components/theme-provider.tsx(5,41): error TS2307: Cannot find module 'next-themes/dist/types' or its corresponding type declarations.
+src/components/ui/calendar.tsx(57,9): error TS2353: Object literal may only specify known properties, and 'IconLeft' does not exist in type 'Partial<CustomComponents>'.
+src/components/ui/calendar.tsx(57,22): error TS7031: Binding element 'className' implicitly has an 'any' type.
+src/components/ui/calendar.tsx(60,23): error TS7031: Binding element 'className' implicitly has an 'any' type.

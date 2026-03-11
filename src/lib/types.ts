@@ -16,6 +16,7 @@ export type User = {
   skillsOffered: string[];
   skillsNeeded: string[];
   isVerified?: boolean;
+  rating?: number;
   lastActive: string;
   status: 'online' | 'offline';
   dismissedNotifications?: string[];
@@ -34,6 +35,20 @@ export type UserProfile = {
   isVerified?: boolean;
   status?: 'online' | 'offline';
   dismissedNotifications?: string[];
+  preferences?: {
+    notifications?: {
+      newMessages: boolean;
+      swapProposals: boolean;
+      aiSuggestions: boolean;
+    };
+    privacy?: {
+      profileVisible: boolean;
+      readReceipts: boolean;
+    };
+    display?: {
+      theme: 'light' | 'dark' | 'system';
+    };
+  };
 }
 
 export type Message = {
