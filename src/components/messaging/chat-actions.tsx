@@ -18,20 +18,23 @@ import {
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
 import { Button } from '@/components/ui/button';
-import { MoreVertical, User, XCircle, ShieldCheck } from 'lucide-react';
+import { MoreVertical, User, XCircle, ShieldCheck, Trash2 } from 'lucide-react';
 import Link from 'next/link';
 import { useState } from 'react';
 import { useFirestore, useUser } from '@/firebase';
-import { doc, updateDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { doc, updateDoc, arrayUnion, arrayRemove, deleteDoc } from 'firebase/firestore';
 import { useToast } from '@/hooks/use-toast';
 
 interface ChatActionsProps {
   otherUserId: string;
+  conversationId: string;
+  onChatDeleted?: () => void;
 }
 
-export function ChatActions({ otherUserId }: ChatActionsProps) {
-  const [showBlockDialog, setShowBlockDialog] = useState(false);
+export function ChatActions({ otherUserId, conversationId, onChatDeleted }: ChatActionsProps) {
+  const [dialog, setDialog] = useState<'block' | 'delete' | null>(null);
   const [isBlocked, setIsBlocked] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const firestore = useFirestore();
   const { user: authUser } = useUser();
@@ -39,6 +42,7 @@ export function ChatActions({ otherUserId }: ChatActionsProps) {
 
   const handleBlockUser = async () => {
     if (!authUser || !firestore || !otherUserId) return;
+    setIsLoading(true);
     try {
       const userRef = doc(firestore, 'users', authUser.uid);
       if (isBlocked) {
@@ -54,7 +58,24 @@ export function ChatActions({ otherUserId }: ChatActionsProps) {
       console.error('Block user error:', error);
       toast({ variant: 'destructive', title: 'Error', description: 'Could not block user. Please try again.' });
     } finally {
-      setShowBlockDialog(false);
+      setIsLoading(false);
+      setDialog(null);
+    }
+  };
+
+  const handleDeleteChat = async () => {
+    if (!firestore || !conversationId) return;
+    setIsLoading(true);
+    try {
+      await deleteDoc(doc(firestore, 'chats', conversationId));
+      toast({ title: 'Chat deleted', description: 'This conversation has been removed.' });
+      onChatDeleted?.();
+    } catch (error) {
+      console.error('Delete chat error:', error);
+      toast({ variant: 'destructive', title: 'Error', description: 'Could not delete chat. Please try again.' });
+    } finally {
+      setIsLoading(false);
+      setDialog(null);
     }
   };
 
@@ -75,19 +96,28 @@ export function ChatActions({ otherUserId }: ChatActionsProps) {
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />
+          {/* Use e.preventDefault() to stop the dropdown from closing before dialog opens */}
           <DropdownMenuItem
             className="text-destructive focus:text-destructive"
-            onSelect={() => setShowBlockDialog(true)}
+            onSelect={(e) => { e.preventDefault(); setDialog('block'); }}
           >
             {isBlocked
               ? <><ShieldCheck className="mr-2 h-4 w-4" />Unblock User</>
               : <><XCircle className="mr-2 h-4 w-4" />Block User</>
             }
           </DropdownMenuItem>
+          <DropdownMenuItem
+            className="text-destructive focus:text-destructive"
+            onSelect={(e) => { e.preventDefault(); setDialog('delete'); }}
+          >
+            <Trash2 className="mr-2 h-4 w-4" />
+            Delete Chat
+          </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <AlertDialog open={showBlockDialog} onOpenChange={setShowBlockDialog}>
+      {/* Block / Unblock Dialog */}
+      <AlertDialog open={dialog === 'block'} onOpenChange={(open) => !open && setDialog(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>{isBlocked ? 'Unblock User?' : 'Block User?'}</AlertDialogTitle>
@@ -98,12 +128,35 @@ export function ChatActions({ otherUserId }: ChatActionsProps) {
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
             <AlertDialogAction
               onClick={handleBlockUser}
+              disabled={isLoading}
               className={isBlocked ? '' : 'bg-destructive text-destructive-foreground hover:bg-destructive/90'}
             >
-              {isBlocked ? 'Unblock' : 'Block User'}
+              {isLoading ? 'Processing...' : (isBlocked ? 'Unblock' : 'Block User')}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Delete Chat Dialog */}
+      <AlertDialog open={dialog === 'delete'} onOpenChange={(open) => !open && setDialog(null)}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Delete Chat?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will permanently delete this conversation and all its messages for you. This action cannot be undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel disabled={isLoading}>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={handleDeleteChat}
+              disabled={isLoading}
+              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+            >
+              {isLoading ? 'Deleting...' : 'Delete Chat'}
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

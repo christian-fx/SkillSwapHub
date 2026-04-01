@@ -16,6 +16,7 @@ import type { EnrichedConversation } from '@/components/messaging/chat-list';
 
 export default function MessagesPage() {
   const [conversations, setConversations] = useState<EnrichedConversation[]>([]);
+  const [conversationsLoading, setConversationsLoading] = useState(true);
   const [selectedConversation, setSelectedConversation] =
     useState<EnrichedConversation | null>(null);
 
@@ -90,6 +91,7 @@ export default function MessagesPage() {
       });
 
       setConversations(resolvedConversations);
+      setConversationsLoading(false);
 
       // Update selected conversation with fresh data if it's currently selected
       if (selectedConversation) {
@@ -141,6 +143,7 @@ export default function MessagesPage() {
           selectedConversation={selectedConversation}
           onSelectConversation={handleSelectConversation}
           currentUser={currentUser}
+          loading={conversationsLoading}
         />
       </div>
 
@@ -155,6 +158,7 @@ export default function MessagesPage() {
             conversation={selectedConversation}
             currentUser={currentUser}
             onBack={handleBack}
+            onChatDeleted={handleBack}
           />
         ) : (
           <WelcomeMessage />
