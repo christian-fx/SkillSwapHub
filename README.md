@@ -4,7 +4,7 @@
 
 SkillSwap Hub is a modern, full-stack web application that connects a community of learners and mentors. It allows users to trade their talents, learn new skills, and grow together in a collaborative environment.(still in development)
 
-## ✨ Key Features
+##  Key Features
 
 - **User Authentication:** Secure sign-up and login with Email/Password, Google, and Phone (OTP).
 - **Profile Management:** Create and customize user profiles, showcasing skills offered and skills needed.
@@ -15,7 +15,7 @@ SkillSwap Hub is a modern, full-stack web application that connects a community 
 - **Swap Management:** A dedicated dashboard to track the status of all proposed, accepted, and completed swaps.
 - **Responsive Design:** A beautiful and modern interface built with ShadCN UI (featuring dynamic Skeleton loading states) and Tailwind CSS, ensuring a great experience on all devices.
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Framework:** [Next.js 15](https://nextjs.org/) (App Router, Turbopack)
 - **Language:** [TypeScript](https://www.typescriptlang.org/) (Strict Mode)
@@ -24,7 +24,7 @@ SkillSwap Hub is a modern, full-stack web application that connects a community 
 - **Backend & Database:** [Firebase 11](https://firebase.google.com/) (Authentication, Firestore)
 - **Form Management:** React Hook Form & Zod
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Local Setup
 
